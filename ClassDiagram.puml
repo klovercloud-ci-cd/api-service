@@ -1,0 +1,234 @@
+@startuml
+namespace api {
+    interface Application  {
+        + UpdateApplication(context echo.Context) error
+
+    }
+    interface Company  {
+        + Save(context echo.Context) error
+        + GetById(context echo.Context) error
+        + GetCompanies(context echo.Context) error
+        + GetRepositoriesById(context echo.Context) error
+
+    }
+    interface Git  {
+        + ListenEvent(context echo.Context) error
+
+    }
+    interface Pipeline  {
+        + GetLogs(context echo.Context) error
+        + GetEvents(context echo.Context) error
+
+    }
+    interface Process  {
+        + GetByCompanyIdAndRepositoryIdAndAppId(context echo.Context) error
+
+    }
+    interface Repository  {
+        + GetById(context echo.Context) error
+        + GetApplicationsById(context echo.Context) error
+        + UpdateRepository(context echo.Context) error
+
+    }
+}
+
+
+namespace common {
+    class MetaData << (S,Aquamarine) >> {
+        + Page int64
+        + PerPage int64
+        + PageCount int64
+        + TotalCount int64
+        + Links []<font color=blue>map</font>[string]string
+
+    }
+    class ResponseDTO << (S,Aquamarine) >> {
+        + Metadata *MetaData
+        + Data <font color=blue>interface</font>{}
+        + Status string
+        + Message string
+
+    }
+}
+
+
+namespace docs {
+    class s << (S,Aquamarine) >> {
+        + ReadDoc() string
+
+    }
+    class swaggerInfo << (S,Aquamarine) >> {
+        + Version string
+        + Host string
+        + BasePath string
+        + Schemes []string
+        + Title string
+        + Description string
+
+    }
+}
+
+
+namespace enums {
+    class enums.STEP_TYPE << (T, #FF7700) >>  {
+    }
+    class enums.TRIGGER << (T, #FF7700) >>  {
+    }
+}
+
+
+namespace logic {
+    class companyService << (S,Aquamarine) >> {
+        - httpPublisher service.HttpClient
+
+        + UpdateApplication(id string, repoId string, payload <font color=blue>interface</font>{}, option v1.CompanyQueryOption) (int, <font color=blue>interface</font>{})
+        + UpdateRepository(company <font color=blue>interface</font>{}, option v1.CompanyQueryOption) (int, <font color=blue>interface</font>{})
+        + GetApplicationsByCompanyId(id string, option v1.CompanyQueryOption) (int, <font color=blue>interface</font>{})
+        + GetRepositoryByRepositoryId(id string) (int, <font color=blue>interface</font>{})
+        + Store(company <font color=blue>interface</font>{}) (int, <font color=blue>interface</font>{})
+        + GetRepositoriesById(id string, option v1.CompanyQueryOption) (int, <font color=blue>interface</font>{})
+        + GetCompanies(option v1.CompanyQueryOption) (int, <font color=blue>interface</font>{})
+        + GetCompaniesById(headers <font color=blue>map</font>[string]string, id string, option v1.CompanyQueryOption) (int, <font color=blue>interface</font>{})
+
+    }
+    class httpClientService << (S,Aquamarine) >> {
+        + Get(url string, header <font color=blue>map</font>[string]string) (int, []byte, error)
+        + Post(url string, header <font color=blue>map</font>[string]string, body []byte) (int, error)
+
+    }
+    class jwtService << (S,Aquamarine) >> {
+        + Jwt v1.Jwt
+
+        + GenerateToken(duration int64, data <font color=blue>interface</font>{}) (string, error)
+        + ValidateToken(tokenString string) (bool, *jwt.Token)
+
+    }
+    class pipelineService << (S,Aquamarine) >> {
+        - httpClient service.HttpClient
+        - websocketClient service.WebsocketClient
+
+        + ReadEventsByProcessId(c <font color=blue>chan</font> <font color=blue>map</font>[string]<font color=blue>interface</font>{}, processId string) 
+        + GetByProcessId(processId string, option v1.CompanyQueryOption) (int, <font color=blue>interface</font>{})
+
+    }
+    class processService << (S,Aquamarine) >> {
+        - httpPublisher service.HttpClient
+
+        + GetByCompanyIdAndRepositoryIdAndAppName(companyId string, repositoryId string, appId string) (int, <font color=blue>interface</font>{})
+
+    }
+    class websocketClientService << (S,Aquamarine) >> {
+        + Get(c <font color=blue>chan</font> <font color=blue>map</font>[string]<font color=blue>interface</font>{}, url string, header <font color=blue>map</font>[string][]string) 
+
+    }
+}
+
+"service.Company" <|-- "logic.companyService"
+"service.HttpClient" <|-- "logic.httpClientService"
+"service.Jwt" <|-- "logic.jwtService"
+"service.Pipeline" <|-- "logic.pipelineService"
+"service.Process" <|-- "logic.processService"
+"service.WebsocketClient" <|-- "logic.websocketClientService"
+
+namespace service {
+    interface Company  {
+        + GetCompaniesById(headers <font color=blue>map</font>[string]string, id string, option v1.CompanyQueryOption) (int, <font color=blue>interface</font>{})
+        + GetCompanies(option v1.CompanyQueryOption) (int, <font color=blue>interface</font>{})
+        + GetRepositoriesById(id string, option v1.CompanyQueryOption) (int, <font color=blue>interface</font>{})
+        + Store(company <font color=blue>interface</font>{}) (int, <font color=blue>interface</font>{})
+        + GetRepositoryByRepositoryId(id string) (int, <font color=blue>interface</font>{})
+        + GetApplicationsByCompanyId(id string, option v1.CompanyQueryOption) (int, <font color=blue>interface</font>{})
+        + UpdateRepository(company <font color=blue>interface</font>{}, option v1.CompanyQueryOption) (int, <font color=blue>interface</font>{})
+        + UpdateApplication(id string, repoId string, payload <font color=blue>interface</font>{}, option v1.CompanyQueryOption) (int, <font color=blue>interface</font>{})
+
+    }
+    interface HttpClient  {
+        + Get(url string, header <font color=blue>map</font>[string]string) (int, []byte, error)
+        + Post(url string, header <font color=blue>map</font>[string]string, body []byte) (int, error)
+
+    }
+    interface Jwt  {
+        + GenerateToken(duration int64, data <font color=blue>interface</font>{}) (string, error)
+        + ValidateToken(tokenString string) (bool, *jwt.Token)
+
+    }
+    interface Pipeline  {
+        + GetByProcessId(processId string, option v1.CompanyQueryOption) (int, <font color=blue>interface</font>{})
+        + ReadEventsByProcessId(c <font color=blue>chan</font> <font color=blue>map</font>[string]<font color=blue>interface</font>{}, processId string) 
+
+    }
+    interface Process  {
+        + GetByCompanyIdAndRepositoryIdAndAppName(companyId string, repositoryId string, appId string) (int, <font color=blue>interface</font>{})
+
+    }
+    interface WebsocketClient  {
+        + Get(c <font color=blue>chan</font> <font color=blue>map</font>[string]<font color=blue>interface</font>{}, url string, header <font color=blue>map</font>[string][]string) 
+
+    }
+}
+
+
+namespace v1 {
+    class CompanyQueryOption << (S,Aquamarine) >> {
+        + Pagination Pagination
+        + LoadRepositories bool
+        + LoadApplications bool
+
+    }
+    class Jwt << (S,Aquamarine) >> {
+        + PrivateKey *rsa.PrivateKey
+        + PublicKey *rsa.PublicKey
+
+    }
+    class Pagination << (S,Aquamarine) >> {
+        + Page int64
+        + Limit int64
+
+    }
+    class applicationApi << (S,Aquamarine) >> {
+        - applicationService service.Company
+
+        + UpdateApplication(context echo.Context) error
+
+    }
+    class companyApi << (S,Aquamarine) >> {
+        - companyService service.Company
+
+        + Save(context echo.Context) error
+        + GetRepositoriesById(context echo.Context) error
+        + GetById(context echo.Context) error
+        + GetCompanies(context echo.Context) error
+
+    }
+    class pipelineApi << (S,Aquamarine) >> {
+        - pipelineService service.Pipeline
+
+        + GetEvents(context echo.Context) error
+        + GetLogs(context echo.Context) error
+
+    }
+    class processApi << (S,Aquamarine) >> {
+        - processService service.Process
+
+        + GetByCompanyIdAndRepositoryIdAndAppId(context echo.Context) error
+
+    }
+    class repositoryApi << (S,Aquamarine) >> {
+        - repositoryService service.Company
+
+        + UpdateRepository(context echo.Context) error
+        + GetApplicationsById(context echo.Context) error
+        + GetById(context echo.Context) error
+
+    }
+}
+
+"api.Application" <|-- "v1.applicationApi"
+"api.Company" <|-- "v1.companyApi"
+"api.Pipeline" <|-- "v1.pipelineApi"
+"api.Process" <|-- "v1.processApi"
+"api.Repository" <|-- "v1.repositoryApi"
+
+"__builtin__.string" #.. "enums.STEP_TYPE"
+"__builtin__.string" #.. "enums.TRIGGER"
+@enduml

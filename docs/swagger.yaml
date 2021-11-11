@@ -1,0 +1,218 @@
+definitions:
+  common.MetaData:
+    properties:
+      links:
+        items:
+          additionalProperties:
+            type: string
+          type: object
+        type: array
+      page:
+        type: integer
+      page_count:
+        type: integer
+      per_page:
+        type: integer
+      total_count:
+        type: integer
+    type: object
+  common.ResponseDTO:
+    properties:
+      _metadata:
+        $ref: '#/definitions/common.MetaData'
+      data: { }
+      message:
+        type: string
+      status:
+        type: string
+    type: object
+info:
+  contact: { }
+  description: Klovercloud-ci-api-service  API
+  title: Klovercloud-ci-api-service API
+paths:
+  /api/v1/applications:
+    post:
+      consumes:
+        - application/json
+      description: Update Application by company id and  repository id
+      parameters:
+        - description: ApplicationWithUpdateOption Data
+          in: body
+          name: data
+          required: true
+          schema:
+            type: object
+        - description: company id
+          in: query
+          name: company_id
+          required: true
+          type: string
+        - description: repository id
+          in: query
+          name: repository_Id
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Update Application
+      tags:
+        - Application
+  /api/v1/companies:
+    post:
+      description: Saves company
+      parameters:
+        - description: Company data
+          in: body
+          name: data
+          required: true
+          schema:
+            type: object
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Save company
+      tags:
+        - Company
+  /api/v1/companies/:
+    get:
+      description: Gets companies
+      parameters:
+        - description: Page number
+          in: query
+          name: page
+          type: integer
+        - description: Record count
+          in: query
+          name: limit
+          type: integer
+        - description: Loads Repositories
+          in: query
+          name: loadRepositories
+          type: integer
+        - description: Loads Applications
+          in: query
+          name: loadApplications
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Get companies
+      tags:
+        - Company
+  /api/v1/companies/{id}:
+    get:
+      description: Gets company by id
+      parameters:
+        - description: Company id
+          in: path
+          name: id
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Get company by id
+      tags:
+        - Company
+  /api/v1/companies/{id}/repositories:
+    get:
+      description: Gets Repositories by company id
+      parameters:
+        - description: Company id
+          in: path
+          name: id
+          required: true
+          type: string
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Get Repositories by company id
+      tags:
+        - Company
+  /api/v1/pipelines/{processId}:
+    get:
+      description: Gets logs by pipeline processId [available if local storage is
+        enabled]
+      parameters:
+        - description: Pipeline ProcessId
+          in: path
+          name: processId
+          required: true
+          type: string
+        - description: Page number
+          in: query
+          name: page
+          type: integer
+        - description: Record count
+          in: query
+          name: limit
+          type: integer
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Get Logs [available if local storage is enabled]
+      tags:
+        - Pipeline
+  /api/v1/processes:
+    get:
+      description: Get Process List or count process
+      parameters:
+        - description: Company Id
+          in: query
+          name: companyId
+          required: true
+          type: string
+        - description: Repository Id
+          in: query
+          name: repositoryId
+          type: string
+        - description: App Id
+          in: query
+          name: appId
+          required: true
+          type: string
+        - description: Operation[countTodaysProcessByCompanyId]
+          in: query
+          name: operation
+          type: string
+      produces:
+        - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Get Process List or count process
+      tags:
+        - Process
+swagger: "2.0"
