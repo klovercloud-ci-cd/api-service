@@ -47,12 +47,12 @@ func (c companyService) UpdateRepositories(companyId string, company interface{}
 	return httpCode, nil
 }
 
-func (c companyService) GetApplicationsByCompanyId(id string, option v1.CompanyQueryOption) (httpCode int, body interface{}) {
+func (c companyService) GetApplicationsByCompanyId(id string, option v1.RepositoryQueryOption) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)
 	header["token"] = config.Token
 
-	code, b, err := c.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/repositories/"+id+"/applications?loadRepositories="+option.LoadRepositories+"&loadApplications="+option.LoadApplications, header)
+	code, b, err := c.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/repositories/"+id+"/applications?loadApplications="+option.LoadApplications, header)
 
 	if err != nil {
 		return code, nil

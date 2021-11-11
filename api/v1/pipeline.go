@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/gorilla/websocket"
+	v1 "github.com/klovercloud-ci-cd/api-service/core/v1"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/api"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/service"
 	"github.com/labstack/echo/v4"
@@ -65,9 +66,16 @@ func (p pipelineApi) GetLogs(context echo.Context) error {
 	if id == "" {
 		return errors.New("Id required!")
 	}
-	option := getQueryOption(context)
+	option := getPipelineQueryOption(context)
 
 	return context.JSON(p.pipelineService.GetByProcessId(id, option))
+}
+
+func getPipelineQueryOption(context echo.Context) v1.Pagination {
+	option := v1.Pagination{}
+	option.Page = context.QueryParam("page")
+	option.Limit = context.QueryParam("limit")
+	return option
 }
 
 // NewPipelineApi returns Pipeline type api

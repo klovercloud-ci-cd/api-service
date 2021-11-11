@@ -17,12 +17,12 @@ func (p pipelineService) ReadEventsByProcessId(c chan map[string]interface{}, pr
 	p.websocketClient.Get(c, config.KlovercloudEventStoreWebSocketUrl+"/pipelines/ws?processId="+processId, http.Header{"token": {config.Token}})
 }
 
-func (p pipelineService) GetByProcessId(processId string, option v1.CompanyQueryOption) (httpCode int, body interface{}) {
+func (p pipelineService) GetByProcessId(processId string, option v1.Pagination) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)
 	header["token"] = config.Token
 
-	code, b, err := p.httpClient.Get(config.KlovercloudEventStoreUrl+"/pipelines/"+processId+"?order=&page="+option.Pagination.Page+"&limit="+option.Pagination.Limit, header)
+	code, b, err := p.httpClient.Get(config.KlovercloudEventStoreUrl+"/pipelines/"+processId+"?order=&page="+option.Page+"&limit="+option.Limit, header)
 
 	if err != nil {
 		return code, nil

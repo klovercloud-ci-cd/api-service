@@ -2,6 +2,7 @@ package v1
 
 import (
 	"errors"
+	v1 "github.com/klovercloud-ci-cd/api-service/core/v1"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/api"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/service"
 	"github.com/labstack/echo/v4"
@@ -16,8 +17,15 @@ func (r repositoryApi) GetApplicationsById(context echo.Context) error {
 	if id == "" {
 		return errors.New("Id required!")
 	}
-	option := getQueryOption(context)
+	option := getRepositoryQueryOption(context)
 	return context.JSON(r.repositoryService.GetApplicationsByCompanyId(id, option))
+}
+func getRepositoryQueryOption(context echo.Context) v1.RepositoryQueryOption {
+	option := v1.RepositoryQueryOption{}
+	option.Pagination.Page = context.QueryParam("page")
+	option.Pagination.Limit = context.QueryParam("limit")
+	option.LoadApplications = context.QueryParam("loadApplications")
+	return option
 }
 
 func (r repositoryApi) GetById(context echo.Context) error {
