@@ -1,331 +1,358 @@
 {
-  "swagger": "2.0",
-  "info": {
-    "description": "Klovercloud-ci-api-service  API",
-    "title": "Klovercloud-ci-api-service API",
-    "contact": {}
-  },
-  "paths": {
-    "/api/v1/applications": {
-      "post": {
-        "description": "Update Application by company id and  repository id",
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "Application"
-        ],
-        "summary": "Update Application",
-        "parameters": [
-          {
-            "description": "ApplicationWithUpdateOption Data",
-            "name": "data",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object"
-            }
-          },
-          {
-            "type": "string",
-            "description": "company id",
-            "name": "company_id",
-            "in": "query",
-            "required": true
-          },
-          {
-            "type": "string",
-            "description": "repository id",
-            "name": "repository_Id",
-            "in": "query",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/common.ResponseDTO"
-            }
-          },
-          "404": {
-            "description": "Not Found",
-            "schema": {
-              "$ref": "#/definitions/common.ResponseDTO"
-            }
-          }
-        }
-      }
+    "swagger": "2.0",
+    "info": {
+        "description": "api-service  API",
+        "title": "api-service API",
+        "contact": {}
     },
-    "/api/v1/companies": {
-      "post": {
-        "description": "Saves company",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "Company"
-        ],
-        "summary": "Save company",
-        "parameters": [
-          {
-            "description": "Company data",
-            "name": "data",
-            "in": "body",
-            "required": true,
-            "schema": {
-              "type": "object"
+    "paths": {
+        "/api/v1/applications": {
+            "post": {
+                "description": "Update Application by company id and  repository id",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Application"
+                ],
+                "summary": "Update Application",
+                "parameters": [
+                    {
+                        "description": "ApplicationWithUpdateOption Data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
             }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/common.ResponseDTO"
+        },
+        "/api/v1/companies": {
+            "get": {
+                "description": "Gets companies",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Get companies",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Record count",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Loads Repositories",
+                        "name": "loadRepositories",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Loads Applications",
+                        "name": "loadApplications",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Saves company",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Save company",
+                "parameters": [
+                    {
+                        "description": "Company data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
             }
-          }
+        },
+        "/api/v1/companies/{id}": {
+            "get": {
+                "description": "Gets company by id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Get company by id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Company id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/companies/{id}/repositories": {
+            "get": {
+                "description": "Gets RepositoriesDto by company id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Get RepositoriesDto by company id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Company id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "updates repositories",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Update repositories by company id",
+                "parameters": [
+                    {
+                        "description": "List Of Repositories data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Company id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Company Update Option",
+                        "name": "companyUpdateOption",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pipelines/{processId}": {
+            "get": {
+                "description": "Gets logs by pipeline processId [available if local storage is enabled]",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Pipeline"
+                ],
+                "summary": "Get Logs [available if local storage is enabled]",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Pipeline ProcessId",
+                        "name": "processId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Record count",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/processes": {
+            "get": {
+                "description": "Get Process List or count process",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Process"
+                ],
+                "summary": "Get Process List or count process",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Company Id",
+                        "name": "companyId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Repository Id",
+                        "name": "repositoryId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "App Id",
+                        "name": "appId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Operation[countTodaysProcessByCompanyId]",
+                        "name": "operation",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            }
         }
-      }
     },
-    "/api/v1/companies/": {
-      "get": {
-        "description": "Gets companies",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "Company"
-        ],
-        "summary": "Get companies",
-        "parameters": [
-          {
-            "type": "integer",
-            "description": "Page number",
-            "name": "page",
-            "in": "query"
-          },
-          {
-            "type": "integer",
-            "description": "Record count",
-            "name": "limit",
-            "in": "query"
-          },
-          {
-            "type": "integer",
-            "description": "Loads Repositories",
-            "name": "loadRepositories",
-            "in": "query"
-          },
-          {
-            "type": "integer",
-            "description": "Loads Applications",
-            "name": "loadApplications",
-            "in": "query"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/common.ResponseDTO"
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/companies/{id}": {
-      "get": {
-        "description": "Gets company by id",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "Company"
-        ],
-        "summary": "Get company by id",
-        "parameters": [
-          {
-            "type": "string",
-            "description": "Company id",
-            "name": "id",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/common.ResponseDTO"
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/companies/{id}/repositories": {
-      "get": {
-        "description": "Gets Repositories by company id",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "Company"
-        ],
-        "summary": "Get Repositories by company id",
-        "parameters": [
-          {
-            "type": "string",
-            "description": "Company id",
-            "name": "id",
-            "in": "path",
-            "required": true
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/common.ResponseDTO"
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/pipelines/{processId}": {
-      "get": {
-        "description": "Gets logs by pipeline processId [available if local storage is enabled]",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "Pipeline"
-        ],
-        "summary": "Get Logs [available if local storage is enabled]",
-        "parameters": [
-          {
-            "type": "string",
-            "description": "Pipeline ProcessId",
-            "name": "processId",
-            "in": "path",
-            "required": true
-          },
-          {
-            "type": "integer",
-            "description": "Page number",
-            "name": "page",
-            "in": "query"
-          },
-          {
-            "type": "integer",
-            "description": "Record count",
-            "name": "limit",
-            "in": "query"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/common.ResponseDTO"
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/processes": {
-      "get": {
-        "description": "Get Process List or count process",
-        "produces": [
-          "application/json"
-        ],
-        "tags": [
-          "Process"
-        ],
-        "summary": "Get Process List or count process",
-        "parameters": [
-          {
-            "type": "string",
-            "description": "Company Id",
-            "name": "companyId",
-            "in": "query",
-            "required": true
-          },
-          {
-            "type": "string",
-            "description": "Repository Id",
-            "name": "repositoryId",
-            "in": "query"
-          },
-          {
-            "type": "string",
-            "description": "App Id",
-            "name": "appId",
-            "in": "query",
-            "required": true
-          },
-          {
-            "type": "string",
-            "description": "Operation[countTodaysProcessByCompanyId]",
-            "name": "operation",
-            "in": "query"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "schema": {
-              "$ref": "#/definitions/common.ResponseDTO"
-            }
-          }
-        }
-      }
-    }
-  },
-  "definitions": {
-    "common.MetaData": {
-      "type": "object",
-      "properties": {
-        "links": {
-          "type": "array",
-          "items": {
+    "definitions": {
+        "common.MetaData": {
             "type": "object",
-            "additionalProperties": {
-              "type": "string"
+            "properties": {
+                "links": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "page_count": {
+                    "type": "integer"
+                },
+                "per_page": {
+                    "type": "integer"
+                },
+                "total_count": {
+                    "type": "integer"
+                }
             }
-          }
         },
-        "page": {
-          "type": "integer"
-        },
-        "page_count": {
-          "type": "integer"
-        },
-        "per_page": {
-          "type": "integer"
-        },
-        "total_count": {
-          "type": "integer"
+        "common.ResponseDTO": {
+            "type": "object",
+            "properties": {
+                "_metadata": {
+                    "$ref": "#/definitions/common.MetaData"
+                },
+                "data": {},
+                "message": {
+                    "type": "string"
+                },
+                "status": {
+                    "type": "string"
+                }
+            }
         }
-      }
-    },
-    "common.ResponseDTO": {
-      "type": "object",
-      "properties": {
-        "_metadata": {
-          "$ref": "#/definitions/common.MetaData"
-        },
-        "data": {},
-        "message": {
-          "type": "string"
-        },
-        "status": {
-          "type": "string"
-        }
-      }
     }
-  }
 }

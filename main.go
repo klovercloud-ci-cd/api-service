@@ -3,10 +3,11 @@ package main
 import (
 	"github.com/klovercloud-ci-cd/api-service/api"
 	"github.com/klovercloud-ci-cd/api-service/config"
+	_ "github.com/klovercloud-ci-cd/api-service/docs"
 )
 
-// @title Klovercloud-ci-api-service API
-// @description Klovercloud-ci-api-service  API
+// @title api-service API
+// @description api-service  API
 func main() {
 	e := config.New()
 	api.Routes(e)
@@ -15,3 +16,4 @@ func main() {
 
 //  goplantuml -recursive . > ClassDiagram.puml
 // goreportcard-cli -v
+// swag init --parseDependency --parseInternal

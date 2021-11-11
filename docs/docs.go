@@ -45,20 +45,6 @@ var doc = `{
                         "schema": {
                             "type": "object"
                         }
-                    },
-                    {
-                        "type": "string",
-                        "description": "company id",
-                        "name": "company_id",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "repository id",
-                        "name": "repository_Id",
-                        "in": "query",
-                        "required": true
                     }
                 ],
                 "responses": {
@@ -78,37 +64,6 @@ var doc = `{
             }
         },
         "/api/v1/companies": {
-            "post": {
-                "description": "Saves company",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Company"
-                ],
-                "summary": "Save company",
-                "parameters": [
-                    {
-                        "description": "Company data",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "object"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseDTO"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/companies/": {
             "get": {
                 "description": "Gets companies",
                 "produces": [
@@ -132,16 +87,45 @@ var doc = `{
                         "in": "query"
                     },
                     {
-                        "type": "integer",
+                        "type": "boolean",
                         "description": "Loads Repositories",
                         "name": "loadRepositories",
                         "in": "query"
                     },
                     {
-                        "type": "integer",
+                        "type": "boolean",
                         "description": "Loads Applications",
                         "name": "loadApplications",
                         "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Saves company",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Save company",
+                "parameters": [
+                    {
+                        "description": "Company data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
                     }
                 ],
                 "responses": {
@@ -185,20 +169,63 @@ var doc = `{
         },
         "/api/v1/companies/{id}/repositories": {
             "get": {
-                "description": "Gets Repositories by company id",
+                "description": "Gets RepositoriesDto by company id",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "Company"
                 ],
-                "summary": "Get Repositories by company id",
+                "summary": "Get RepositoriesDto by company id",
                 "parameters": [
                     {
                         "type": "string",
                         "description": "Company id",
                         "name": "id",
                         "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "updates repositories",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Update repositories by company id",
+                "parameters": [
+                    {
+                        "description": "List Of Repositories data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Company id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Company Update Option",
+                        "name": "companyUpdateOption",
+                        "in": "query",
                         "required": true
                     }
                 ],
@@ -362,8 +389,8 @@ var SwaggerInfo = swaggerInfo{
 	Host:        "",
 	BasePath:    "",
 	Schemes:     []string{},
-	Title:       "Klovercloud-ci-api-service API",
-	Description: "Klovercloud-ci-api-service  API",
+	Title:       "api-service API",
+	Description: "api-service  API",
 }
 
 type s struct{}
