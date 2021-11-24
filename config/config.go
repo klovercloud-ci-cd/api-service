@@ -13,7 +13,7 @@ var ServerPort string
 // KlovercloudIntegrationMangerUrl refers to integration-managers url.
 var KlovercloudIntegrationMangerUrl string
 
-// KlovercloudEventStoreUrl refers to event-store url.
+// KlovercloudEventStoreUrl refers to event-bank url.
 var KlovercloudEventStoreUrl string
 
 // KlovercloudEventStoreWebSocketUrl refers to event-stores socket url.
