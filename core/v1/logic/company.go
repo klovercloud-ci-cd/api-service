@@ -22,7 +22,7 @@ func (c companyService) UpdateApplication(id string, repoId string, payload inte
 	header["token"] = config.Token
 	header["Content-Type"] = "application/json"
 
-	post, err := c.httpPublisher.Post(config.KlovercloudIntegrationMangerUrl+"/applications?company_id="+id+"&repository_Id="+repoId+"&companyUpdateOption="+option, header, marshal)
+	post, err := c.httpPublisher.Post(config.KlovercloudIntegrationMangerUrl+"/applications?companyId="+id+"&repositoryId="+repoId+"&companyUpdateOption="+option, header, marshal)
 
 	if err != nil {
 		return 0, err

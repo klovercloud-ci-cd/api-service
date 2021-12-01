@@ -25,8 +25,8 @@ func (a applicationApi) Update(context echo.Context) error {
 	if err := context.Bind(&formData); err != nil {
 		return err
 	}
-	repoId := context.QueryParam("repository_Id")
-	companyId := context.QueryParam("company_Id")
+	repoId := context.QueryParam("repositoryId")
+	companyId := context.QueryParam("companyId")
 	companyUpdateOption := context.QueryParam("companyUpdateOption")
 	return context.JSON(a.applicationService.UpdateApplication(companyId, repoId, formData, companyUpdateOption))
 }
