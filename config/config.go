@@ -31,6 +31,9 @@ var EnableAuthentication bool
 // Token refers to jwt token for service to service communication.
 var Token string
 
+// EnableOpenTracing set true if opentracing is needed.
+var EnableOpenTracing bool
+
 // InitEnvironmentVariables initializes environment variables
 func InitEnvironmentVariables() {
 	err := godotenv.Load()
@@ -54,5 +57,17 @@ func InitEnvironmentVariables() {
 			EnableAuthentication = false
 		}
 	}
+
+	if os.Getenv("ENABLE_OPENTRACING")==""{
+		EnableOpenTracing=false
+	}else{
+		if strings.ToLower(os.Getenv("ENABLE_OPENTRACING")) == "true" {
+			EnableOpenTracing = true
+		} else {
+			EnableOpenTracing = false
+		}
+	}
+
 	Token = os.Getenv("TOKEN")
+
 }

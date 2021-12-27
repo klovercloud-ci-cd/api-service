@@ -33,7 +33,6 @@ func (r repositoryApi) GetById(context echo.Context) error {
 	if id == "" {
 		return errors.New("Id required!")
 	}
-
 	return context.JSON(r.repositoryService.GetRepositoryByRepositoryId(id))
 }
 
