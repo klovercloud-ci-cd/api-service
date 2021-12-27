@@ -25,7 +25,7 @@ func (h httpClientService) Put(url string, header map[string]string, body []byte
 		req.Header.Set(k, v)
 	}
 	client := &http.Client{}
-	startTraceSpan(req,url,"PUT")
+	startTraceSpan(req, url, "PUT")
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Println("[ERROR] Failed communicate :", err.Error())
@@ -55,7 +55,7 @@ func (h httpClientService) Get(url string, header map[string]string) (httpCode i
 		log.Println(err.Error())
 		return http.StatusBadRequest, nil, err
 	}
-	startTraceSpan(req,url,"GET")
+	startTraceSpan(req, url, "GET")
 
 	res, err := client.Do(req)
 	if err != nil {
@@ -81,7 +81,7 @@ func (h httpClientService) Post(url string, header map[string]string, body []byt
 		req.Header.Set(k, v)
 	}
 	client := &http.Client{}
-	startTraceSpan(req,url,"POST")
+	startTraceSpan(req, url, "POST")
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Println("[ERROR] Failed communicate :", err.Error())
@@ -99,8 +99,9 @@ func (h httpClientService) Post(url string, header map[string]string, body []byt
 	}
 	return resp.StatusCode, nil
 }
+
 // startTraceSpan starts a span
-func startTraceSpan(req *http.Request,url, httpMethod string){
+func startTraceSpan(req *http.Request, url, httpMethod string) {
 	if config.EnableOpenTracing {
 		span, _ := opentracer.StartSpanFromContext(context.Background(), "client")
 		ext.SpanKindRPCClient.Set(span)

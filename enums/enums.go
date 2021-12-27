@@ -1,6 +1,5 @@
 package enums
 
-
 // STEP_TYPE steps type
 type STEP_TYPE string
 

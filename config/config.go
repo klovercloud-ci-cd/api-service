@@ -58,9 +58,9 @@ func InitEnvironmentVariables() {
 		}
 	}
 
-	if os.Getenv("ENABLE_OPENTRACING")==""{
-		EnableOpenTracing=false
-	}else{
+	if os.Getenv("ENABLE_OPENTRACING") == "" {
+		EnableOpenTracing = false
+	} else {
 		if strings.ToLower(os.Getenv("ENABLE_OPENTRACING")) == "true" {
 			EnableOpenTracing = true
 		} else {

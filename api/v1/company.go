@@ -101,6 +101,7 @@ func (c companyApi) GetCompanies(context echo.Context) error {
 	return context.JSON(c.companyService.GetCompanies(option))
 }
 
+//this function is for set all query param
 func getQueryOption(context echo.Context) v1.CompanyQueryOption {
 	option := v1.CompanyQueryOption{}
 	option.Pagination.Page = context.QueryParam("page")

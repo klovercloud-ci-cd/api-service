@@ -10,6 +10,16 @@ func GetV1CompanyService() service.Company {
 	return logic.NewCompanyService(logic.NewHttpClientService())
 }
 
+// GetV1GithubService returns Github services
+func GetV1GithubService() service.Github {
+	return logic.NewGithubService(logic.NewHttpClientService())
+}
+
+// GetV1BitbucketService returns Bitbucket services
+func GetV1BitbucketService() service.Bitbucket {
+	return logic.NewBitbucketService(logic.NewHttpClientService())
+}
+
 // GetV1ProcessService returns Process services
 func GetV1ProcessService() service.Process {
 	return logic.NewProcessService(logic.NewHttpClientService())

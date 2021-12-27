@@ -1,10 +1,10 @@
 package v1
 
 import (
+	"github.com/klovercloud-ci-cd/api-service/core/v1/api"
 	"github.com/klovercloud-ci-cd/api-service/dependency"
 	"github.com/labstack/echo/v4"
 )
-
 
 // Router api/v1 base router
 func Router(g *echo.Group) {
@@ -13,6 +13,22 @@ func Router(g *echo.Group) {
 	PipelineRouter(g.Group("/pipelines"))
 	RepositoryRouter(g.Group("/repositories"))
 	ApplicationRouter(g.Group("/applications"))
+	GithubEventRouter(g.Group("/githubs"))
+	BitbucketEventRouter(g.Group("/bitbuckets"))
+}
+
+// BitbucketEventRouter api/v1/bitbuckets event router
+func BitbucketEventRouter(g *echo.Group) {
+	var bitbucket api.Git
+	bitbucket = newBitbucketApi(dependency.GetV1BitbucketService())
+	g.POST("", bitbucket.ListenEvent)
+}
+
+// GithubEventRouter api/v1/githubs/* router
+func GithubEventRouter(g *echo.Group) {
+	var githubApi api.Git
+	githubApi = NewGithubApi(dependency.GetV1GithubService())
+	g.POST("", githubApi.ListenEvent)
 }
 
 // ApplicationRouter api/v1/applications/* router

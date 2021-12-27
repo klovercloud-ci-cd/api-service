@@ -20,31 +20,31 @@ definitions:
     properties:
       _metadata:
         $ref: '#/definitions/common.MetaData'
-      data: {}
+      data: { }
       message:
         type: string
       status:
         type: string
     type: object
 info:
-  contact: {}
+  contact: { }
   description: api-service  API
   title: api-service API
 paths:
   /api/v1/applications:
     post:
       consumes:
-      - application/json
+        - application/json
       description: Update Application by company id and  repository id
       parameters:
-      - description: ApplicationWithUpdateOption Data
-        in: body
-        name: data
-        required: true
-        schema:
-          type: object
+        - description: ApplicationWithUpdateOption Data
+          in: body
+          name: data
+          required: true
+          schema:
+            type: object
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
@@ -56,29 +56,29 @@ paths:
             $ref: '#/definitions/common.ResponseDTO'
       summary: Update Application
       tags:
-      - Application
+        - Application
   /api/v1/companies:
     get:
       description: Gets companies
       parameters:
-      - description: Page number
-        in: query
-        name: page
-        type: integer
-      - description: Record count
-        in: query
-        name: limit
-        type: integer
-      - description: Loads Repositories
-        in: query
-        name: loadRepositories
-        type: boolean
-      - description: Loads Applications
-        in: query
-        name: loadApplications
-        type: boolean
+        - description: Page number
+          in: query
+          name: page
+          type: integer
+        - description: Record count
+          in: query
+          name: limit
+          type: integer
+        - description: Loads Repositories
+          in: query
+          name: loadRepositories
+          type: boolean
+        - description: Loads Applications
+          in: query
+          name: loadApplications
+          type: boolean
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
@@ -86,18 +86,18 @@ paths:
             $ref: '#/definitions/common.ResponseDTO'
       summary: Get companies
       tags:
-      - Company
+        - Company
     post:
       description: Saves company
       parameters:
-      - description: Company data
-        in: body
-        name: data
-        required: true
-        schema:
-          type: object
+        - description: Company data
+          in: body
+          name: data
+          required: true
+          schema:
+            type: object
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
@@ -105,18 +105,18 @@ paths:
             $ref: '#/definitions/common.ResponseDTO'
       summary: Save company
       tags:
-      - Company
+        - Company
   /api/v1/companies/{id}:
     get:
       description: Gets company by id
       parameters:
-      - description: Company id
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: Company id
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
@@ -124,18 +124,18 @@ paths:
             $ref: '#/definitions/common.ResponseDTO'
       summary: Get company by id
       tags:
-      - Company
+        - Company
   /api/v1/companies/{id}/repositories:
     get:
       description: Gets RepositoriesDto by company id
       parameters:
-      - description: Company id
-        in: path
-        name: id
-        required: true
-        type: string
+        - description: Company id
+          in: path
+          name: id
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
@@ -143,28 +143,28 @@ paths:
             $ref: '#/definitions/common.ResponseDTO'
       summary: Get RepositoriesDto by company id
       tags:
-      - Company
+        - Company
     put:
       description: updates repositories
       parameters:
-      - description: List Of Repositories data
-        in: body
-        name: data
-        required: true
-        schema:
-          type: object
-      - description: Company id
-        in: path
-        name: id
-        required: true
-        type: string
-      - description: Company Update Option
-        in: query
-        name: companyUpdateOption
-        required: true
-        type: string
+        - description: List Of Repositories data
+          in: body
+          name: data
+          required: true
+          schema:
+            type: object
+        - description: Company id
+          in: path
+          name: id
+          required: true
+          type: string
+        - description: Company Update Option
+          in: query
+          name: companyUpdateOption
+          required: true
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
@@ -172,27 +172,27 @@ paths:
             $ref: '#/definitions/common.ResponseDTO'
       summary: Update repositories by company id
       tags:
-      - Company
+        - Company
   /api/v1/pipelines/{processId}:
     get:
       description: Gets logs by pipeline processId [available if local storage is
         enabled]
       parameters:
-      - description: Pipeline ProcessId
-        in: path
-        name: processId
-        required: true
-        type: string
-      - description: Page number
-        in: query
-        name: page
-        type: integer
-      - description: Record count
-        in: query
-        name: limit
-        type: integer
+        - description: Pipeline ProcessId
+          in: path
+          name: processId
+          required: true
+          type: string
+        - description: Page number
+          in: query
+          name: page
+          type: integer
+        - description: Record count
+          in: query
+          name: limit
+          type: integer
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
@@ -200,31 +200,31 @@ paths:
             $ref: '#/definitions/common.ResponseDTO'
       summary: Get Logs [available if local storage is enabled]
       tags:
-      - Pipeline
+        - Pipeline
   /api/v1/processes:
     get:
       description: Get Process List or count process
       parameters:
-      - description: Company Id
-        in: query
-        name: companyId
-        required: true
-        type: string
-      - description: Repository Id
-        in: query
-        name: repositoryId
-        type: string
-      - description: App Id
-        in: query
-        name: appId
-        required: true
-        type: string
-      - description: Operation[countTodaysProcessByCompanyId]
-        in: query
-        name: operation
-        type: string
+        - description: Company Id
+          in: query
+          name: companyId
+          required: true
+          type: string
+        - description: Repository Id
+          in: query
+          name: repositoryId
+          type: string
+        - description: App Id
+          in: query
+          name: appId
+          required: true
+          type: string
+        - description: Operation[countTodaysProcessByCompanyId]
+          in: query
+          name: operation
+          type: string
       produces:
-      - application/json
+        - application/json
       responses:
         "200":
           description: OK
@@ -232,5 +232,5 @@ paths:
             $ref: '#/definitions/common.ResponseDTO'
       summary: Get Process List or count process
       tags:
-      - Process
+        - Process
 swagger: "2.0"

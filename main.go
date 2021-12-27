@@ -22,4 +22,3 @@ func main() {
 //  goplantuml -recursive . > ClassDiagram.puml
 // goreportcard-cli -v
 // swag init --parseDependency --parseInternal
-

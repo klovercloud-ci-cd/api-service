@@ -67,10 +67,9 @@ func (p pipelineApi) GetLogs(context echo.Context) error {
 		return errors.New("Id required!")
 	}
 	option := getPipelineQueryOption(context)
-	code,data:=p.pipelineService.GetByProcessId(id, option)
-	return context.JSON(code,data)
+	code, data := p.pipelineService.GetByProcessId(id, option)
+	return context.JSON(code, data)
 }
-
 
 func getPipelineQueryOption(context echo.Context) v1.Pagination {
 	option := v1.Pagination{}
