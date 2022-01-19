@@ -15,6 +15,7 @@ func Router(g *echo.Group) {
 	ApplicationRouter(g.Group("/applications"))
 	GithubEventRouter(g.Group("/githubs"))
 	BitbucketEventRouter(g.Group("/bitbuckets"))
+	ProcessLifeCycleEventRouter(g.Group("/process_life_cycle_events"))
 }
 
 // BitbucketEventRouter api/v1/bitbuckets event router
@@ -61,9 +62,17 @@ func ProcessRouter(g *echo.Group) {
 // CompanyRouter api/v1/companies/* router
 func CompanyRouter(g *echo.Group) {
 	companyApi := NewCompanyApi(dependency.GetV1CompanyService())
-	g.POST("", companyApi.Save)
+	g.POST("", companyApi.Save,AuthenticationHandler)
 	g.GET("", companyApi.GetCompanies)
 	g.GET("/:id", companyApi.GetById)
 	g.GET("/:id/repositories", companyApi.GetRepositoriesById)
 	g.PUT("/:id/repositories", companyApi.UpdateRepositories)
+}
+
+
+// ProcessLifeCycleEventRouter api/v1/process_life_cycle_events/* router
+func ProcessLifeCycleEventRouter(g *echo.Group) {
+	processLifeCycleEventApi := NewProcessLifeCycleEventApi(dependency.GetV1ProcessLifeCycleEventService())
+	g.POST("", processLifeCycleEventApi.Save)
+	g.GET("", processLifeCycleEventApi.Pull)
 }

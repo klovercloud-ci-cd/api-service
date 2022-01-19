@@ -12,7 +12,9 @@ type Pagination struct {
 	Page  string
 	Limit string
 }
+// RepositoryQueryOption repository query option
 type RepositoryQueryOption struct {
 	Pagination       Pagination
 	LoadApplications string
 }
+

@@ -34,6 +34,12 @@ var Token string
 // EnableOpenTracing set true if opentracing is needed.
 var EnableOpenTracing bool
 
+// PublicKeyForInternalCall refers to public key for service to service communication.
+var PublicKeyForInternalCall string
+
+// TokenForInternalCall refers to jwt token for service to service communication.
+var TokenForInternalCall string
+
 // InitEnvironmentVariables initializes environment variables
 func InitEnvironmentVariables() {
 	err := godotenv.Load()
@@ -69,5 +75,6 @@ func InitEnvironmentVariables() {
 	}
 
 	Token = os.Getenv("TOKEN")
-
+	PublicKeyForInternalCall=os.Getenv("PUBLIC_KEY_FOR_INTERNAL_CALL")
+	TokenForInternalCall=os.Getenv("TOKEN_FOR_INTERNAL_CALL")
 }

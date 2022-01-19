@@ -30,3 +30,12 @@ func GenerateErrorResponse(c echo.Context, data interface{}, message string) err
 		Data:    data,
 	})
 }
+
+// GenerateUnauthorizedResponse Http unauthorized response
+func GenerateUnauthorizedResponse(c echo.Context, data interface{}, message string) error {
+	return c.JSON(http.StatusUnauthorized, ResponseDTO{
+		Status:  "unauthorized",
+		Message: message,
+		Data:    data,
+	})
+}

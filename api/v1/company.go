@@ -2,9 +2,11 @@ package v1
 
 import (
 	"errors"
+	"github.com/klovercloud-ci-cd/api-service/config"
 	v1 "github.com/klovercloud-ci-cd/api-service/core/v1"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/api"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/service"
+	"github.com/klovercloud-ci-cd/api-service/enums"
 	"github.com/labstack/echo/v4"
 )
 
@@ -44,11 +46,31 @@ func (c companyApi) UpdateRepositories(context echo.Context) error {
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/companies [POST]
 func (c companyApi) Save(context echo.Context) error {
-	var formData interface{}
-	if err := context.Bind(&formData); err != nil {
-		return err
+	isAllowed := false
+	if config.EnableAuthentication {
+		resourceWiseRoles := getResourceWiseRoleFromToken(context, "company")
+		for _, role := range resourceWiseRoles.Roles {
+			for _, permission := range role.Permissions {
+				if permission.Name == string(enums.CREATE) {
+					isAllowed = true
+					break
+				}
+			}
+			if isAllowed {
+				break
+			}
+		}
 	}
-	return context.JSON(c.companyService.Store(formData))
+	if isAllowed || !config.EnableAuthentication{
+		var formData interface{}
+		if err := context.Bind(&formData); err != nil {
+			return err
+		}
+		return context.JSON(c.companyService.Store(formData))
+	}
+
+	return context.JSON(401,"Unauthorized user!")
+
 }
 
 // Get.. Get RepositoriesDto by company id
@@ -67,6 +89,7 @@ func (c companyApi) GetRepositoriesById(context echo.Context) error {
 	option := getQueryOption(context)
 	return context.JSON(c.companyService.GetRepositoriesById(id, option))
 }
+
 
 // Get.. Get company
 // @Summary Get company by id

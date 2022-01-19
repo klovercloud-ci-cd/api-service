@@ -19,3 +19,16 @@ const (
 	// MANUAL pipeline trigger options is MANUAL
 	MANUAL = TRIGGER("MANUAL")
 )
+// PERMISSIONS permission type
+type PERMISSIONS string
+
+const (
+	// CREATE permission
+	CREATE = PERMISSIONS("CREATE")
+	// READ permission
+	READ = PERMISSIONS("READ")
+	// DELETE permission
+	DELETE = PERMISSIONS("DELETE")
+	// UPDATE permission
+	UPDATE = PERMISSIONS("UPDATE")
+)
