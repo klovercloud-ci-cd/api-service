@@ -1,13 +1,16 @@
 package v1
 
 import (
+	"github.com/klovercloud-ci-cd/api-service/config"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/api"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/service"
+	"github.com/klovercloud-ci-cd/api-service/enums"
 	"github.com/labstack/echo/v4"
 )
 
 type processApi struct {
 	processService service.Process
+	jwtService     service.Jwt
 }
 
 // Get... Get Process List or count process
@@ -25,12 +28,25 @@ func (p processApi) GetByCompanyIdAndRepositoryIdAndAppId(context echo.Context) 
 	companyId := context.QueryParam("companyId")
 	repositoryId := context.QueryParam("repositoryId")
 	appId := context.QueryParam("appId")
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, p.jwtService)
+		if err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.PROCESS), "", string(enums.READ)); err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+		if companyId != userResourcePermission.Metadata.CompanyId {
+			return context.JSON(404, "Company not found!")
+		}
+	}
 	return context.JSON(p.processService.GetByCompanyIdAndRepositoryIdAndAppName(companyId, repositoryId, appId))
 }
 
 // NewProcessApi returns Process type api
-func NewProcessApi(processService service.Process) api.Process {
+func NewProcessApi(processService service.Process, jwtService service.Jwt) api.Process {
 	return &processApi{
 		processService: processService,
+		jwtService:     jwtService,
 	}
 }
