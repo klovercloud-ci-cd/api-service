@@ -12,6 +12,7 @@ import (
 
 type companyApi struct {
 	companyService service.Company
+	jwtService     service.Jwt
 }
 
 // Update... Update repositories
@@ -46,31 +47,20 @@ func (c companyApi) UpdateRepositories(context echo.Context) error {
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/companies [POST]
 func (c companyApi) Save(context echo.Context) error {
-	isAllowed := false
 	if config.EnableAuthentication {
-		resourceWiseRoles := getResourceWiseRoleFromToken(context, "company")
-		for _, role := range resourceWiseRoles.Roles {
-			for _, permission := range role.Permissions {
-				if permission.Name == string(enums.CREATE) {
-					isAllowed = true
-					break
-				}
-			}
-			if isAllowed {
-				break
-			}
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, c.jwtService)
+		if err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.COMPANY), "", string(enums.CREATE)); err != nil {
+			return context.JSON(401, "Unauthorized user!")
 		}
 	}
-	if isAllowed || !config.EnableAuthentication{
-		var formData interface{}
-		if err := context.Bind(&formData); err != nil {
-			return err
-		}
-		return context.JSON(c.companyService.Store(formData))
+	var formData interface{}
+	if err := context.Bind(&formData); err != nil {
+		return err
 	}
-
-	return context.JSON(401,"Unauthorized user!")
-
+	return context.JSON(c.companyService.Store(formData))
 }
 
 // Get.. Get RepositoriesDto by company id
@@ -89,7 +79,6 @@ func (c companyApi) GetRepositoriesById(context echo.Context) error {
 	option := getQueryOption(context)
 	return context.JSON(c.companyService.GetRepositoriesById(id, option))
 }
-
 
 // Get.. Get company
 // @Summary Get company by id
@@ -135,8 +124,9 @@ func getQueryOption(context echo.Context) v1.CompanyQueryOption {
 }
 
 // NewCompanyApi returns Company type api
-func NewCompanyApi(companyService service.Company) api.Company {
+func NewCompanyApi(companyService service.Company, jwtService service.Jwt) api.Company {
 	return &companyApi{
 		companyService: companyService,
+		jwtService:     jwtService,
 	}
 }

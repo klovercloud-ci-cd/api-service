@@ -61,7 +61,7 @@ func ProcessRouter(g *echo.Group) {
 
 // CompanyRouter api/v1/companies/* router
 func CompanyRouter(g *echo.Group) {
-	companyApi := NewCompanyApi(dependency.GetV1CompanyService())
+	companyApi := NewCompanyApi(dependency.GetV1CompanyService(),dependency.GetV1JwtService())
 	g.POST("", companyApi.Save,AuthenticationHandler)
 	g.GET("", companyApi.GetCompanies)
 	g.GET("/:id", companyApi.GetById)
