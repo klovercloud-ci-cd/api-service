@@ -4,9 +4,11 @@ import (
 	"encoding/json"
 	"errors"
 	"github.com/gorilla/websocket"
+	"github.com/klovercloud-ci-cd/api-service/config"
 	v1 "github.com/klovercloud-ci-cd/api-service/core/v1"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/api"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/service"
+	"github.com/klovercloud-ci-cd/api-service/enums"
 	"github.com/labstack/echo/v4"
 	"log"
 	"net/http"
@@ -14,6 +16,7 @@ import (
 
 type pipelineApi struct {
 	pipelineService service.Pipeline
+	jwtService      service.Jwt
 }
 
 var (
@@ -28,7 +31,21 @@ func (p pipelineApi) GetEvents(context echo.Context) error {
 		log.Println(err.Error())
 		return err
 	}
-	defer ws.Close()
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, p.jwtService)
+		if err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.PIPELINE), "", string(enums.READ)); err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+	}
+	defer func(ws *websocket.Conn) {
+		err := ws.Close()
+		if err != nil {
+
+		}
+	}(ws)
 
 	status := make(chan map[string]interface{})
 	for {
@@ -40,12 +57,18 @@ func (p pipelineApi) GetEvents(context echo.Context) error {
 		err = ws.WriteMessage(websocket.TextMessage, []byte(jsonStr))
 		if err != nil {
 			log.Println("[ERROR]: Failed to write", err.Error())
-			ws.Close()
+			err := ws.Close()
+			if err != nil {
+				return err
+			}
 		}
 		_, _, err = ws.ReadMessage()
 		if err != nil {
 			log.Println("[ERROR]: Failed to read", err.Error())
-			ws.Close()
+			err := ws.Close()
+			if err != nil {
+				return err
+			}
 		}
 
 	}
@@ -66,6 +89,15 @@ func (p pipelineApi) GetLogs(context echo.Context) error {
 	if id == "" {
 		return errors.New("Id required!")
 	}
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, p.jwtService)
+		if err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.PIPELINE), "", string(enums.READ)); err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+	}
 	option := getPipelineQueryOption(context)
 	code, data := p.pipelineService.GetByProcessId(id, option)
 	return context.JSON(code, data)
@@ -79,6 +111,9 @@ func getPipelineQueryOption(context echo.Context) v1.Pagination {
 }
 
 // NewPipelineApi returns Pipeline type api
-func NewPipelineApi(pipelineService service.Pipeline) api.Pipeline {
-	return &pipelineApi{pipelineService: pipelineService}
+func NewPipelineApi(pipelineService service.Pipeline, jwtService service.Jwt) api.Pipeline {
+	return &pipelineApi{
+		pipelineService: pipelineService,
+		jwtService:      jwtService,
+	}
 }

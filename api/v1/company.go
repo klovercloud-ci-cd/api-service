@@ -34,6 +34,18 @@ func (c companyApi) UpdateRepositories(context echo.Context) error {
 	if id == "" {
 		return errors.New("Id required!")
 	}
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, c.jwtService)
+		if err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.REPOSITORY), "", string(enums.UPDATE)); err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+		if id != userResourcePermission.Metadata.CompanyId {
+			return context.JSON(404, "Repository not found!")
+		}
+	}
 	companyUpdateOption := context.QueryParam("companyUpdateOption")
 	return context.JSON(c.companyService.UpdateRepositories(id, formData, companyUpdateOption))
 }
@@ -76,6 +88,18 @@ func (c companyApi) GetRepositoriesById(context echo.Context) error {
 	if id == "" {
 		return errors.New("Id required!")
 	}
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, c.jwtService)
+		if err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.REPOSITORY), "", string(enums.READ)); err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+		if id != userResourcePermission.Metadata.CompanyId {
+			return context.JSON(404, "Repository not found!")
+		}
+	}
 	option := getQueryOption(context)
 	return context.JSON(c.companyService.GetRepositoriesById(id, option))
 }
@@ -92,6 +116,18 @@ func (c companyApi) GetById(context echo.Context) error {
 	id := context.Param("id")
 	if id == "" {
 		return errors.New("Id required!")
+	}
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, c.jwtService)
+		if err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.COMPANY), "", string(enums.READ)); err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+		if id != userResourcePermission.Metadata.CompanyId {
+			return context.JSON(404, "Company not found!")
+		}
 	}
 	option := getQueryOption(context)
 	return context.JSON(c.companyService.GetCompaniesById(nil, id, option))
@@ -110,6 +146,15 @@ func (c companyApi) GetById(context echo.Context) error {
 // @Router /api/v1/companies [GET]
 func (c companyApi) GetCompanies(context echo.Context) error {
 	option := getQueryOption(context)
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, c.jwtService)
+		if err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.COMPANY), "", string(enums.READ)); err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+	}
 	return context.JSON(c.companyService.GetCompanies(option))
 }
 

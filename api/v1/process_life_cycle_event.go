@@ -1,13 +1,16 @@
 package v1
 
 import (
+	"github.com/klovercloud-ci-cd/api-service/config"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/api"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/service"
+	"github.com/klovercloud-ci-cd/api-service/enums"
 	"github.com/labstack/echo/v4"
 )
 
 type processLifeCycleEventApi struct {
 	processLifeCycleEventService service.ProcessLifeCycleEvent
+	jwtService                   service.Jwt
 }
 
 // Pull... Pull Steps
@@ -24,6 +27,15 @@ func (p processLifeCycleEventApi) Pull(context echo.Context) error {
 	agentName := context.QueryParam("agent")
 	count := context.QueryParam("count")
 	steptype := context.QueryParam("step_type")
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, p.jwtService)
+		if err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.PROCESS), "", string(enums.READ)); err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+	}
 	if steptype != "" {
 		return context.JSON(p.processLifeCycleEventService.PullNonInitializedAndAutoTriggerEnabledEventsByStepType(count, steptype))
 	}
@@ -46,12 +58,24 @@ func (p processLifeCycleEventApi) Save(context echo.Context) error {
 	if err := context.Bind(&formData); err != nil {
 		return err
 	}
+
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, p.jwtService)
+		if err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.PROCESS), "", string(enums.CREATE)); err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+	}
+
 	return context.JSON(p.processLifeCycleEventService.Store(formData))
 }
 
 // NewProcessLifeCycleEventApi returns ProcessLifeCycleEvent type api
-func NewProcessLifeCycleEventApi(processLifeCycleEventService service.ProcessLifeCycleEvent) api.ProcessLifeCycleEvent {
+func NewProcessLifeCycleEventApi(processLifeCycleEventService service.ProcessLifeCycleEvent, jwtService service.Jwt) api.ProcessLifeCycleEvent {
 	return &processLifeCycleEventApi{
 		processLifeCycleEventService: processLifeCycleEventService,
+		jwtService:                   jwtService,
 	}
 }
