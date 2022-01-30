@@ -11,36 +11,6 @@ import (
 	"strings"
 )
 
-func getResourceWiseRoleFromToken(context echo.Context, resource string)*v1.ResourceWiseRoles{
-	bearerToken:=context.Request().Header.Get("Authorization")
-	if bearerToken==""{
-		return nil
-	}
-	var token string
-	if len(strings.Split(bearerToken," "))==2{
-		token=strings.Split(bearerToken," ")[1]
-	}else{
-		return nil
-	}
-	claims := jwt.MapClaims{}
-	jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
-		return []byte(""), nil
-	})
-	jsonbody, err := json.Marshal(claims["data"])
-	if err != nil {
-		log.Println(err)
-	}
-	usersPermission := v1.UserResourcePermission{}
-	if err := json.Unmarshal(jsonbody, &usersPermission); err != nil {
-		log.Println(err)
-	}
-	for _,each:=range usersPermission.Resources{
-		if each.Name==resource{
-			return &each
-		}
-	}
-	return nil
-}
 
 func checkAuthority(userResourcePermission v1.UserResourcePermission, resourceName, role, permission string) error {
 	var resourceWiseRoles v1.ResourceWiseRoles

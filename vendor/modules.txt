@@ -6,6 +6,8 @@ github.com/PuerkitoBio/purell
 github.com/PuerkitoBio/urlesc
 # github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 ## explicit
+# github.com/davecgh/go-spew v1.1.1
+github.com/davecgh/go-spew/spew
 # github.com/dgrijalva/jwt-go v3.2.0+incompatible
 ## explicit
 github.com/dgrijalva/jwt-go
@@ -18,6 +20,7 @@ github.com/go-openapi/spec
 # github.com/go-openapi/swag v0.19.14
 github.com/go-openapi/swag
 # github.com/golang-jwt/jwt v3.2.2+incompatible
+## explicit
 github.com/golang-jwt/jwt
 # github.com/golangci/golangci-lint v1.31.0
 ## explicit
@@ -56,8 +59,13 @@ github.com/opentracing/opentracing-go/ext
 github.com/opentracing/opentracing-go/log
 # github.com/pkg/errors v0.9.1
 github.com/pkg/errors
+# github.com/pmezard/go-difflib v1.0.0
+github.com/pmezard/go-difflib/difflib
 # github.com/spf13/cobra v1.2.1
 ## explicit
+# github.com/stretchr/testify v1.7.0
+## explicit
+github.com/stretchr/testify/assert
 # github.com/swaggo/echo-swagger v1.1.4
 ## explicit
 github.com/swaggo/echo-swagger
@@ -125,3 +133,5 @@ golang.org/x/tools/go/internal/cgo
 golang.org/x/tools/go/loader
 # gopkg.in/yaml.v2 v2.4.0
 gopkg.in/yaml.v2
+# gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
+gopkg.in/yaml.v3
