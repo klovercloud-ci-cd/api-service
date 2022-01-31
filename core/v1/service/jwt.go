@@ -6,6 +6,6 @@ import (
 
 // Jwt Jwt operations.
 type Jwt interface {
-	GenerateToken(duration int64, data interface{}) (string, error)
 	ValidateToken(tokenString string) (bool, *jwt.Token)
+	ValidateTokenForInternalCall(tokenString string) (bool, *jwt.Token)
 }

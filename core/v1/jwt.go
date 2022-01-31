@@ -6,6 +6,7 @@ import (
 
 // Jwt Struct of Jwt keys
 type Jwt struct {
-	PrivateKey *rsa.PrivateKey
-	PublicKey  *rsa.PublicKey
+	PrivateKey               *rsa.PrivateKey
+	PublicKey                *rsa.PublicKey
+	PublicKeyForInternalCall *rsa.PublicKey
 }

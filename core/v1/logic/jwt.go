@@ -17,24 +17,10 @@ type jwtService struct {
 	Jwt v1.Jwt
 }
 
-func (j jwtService) GenerateToken(duration int64, data interface{}) (string, error) {
-	token := jwt.New(jwt.SigningMethodRS512)
-	token.Claims = jwt.MapClaims{
-		"exp":  time.Duration(duration) * time.Hour,
-		"iat":  time.Now().Unix(),
-		"data": data,
-	}
-	tokenString, err := token.SignedString(j.Jwt.PrivateKey)
-	if err != nil {
-		return "", err
-	}
-	return tokenString, nil
-}
-
 func (j jwtService) ValidateToken(tokenString string) (bool, *jwt.Token) {
 	claims := jwt.MapClaims{}
-	token, err :=jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
-		return  j.Jwt.PublicKey, nil
+	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+		return j.Jwt.PublicKey, nil
 	})
 	if err != nil {
 		log.Print("[ERROR]: Token is invalid! ", err.Error())
@@ -48,11 +34,34 @@ func (j jwtService) ValidateToken(tokenString string) (bool, *jwt.Token) {
 		v, _ := iat.Int64()
 		tm = time.Unix(v, 0)
 	}
-	if time.Now().UTC().After(tm){
-		return false,nil
+	if time.Now().UTC().After(tm) {
+		return false, nil
 	}
 	return true, token
 
+}
+
+func (j jwtService) ValidateTokenForInternalCall(tokenString string) (bool, *jwt.Token) {
+	claims := jwt.MapClaims{}
+	token, err := jwt.ParseWithClaims(tokenString, claims, func(token *jwt.Token) (interface{}, error) {
+		return j.Jwt.PublicKeyForInternalCall, nil
+	})
+	if err != nil {
+		return false, nil
+	}
+
+	var tm time.Time
+	switch iat := claims["exp"].(type) {
+	case float64:
+		tm = time.Unix(int64(iat), 0)
+	case json.Number:
+		v, _ := iat.Int64()
+		tm = time.Unix(v, 0)
+	}
+	if time.Now().UTC().After(tm) {
+		return false, nil
+	}
+	return true, token
 }
 
 //func getPrivateKey() *rsa.PrivateKey {
@@ -66,6 +75,17 @@ func (j jwtService) ValidateToken(tokenString string) (bool, *jwt.Token) {
 //
 //	return privateKeyImported
 //}
+
+func getPublicKeyForInternalCall() *rsa.PublicKey {
+	block, _ := pem.Decode([]byte(config.PublicKeyForInternalCall))
+	publicKeyImported, err := x509.ParsePKCS1PublicKey(block.Bytes)
+
+	if err != nil {
+		log.Print(err.Error())
+		panic(err)
+	}
+	return publicKeyImported
+}
 
 func getPublicKey() *rsa.PublicKey {
 	block, _ := pem.Decode([]byte(config.PublicKey))
@@ -83,7 +103,8 @@ func NewJwtService() service.Jwt {
 	return jwtService{
 		Jwt: v1.Jwt{
 			//PrivateKey: getPrivateKey(),
-			PublicKey:  getPublicKey(),
+			PublicKey:                getPublicKey(),
+			PublicKeyForInternalCall: getPublicKeyForInternalCall(),
 		},
 	}
 }

@@ -72,6 +72,6 @@ func CompanyRouter(g *echo.Group) {
 // ProcessLifeCycleEventRouter api/v1/process_life_cycle_events/* router
 func ProcessLifeCycleEventRouter(g *echo.Group) {
 	processLifeCycleEventApi := NewProcessLifeCycleEventApi(dependency.GetV1ProcessLifeCycleEventService(), dependency.GetV1JwtService())
-	g.POST("", processLifeCycleEventApi.Save)
-	g.GET("", processLifeCycleEventApi.Pull)
+	g.POST("", processLifeCycleEventApi.Save, AuthenticationHandlerForInternalCall)
+	g.GET("", processLifeCycleEventApi.Pull, AuthenticationHandlerForInternalCall)
 }
