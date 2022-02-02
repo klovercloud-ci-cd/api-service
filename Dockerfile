@@ -26,4 +26,4 @@ WORKDIR /app
 COPY --from=builder /app/bin /app
 EXPOSE 8080
 # Run the executable
-CMD ["./klovercloud-ci-api-service"]
+CMD ["./api-service"]
