@@ -22,7 +22,7 @@ spec:
         containers:
           - name: app
             imagePullPolicy: Always
-            image: klovercloud/api-service-v0.1.0
+            image: quay.io/klovercloud/api-service:v0.1.0
             resources:
               limits:
                 cpu: 100m
