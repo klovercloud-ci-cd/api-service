@@ -2,6 +2,7 @@ package config
 
 import (
 	"github.com/joho/godotenv"
+	"github.com/klovercloud-ci-cd/api-service/enums"
 	"log"
 	"os"
 	"strings"
@@ -40,13 +41,25 @@ var PublicKeyForInternalCall string
 // TokenForInternalCall refers to jwt token for service to service communication.
 var TokenForInternalCall string
 
+// RunMode refers to run mode.
+var RunMode string
+
 // InitEnvironmentVariables initializes environment variables
 func InitEnvironmentVariables() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Println("ERROR:", err.Error(), ", reading from env")
-
+	RunMode = os.Getenv("RUN_MODE")
+	if RunMode == "" {
+		RunMode = string(enums.DEVELOP)
 	}
+
+	if RunMode != string(enums.PRODUCTION) {
+		//Load .env file
+		err := godotenv.Load()
+		if err != nil {
+			log.Println("ERROR:", err.Error())
+			return
+		}
+	}
+	log.Println("RUN MODE:", RunMode)
 	ServerPort = os.Getenv("SERVER_PORT")
 	KlovercloudIntegrationMangerUrl = os.Getenv("KLOVERCLOUD_CI_INTEGRATION_MANAGER_URL")
 	KlovercloudEventStoreUrl = os.Getenv("KLOVERCLOUD_CI_EVENT_STORE")
@@ -75,6 +88,6 @@ func InitEnvironmentVariables() {
 	}
 
 	Token = os.Getenv("TOKEN")
-	PublicKeyForInternalCall=os.Getenv("PUBLIC_KEY_FOR_INTERNAL_CALL")
-	TokenForInternalCall=os.Getenv("TOKEN_FOR_INTERNAL_CALL")
+	PublicKeyForInternalCall = os.Getenv("PUBLIC_KEY_FOR_INTERNAL_CALL")
+	TokenForInternalCall = os.Getenv("TOKEN_FOR_INTERNAL_CALL")
 }

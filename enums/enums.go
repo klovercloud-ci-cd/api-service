@@ -19,6 +19,7 @@ const (
 	// MANUAL pipeline trigger options is MANUAL
 	MANUAL = TRIGGER("MANUAL")
 )
+
 // PERMISSIONS permission type
 type PERMISSIONS string
 
@@ -33,9 +34,9 @@ const (
 	UPDATE = PERMISSIONS("UPDATE")
 )
 
-
 // RESOURCE resource string
 type RESOURCE string
+
 const (
 	// PIPELINE refers to pipeline resource
 	PIPELINE = RESOURCE("pipeline")
@@ -47,4 +48,16 @@ const (
 	REPOSITORY = RESOURCE("repository")
 	// APPLICATION refers to application resource
 	APPLICATION = RESOURCE("application")
+)
+
+// ENVIRONMENT run environment
+type ENVIRONMENT string
+
+const (
+	// PRODUCTION production environment
+	PRODUCTION = ENVIRONMENT("PRODUCTION")
+	// DEVELOP development environment
+	DEVELOP = ENVIRONMENT("DEVELOP")
+	// TEST test environment
+	TEST = ENVIRONMENT("TEST")
 )
