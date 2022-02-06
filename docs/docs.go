@@ -280,6 +280,86 @@ var doc = `{
                 }
             }
         },
+        "/api/v1/process_life_cycle_events": {
+            "get": {
+                "description": "Pulls auto trigger enabled steps",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ProcessLifeCycle"
+                ],
+                "summary": "Pull Steps",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Agen name",
+                        "name": "agent",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Pull size",
+                        "name": "count",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Step type [BUILD, DEPLOY]",
+                        "name": "step_type",
+                        "in": "path"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Stores process lifecycle event",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ProcessLifeCycle"
+                ],
+                "summary": "Save process lifecycle event",
+                "parameters": [
+                    {
+                        "description": "ProcessLifeCycleEventList Data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/processes": {
             "get": {
                 "description": "Get Process List or count process",
