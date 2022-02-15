@@ -2,6 +2,7 @@ package v1
 
 import (
 	"errors"
+	"github.com/klovercloud-ci-cd/api-service/api/common"
 	"github.com/klovercloud-ci-cd/api-service/config"
 	v1 "github.com/klovercloud-ci-cd/api-service/core/v1"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/api"
@@ -47,7 +48,25 @@ func (c companyApi) UpdateRepositories(context echo.Context) error {
 		}
 	}
 	companyUpdateOption := context.QueryParam("companyUpdateOption")
-	return context.JSON(c.companyService.UpdateRepositories(id, formData, companyUpdateOption))
+	httpCode, err := c.companyService.UpdateRepositories(id, formData, companyUpdateOption)
+	if err != nil {
+		return common.GenerateErrorResponse(context, nil, err.Error())
+	}
+	if httpCode == 200 || httpCode == 201 {
+		return context.JSON(200, common.ResponseDTO{
+			Metadata: nil,
+			Data:     nil,
+			Status:   "success",
+			Message:  "Repository updated successfully!",
+		})
+	} else {
+		return context.JSON(httpCode, common.ResponseDTO{
+			Metadata: nil,
+			Data:     nil,
+			Status:   "error",
+			Message:  "Repository not updated!",
+		})
+	}
 }
 
 // Save... Save company

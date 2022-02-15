@@ -13,6 +13,7 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/golangci/golangci-lint v1.31.0 // indirect
 	github.com/gorilla/websocket v1.4.2
+	github.com/klovercloud-ci-cd/integration-manager v0.0.0-20220215072343-16b32fee6da0
 	github.com/labstack/echo-contrib v0.11.0
 	github.com/opentracing/opentracing-go v1.2.0
 	github.com/spf13/cobra v1.2.1 // indirect

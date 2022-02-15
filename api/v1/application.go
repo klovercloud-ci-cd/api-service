@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"github.com/klovercloud-ci-cd/api-service/api/common"
 	"github.com/klovercloud-ci-cd/api-service/config"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/api"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/service"
@@ -43,7 +44,25 @@ func (a applicationApi) Update(context echo.Context) error {
 			return context.JSON(404, "Company not found!")
 		}
 	}
-	return context.JSON(a.applicationService.UpdateApplication(companyId, repoId, formData, companyUpdateOption))
+	httpCode, err := a.applicationService.UpdateApplication(companyId, repoId, formData, companyUpdateOption)
+	if err != nil {
+		return common.GenerateErrorResponse(context, nil, err.Error())
+	}
+	if httpCode == 200 || httpCode == 201 {
+		return context.JSON(200, common.ResponseDTO{
+			Metadata: nil,
+			Data:     nil,
+			Status:   "success",
+			Message:  "Repository updated successfully!",
+		})
+	} else {
+		return context.JSON(httpCode, common.ResponseDTO{
+			Metadata: nil,
+			Data:     nil,
+			Status:   "error",
+			Message:  "Repository not updated!",
+		})
+	}
 }
 
 // NewApplicationApi returns Application type api
