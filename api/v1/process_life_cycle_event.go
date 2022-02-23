@@ -42,7 +42,7 @@ func (p processLifeCycleEventApi) Pull(context echo.Context) error {
 	return context.JSON(p.processLifeCycleEventService.PullPausedAndAutoTriggerEnabledResourcesByAgentName(count, agentName))
 }
 
-// Save ... Save process lifecycle event
+// Save... Save process lifecycle event
 // @Summary Save process lifecycle event
 // @Description Stores process lifecycle event
 // @Tags ProcessLifeCycle

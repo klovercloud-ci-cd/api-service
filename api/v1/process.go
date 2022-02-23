@@ -18,14 +18,13 @@ type processApi struct {
 // @Description Get Process List or count process
 // @Tags Process
 // @Produce json
-// @Param companyId query string true "Company Id"
 // @Param repositoryId query string false "Repository Id"
 // @Param appId query string true "App Id"
 // @Param operation query string false "Operation[countTodaysProcessByCompanyId]"
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/processes [GET]
 func (p processApi) GetByCompanyIdAndRepositoryIdAndAppId(context echo.Context) error {
-	companyId := context.QueryParam("companyId")
+	var companyId string
 	repositoryId := context.QueryParam("repositoryId")
 	appId := context.QueryParam("appId")
 	if config.EnableAuthentication {
@@ -36,9 +35,7 @@ func (p processApi) GetByCompanyIdAndRepositoryIdAndAppId(context echo.Context) 
 		if err := checkAuthority(userResourcePermission, string(enums.PROCESS), "", string(enums.READ)); err != nil {
 			return context.JSON(401, "Unauthorized user!")
 		}
-		if companyId != userResourcePermission.Metadata.CompanyId {
-			return context.JSON(404, "Company not found!")
-		}
+		companyId = userResourcePermission.Metadata.CompanyId
 	}
 	return context.JSON(p.processService.GetByCompanyIdAndRepositoryIdAndAppName(companyId, repositoryId, appId))
 }

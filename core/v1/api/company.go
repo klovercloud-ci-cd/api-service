@@ -9,4 +9,5 @@ type Company interface {
 	GetCompanies(context echo.Context) error
 	GetRepositoriesById(context echo.Context) error
 	UpdateRepositories(context echo.Context) error
+	GetApplicationsByCompanyIdAndRepositoryType(context echo.Context) error
 }

@@ -45,6 +45,13 @@ var doc = `{
                         "schema": {
                             "type": "object"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "repository Id",
+                        "name": "repositoryId",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -56,6 +63,42 @@ var doc = `{
                     },
                     "404": {
                         "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/applications/{id}": {
+            "get": {
+                "description": "Get application by appliction id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Application"
+                ],
+                "summary": "Get application by appliction id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "application id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "repository id",
+                        "name": "repositoryId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/common.ResponseDTO"
                         }
@@ -96,6 +139,12 @@ var doc = `{
                         "type": "boolean",
                         "description": "Loads Applications",
                         "name": "loadApplications",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "status",
+                        "name": "status",
                         "in": "query"
                     }
                 ],
@@ -167,6 +216,53 @@ var doc = `{
                 }
             }
         },
+        "/api/v1/companies/{id}/applications": {
+            "get": {
+                "description": "Gets RApplications by company id and repository type",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Company"
+                ],
+                "summary": "Get Applications by company id and repository type",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Company id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "status",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Record count",
+                        "name": "limit",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/companies/{id}/repositories": {
             "get": {
                 "description": "Gets RepositoriesDto by company id",
@@ -225,6 +321,35 @@ var doc = `{
                         "type": "string",
                         "description": "Company Update Option",
                         "name": "companyUpdateOption",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/pipelines/ws": {
+            "get": {
+                "description": "Get events by process id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Pipeline"
+                ],
+                "summary": "Get events by process id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "process id",
+                        "name": "processId",
                         "in": "query",
                         "required": true
                     }
@@ -373,13 +498,6 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "Company Id",
-                        "name": "companyId",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
                         "description": "Repository Id",
                         "name": "repositoryId",
                         "in": "query"
@@ -395,6 +513,88 @@ var doc = `{
                         "type": "string",
                         "description": "Operation[countTodaysProcessByCompanyId]",
                         "name": "operation",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/repositories/{id}": {
+            "get": {
+                "description": "Get repository by repository id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Repository"
+                ],
+                "summary": "Get repository by repository id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "repository id",
+                        "name": "repositoryId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Load applications",
+                        "name": "loadApplications",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/repositories/{id}/applications": {
+            "get": {
+                "description": "Get applications by repository id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Repository"
+                ],
+                "summary": "Get applications by repository id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "repository id",
+                        "name": "repositoryId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "status",
+                        "name": "status",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Record count",
+                        "name": "limit",
                         "in": "query"
                     }
                 ],

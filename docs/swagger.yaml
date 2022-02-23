@@ -43,6 +43,11 @@ paths:
         required: true
         schema:
           type: object
+      - description: repository Id
+        in: query
+        name: repositoryId
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -55,6 +60,30 @@ paths:
           schema:
             $ref: '#/definitions/common.ResponseDTO'
       summary: Update Application
+      tags:
+      - Application
+  /api/v1/applications/{id}:
+    get:
+      description: Get application by appliction id
+      parameters:
+      - description: application id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: repository id
+        in: query
+        name: repositoryId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Get application by appliction id
       tags:
       - Application
   /api/v1/companies:
@@ -77,6 +106,10 @@ paths:
         in: query
         name: loadApplications
         type: boolean
+      - description: status
+        in: query
+        name: status
+        type: string
       produces:
       - application/json
       responses:
@@ -123,6 +156,37 @@ paths:
           schema:
             $ref: '#/definitions/common.ResponseDTO'
       summary: Get company by id
+      tags:
+      - Company
+  /api/v1/companies/{id}/applications:
+    get:
+      description: Gets RApplications by company id and repository type
+      parameters:
+      - description: Company id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: status
+        in: query
+        name: status
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Record count
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Get Applications by company id and repository type
       tags:
       - Company
   /api/v1/companies/{id}/repositories:
@@ -201,6 +265,25 @@ paths:
       summary: Get Logs [available if local storage is enabled]
       tags:
       - Pipeline
+  /api/v1/pipelines/ws:
+    get:
+      description: Get events by process id
+      parameters:
+      - description: process id
+        in: query
+        name: processId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Get events by process id
+      tags:
+      - Pipeline
   /api/v1/process_life_cycle_events:
     get:
       description: Pulls auto trigger enabled steps
@@ -258,11 +341,6 @@ paths:
     get:
       description: Get Process List or count process
       parameters:
-      - description: Company Id
-        in: query
-        name: companyId
-        required: true
-        type: string
       - description: Repository Id
         in: query
         name: repositoryId
@@ -286,4 +364,58 @@ paths:
       summary: Get Process List or count process
       tags:
       - Process
+  /api/v1/repositories/{id}:
+    get:
+      description: Get repository by repository id
+      parameters:
+      - description: repository id
+        in: path
+        name: repositoryId
+        required: true
+        type: string
+      - description: Load applications
+        in: query
+        name: loadApplications
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Get repository by repository id
+      tags:
+      - Repository
+  /api/v1/repositories/{id}/applications:
+    get:
+      description: Get applications by repository id
+      parameters:
+      - description: repository id
+        in: path
+        name: repositoryId
+        required: true
+        type: string
+      - description: status
+        in: query
+        name: status
+        type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Record count
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Get applications by repository id
+      tags:
+      - Repository
 swagger: "2.0"

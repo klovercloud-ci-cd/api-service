@@ -36,6 +36,7 @@ func GithubEventRouter(g *echo.Group) {
 func ApplicationRouter(g *echo.Group) {
 	applicationApi := NewApplicationApi(dependency.GetV1CompanyService(), dependency.GetV1JwtService())
 	g.POST("", applicationApi.Update)
+	g.GET("/:id", applicationApi.GetApplicationByApplicationId)
 }
 
 // RepositoryRouter api/v1/repositories/* router
@@ -67,6 +68,7 @@ func CompanyRouter(g *echo.Group) {
 	g.GET("/:id", companyApi.GetById)
 	g.GET("/:id/repositories", companyApi.GetRepositoriesById)
 	g.PUT("/:id/repositories", companyApi.UpdateRepositories)
+	g.GET("/:id/applications", companyApi.GetApplicationsByCompanyIdAndRepositoryType)
 }
 
 // ProcessLifeCycleEventRouter api/v1/process_life_cycle_events/* router

@@ -16,6 +16,55 @@ type companyApi struct {
 	jwtService     service.Jwt
 }
 
+// Get.. Get Applications by company id and repository type
+// @Summary Get Applications by company id and repository type
+// @Description Gets RApplications by company id and repository type
+// @Tags Company
+// @Produce json
+// @Param id path string true "Company id"
+// @Param status query string false "status"
+// @Param page query int64 false "Page number"
+// @Param limit query int64 false "Record count"
+// @Success 200 {object} common.ResponseDTO
+// @Router /api/v1/companies/{id}/applications [GET]
+func (c companyApi) GetApplicationsByCompanyIdAndRepositoryType(context echo.Context) error {
+	id := context.Param("id")
+	if id == "" {
+		return errors.New("company id required")
+	}
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, c.jwtService)
+		if err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.REPOSITORY), "", string(enums.UPDATE)); err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+		if id != userResourcePermission.Metadata.CompanyId {
+			return context.JSON(404, "Repository not found!")
+		}
+	}
+	repositoryType := context.QueryParam("repository_type")
+	option := getQueryOption(context)
+	status := context.QueryParam("status")
+	httpCode, data := c.companyService.GetApplicationsByCompanyIdAndRepositoryType(id, repositoryType, option, status)
+	if httpCode == 200 || httpCode == 201 {
+		return context.JSON(200, common.ResponseDTO{
+			Metadata: nil,
+			Data:     data,
+			Status:   "success",
+			Message:  "successfully!",
+		})
+	} else {
+		return context.JSON(httpCode, common.ResponseDTO{
+			Metadata: nil,
+			Data:     nil,
+			Status:   "error",
+			Message:  "No application found!",
+		})
+	}
+}
+
 // Update... Update repositories
 // @Summary Update repositories by company id
 // @Description updates repositories
@@ -81,7 +130,7 @@ func (c companyApi) Save(context echo.Context) error {
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, c.jwtService)
 		if err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return context.JSON(401, err.Error())
 		}
 		if err := checkAuthority(userResourcePermission, string(enums.COMPANY), "", string(enums.CREATE)); err != nil {
 			return context.JSON(401, "Unauthorized user!")
@@ -110,7 +159,7 @@ func (c companyApi) GetRepositoriesById(context echo.Context) error {
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, c.jwtService)
 		if err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return context.JSON(401, err.Error())
 		}
 		if err := checkAuthority(userResourcePermission, string(enums.REPOSITORY), "", string(enums.READ)); err != nil {
 			return context.JSON(401, "Unauthorized user!")
@@ -161,10 +210,12 @@ func (c companyApi) GetById(context echo.Context) error {
 // @Param limit query int64 false "Record count"
 // @Param loadRepositories query bool false "Loads Repositories"
 // @Param loadApplications query bool false "Loads Applications"
+// @Param status query string false "status"
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/companies [GET]
 func (c companyApi) GetCompanies(context echo.Context) error {
 	option := getQueryOption(context)
+	status := context.QueryParam("status")
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, c.jwtService)
 		if err != nil {
@@ -174,7 +225,7 @@ func (c companyApi) GetCompanies(context echo.Context) error {
 			return context.JSON(401, "Unauthorized user!")
 		}
 	}
-	return context.JSON(c.companyService.GetCompanies(option))
+	return context.JSON(c.companyService.GetCompanies(option, status))
 }
 
 //this function is for set all query param

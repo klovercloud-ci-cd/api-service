@@ -6,11 +6,65 @@ import (
 	"github.com/klovercloud-ci-cd/api-service/config"
 	v1 "github.com/klovercloud-ci-cd/api-service/core/v1"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/service"
+	"log"
 	"net/http"
 )
 
 type companyService struct {
 	httpPublisher service.HttpClient
+}
+
+func (c companyService) GetApplicationsByRepositoryId(repoId string, companyId string, option v1.RepositoryQueryOption, status string) (httpCode int, body interface{}) {
+	var response interface{}
+	header := make(map[string]string)
+	header["token"] = config.Token
+
+	code, b, err := c.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/repositories/"+repoId+"/applications?page="+option.Pagination.Page+"&limit="+option.Pagination.Limit+"&companyId="+companyId+"&status="+status, header)
+
+	if err != nil {
+		return code, nil
+	}
+	er := json.Unmarshal(b, &response)
+	if er != nil {
+		return code, nil
+	}
+	return code, response
+}
+
+func (c companyService) GetApplicationsByCompanyIdAndRepositoryType(id string, _type string, option v1.CompanyQueryOption, status string) (httpCode int, data interface{}) {
+	var response interface{}
+	header := make(map[string]string)
+	header["token"] = config.Token
+
+	code, b, err := c.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/companies/"+id+"/applications"+"?repository_type="+_type+"&page="+option.Pagination.Page+"&limit="+option.Pagination.Limit+"&status="+status, header)
+
+	if err != nil {
+		return code, nil
+	}
+	er := json.Unmarshal(b, &response)
+	if er != nil {
+		log.Println("[Error]", err.Error())
+		return code, nil
+	}
+	return code, response
+}
+
+func (c companyService) GetApplicationByApplicationId(companyId string, repoId string, applicationId string) (httpCode int, data interface{}) {
+	var response interface{}
+	header := make(map[string]string)
+	header["token"] = config.Token
+
+	code, b, err := c.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/applications/"+applicationId+"?companyId="+companyId+"&repositoryId="+repoId, header)
+
+	if err != nil {
+		return code, nil
+	}
+	er := json.Unmarshal(b, &response)
+	if er != nil {
+		log.Println("[Error]", err.Error())
+		return code, nil
+	}
+	return code, response
 }
 
 func (c companyService) UpdateApplication(id string, repoId string, payload interface{}, option string) (httpCode int, err error) {
@@ -47,29 +101,12 @@ func (c companyService) UpdateRepositories(companyId string, company interface{}
 	return httpCode, nil
 }
 
-func (c companyService) GetApplicationsByCompanyId(id string, option v1.RepositoryQueryOption) (httpCode int, body interface{}) {
+func (c companyService) GetRepositoryByRepositoryId(id string, companyId string, loadApplications string) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)
 	header["token"] = config.Token
 
-	code, b, err := c.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/repositories/"+id+"/applications?loadApplications="+option.LoadApplications, header)
-
-	if err != nil {
-		return code, nil
-	}
-	er := json.Unmarshal(b, &response)
-	if er != nil {
-		return code, nil
-	}
-	return code, response
-}
-
-func (c companyService) GetRepositoryByRepositoryId(id string) (httpCode int, body interface{}) {
-	var response interface{}
-	header := make(map[string]string)
-	header["token"] = config.Token
-
-	code, b, err := c.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/repositories/"+id, header)
+	code, b, err := c.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/repositories/"+id+"?loadApplications="+loadApplications+"&companyId="+companyId, header)
 
 	if err != nil {
 		return code, nil
@@ -110,11 +147,11 @@ func (c companyService) GetRepositoriesById(id string, option v1.CompanyQueryOpt
 	}
 	return code, response
 }
-func (c companyService) GetCompanies(option v1.CompanyQueryOption) (httpCode int, body interface{}) {
+func (c companyService) GetCompanies(option v1.CompanyQueryOption, status string) (httpCode int, body interface{}) {
 	response := make(map[string]interface{})
 	header := make(map[string]string)
 	header["token"] = config.Token
-	code, b, err := c.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/companies"+"?loadRepositories="+option.LoadRepositories+"&loadApplications="+option.LoadApplications, header)
+	code, b, err := c.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/companies"+"?loadRepositories="+option.LoadRepositories+"&loadApplications="+option.LoadApplications+"&status="+status, header)
 	if err != nil {
 		return code, nil
 	}

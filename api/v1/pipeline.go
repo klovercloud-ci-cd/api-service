@@ -23,6 +23,14 @@ var (
 	upgrader = websocket.Upgrader{}
 )
 
+// Get.. Get events by process id
+// @Summary Get events by process id
+// @Description Get events by process id
+// @Tags Pipeline
+// @Produce json
+// @Param processId query string true "process id"
+// @Success 200 {object} common.ResponseDTO
+// @Router /api/v1/pipelines/ws [GET]
 func (p pipelineApi) GetEvents(context echo.Context) error {
 	processId := context.QueryParam("processId")
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
