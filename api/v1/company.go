@@ -2,7 +2,6 @@ package v1
 
 import (
 	"errors"
-	"github.com/klovercloud-ci-cd/api-service/api/common"
 	"github.com/klovercloud-ci-cd/api-service/config"
 	v1 "github.com/klovercloud-ci-cd/api-service/core/v1"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/api"
@@ -47,22 +46,7 @@ func (c companyApi) GetApplicationsByCompanyIdAndRepositoryType(context echo.Con
 	repositoryType := context.QueryParam("repository_type")
 	option := getQueryOption(context)
 	status := context.QueryParam("status")
-	httpCode, data := c.companyService.GetApplicationsByCompanyIdAndRepositoryType(id, repositoryType, option, status)
-	if httpCode == 200 || httpCode == 201 {
-		return context.JSON(200, common.ResponseDTO{
-			Metadata: nil,
-			Data:     data,
-			Status:   "success",
-			Message:  "successfully!",
-		})
-	} else {
-		return context.JSON(httpCode, common.ResponseDTO{
-			Metadata: nil,
-			Data:     nil,
-			Status:   "error",
-			Message:  "No application found!",
-		})
-	}
+	return context.JSON(c.companyService.GetApplicationsByCompanyIdAndRepositoryType(id, repositoryType, option, status))
 }
 
 // Update... Update repositories
@@ -97,25 +81,7 @@ func (c companyApi) UpdateRepositories(context echo.Context) error {
 		}
 	}
 	companyUpdateOption := context.QueryParam("companyUpdateOption")
-	httpCode, err := c.companyService.UpdateRepositories(id, formData, companyUpdateOption)
-	if err != nil {
-		return common.GenerateErrorResponse(context, nil, err.Error())
-	}
-	if httpCode == 200 || httpCode == 201 {
-		return context.JSON(200, common.ResponseDTO{
-			Metadata: nil,
-			Data:     nil,
-			Status:   "success",
-			Message:  "Repository updated successfully!",
-		})
-	} else {
-		return context.JSON(httpCode, common.ResponseDTO{
-			Metadata: nil,
-			Data:     nil,
-			Status:   "error",
-			Message:  "Repository not updated!",
-		})
-	}
+	return context.JSON(c.companyService.UpdateRepositories(id, formData, companyUpdateOption))
 }
 
 // Save... Save company
@@ -198,7 +164,7 @@ func (c companyApi) GetById(context echo.Context) error {
 		}
 	}
 	option := getQueryOption(context)
-	return context.JSON(c.companyService.GetCompaniesById(nil, id, option))
+	return context.JSON(c.companyService.GetById(nil, id, option))
 }
 
 // Get... Get companies
@@ -213,7 +179,7 @@ func (c companyApi) GetById(context echo.Context) error {
 // @Param status query string false "status"
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/companies [GET]
-func (c companyApi) GetCompanies(context echo.Context) error {
+func (c companyApi) Get(context echo.Context) error {
 	option := getQueryOption(context)
 	status := context.QueryParam("status")
 	if config.EnableAuthentication {
@@ -225,7 +191,7 @@ func (c companyApi) GetCompanies(context echo.Context) error {
 			return context.JSON(401, "Unauthorized user!")
 		}
 	}
-	return context.JSON(c.companyService.GetCompanies(option, status))
+	return context.JSON(c.companyService.Get(option, status))
 }
 
 //this function is for set all query param

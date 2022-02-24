@@ -23,7 +23,7 @@ type applicationApi struct {
 // @Param repositoryId query string true "repository id"
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/applications/{id} [GET]
-func (a applicationApi) GetApplicationByApplicationId(context echo.Context) error {
+func (a applicationApi) GetById(context echo.Context) error {
 	id := context.Param("id")
 	if id == "" {
 		return common.GenerateErrorResponse(context, nil, "application Id is required!")
@@ -46,23 +46,7 @@ func (a applicationApi) GetApplicationByApplicationId(context echo.Context) erro
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
 
-	httpCode, app := a.applicationService.GetApplicationByApplicationId(companyId, repositoryId, id)
-	if httpCode == 200 || httpCode == 201 {
-		return context.JSON(200, common.ResponseDTO{
-			Metadata: nil,
-			Data:     app,
-			Status:   "success",
-			Message:  "successfully!",
-		})
-	} else {
-		return context.JSON(httpCode, common.ResponseDTO{
-			Metadata: nil,
-			Data:     nil,
-			Status:   "error",
-			Message:  "application not found!",
-		})
-	}
-
+	return context.JSON(a.applicationService.GetApplicationByApplicationId(companyId, repositoryId, id))
 }
 
 // Update... Update Application
@@ -94,25 +78,7 @@ func (a applicationApi) Update(context echo.Context) error {
 		}
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
-	httpCode, err := a.applicationService.UpdateApplication(companyId, repoId, formData, companyUpdateOption)
-	if err != nil {
-		return common.GenerateErrorResponse(context, nil, err.Error())
-	}
-	if httpCode == 200 || httpCode == 201 {
-		return context.JSON(200, common.ResponseDTO{
-			Metadata: nil,
-			Data:     nil,
-			Status:   "success",
-			Message:  "Repository updated successfully!",
-		})
-	} else {
-		return context.JSON(httpCode, common.ResponseDTO{
-			Metadata: nil,
-			Data:     nil,
-			Status:   "error",
-			Message:  "Repository not updated!",
-		})
-	}
+	return context.JSON(a.applicationService.UpdateApplication(companyId, repoId, formData, companyUpdateOption))
 }
 
 // NewApplicationApi returns Application type api

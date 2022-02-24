@@ -147,7 +147,7 @@ func (c companyService) GetRepositoriesById(id string, option v1.CompanyQueryOpt
 	}
 	return code, response
 }
-func (c companyService) GetCompanies(option v1.CompanyQueryOption, status string) (httpCode int, body interface{}) {
+func (c companyService) Get(option v1.CompanyQueryOption, status string) (httpCode int, body interface{}) {
 	response := make(map[string]interface{})
 	header := make(map[string]string)
 	header["token"] = config.Token
@@ -162,7 +162,7 @@ func (c companyService) GetCompanies(option v1.CompanyQueryOption, status string
 	}
 	return code, response
 }
-func (c companyService) GetCompaniesById(headers map[string]string, id string, option v1.CompanyQueryOption) (httpCode int, body interface{}) {
+func (c companyService) GetById(headers map[string]string, id string, option v1.CompanyQueryOption) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)
 	header["token"] = config.Token
