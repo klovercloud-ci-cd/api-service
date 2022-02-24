@@ -36,7 +36,7 @@ func (c companyApi) GetApplicationsByCompanyIdAndRepositoryType(context echo.Con
 		if err != nil {
 			return context.JSON(401, "Unauthorized user!")
 		}
-		if err := checkAuthority(userResourcePermission, string(enums.REPOSITORY), "", string(enums.UPDATE)); err != nil {
+		if err := checkAuthority(userResourcePermission, string(enums.REPOSITORY), "", string(enums.READ)); err != nil {
 			return context.JSON(401, "Unauthorized user!")
 		}
 		if id != userResourcePermission.Metadata.CompanyId {
