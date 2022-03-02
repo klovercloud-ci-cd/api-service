@@ -91,10 +91,10 @@ func (h httpClientService) Post(url string, header map[string]string, body []byt
 	if resp.StatusCode != 200 {
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
+			log.Println("[ERROR] Failed to communicate ", err.Error())
 			return resp.StatusCode, err
-			log.Println("[ERROR] Failed communicate ", err.Error())
 		} else {
-			log.Println("[ERROR] Failed communicate :", string(body))
+			log.Println("[ERROR] Failed to communicate :", string(body))
 		}
 	}
 	return resp.StatusCode, nil
