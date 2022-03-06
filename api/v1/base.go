@@ -37,6 +37,7 @@ func ApplicationRouter(g *echo.Group) {
 	applicationApi := NewApplicationApi(dependency.GetV1CompanyService(), dependency.GetV1JwtService())
 	g.POST("", applicationApi.Update)
 	g.GET("/:id", applicationApi.GetById)
+	g.GET("", applicationApi.GetAll)
 }
 
 // RepositoryRouter api/v1/repositories/* router

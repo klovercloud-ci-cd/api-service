@@ -13,5 +13,6 @@ type Company interface {
 	UpdateRepositories(companyId string, company interface{}, option string) (httpCode int, error error)
 	UpdateApplication(id string, repoId string, payload interface{}, option string) (httpCode int, error error)
 	GetApplicationByApplicationId(companyId string, repoId string, applicationId string) (httpCode int, data interface{})
+	GetAllApplications(companyId string, option v1.CompanyQueryOption) (httpCode int, data interface{})
 	GetApplicationsByCompanyIdAndRepositoryType(id string, _type string, option v1.CompanyQueryOption, status string) (httpCode int, data interface{})
 }

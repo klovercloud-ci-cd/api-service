@@ -14,6 +14,29 @@ type applicationApi struct {
 	jwtService         service.Jwt
 }
 
+// GetAll.. Get all applications
+// @Summary Get all applications
+// @Description Get all applications
+// @Tags Application
+// @Produce json
+// @Success 200 {object} common.ResponseDTO
+// @Router /api/v1/applications [GET]
+func (a applicationApi) GetAll(context echo.Context) error {
+	var companyId string
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, a.jwtService)
+		if err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.APPLICATION), "", string(enums.READ)); err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+		companyId = userResourcePermission.Metadata.CompanyId
+	}
+	option := getQueryOption(context)
+	return context.JSON(a.applicationService.GetAllApplications(companyId, option))
+}
+
 // Get.. Get application by appliction id
 // @Summary Get application by appliction id
 // @Description Get application by appliction id
@@ -40,7 +63,7 @@ func (a applicationApi) GetById(context echo.Context) error {
 		if err != nil {
 			return context.JSON(401, "Unauthorized user!")
 		}
-		if err := checkAuthority(userResourcePermission, string(enums.APPLICATION), "", string(enums.UPDATE)); err != nil {
+		if err := checkAuthority(userResourcePermission, string(enums.APPLICATION), "", string(enums.READ)); err != nil {
 			return context.JSON(401, "Unauthorized user!")
 		}
 		companyId = userResourcePermission.Metadata.CompanyId

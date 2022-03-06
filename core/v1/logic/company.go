@@ -14,6 +14,23 @@ type companyService struct {
 	httpPublisher service.HttpClient
 }
 
+func (c companyService) GetAllApplications(companyId string, option v1.CompanyQueryOption) (httpCode int, data interface{}) {
+	var response interface{}
+	header := make(map[string]string)
+	header["token"] = config.Token
+
+	code, b, err := c.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/applications?page="+option.Pagination.Page+"&limit="+option.Pagination.Limit+"&companyId="+companyId, header)
+
+	if err != nil {
+		return code, nil
+	}
+	er := json.Unmarshal(b, &response)
+	if er != nil {
+		return code, nil
+	}
+	return code, response
+}
+
 func (c companyService) GetApplicationsByRepositoryId(repoId string, companyId string, option v1.RepositoryQueryOption, status string) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)
@@ -48,6 +65,8 @@ func (c companyService) GetApplicationsByCompanyIdAndRepositoryType(id string, _
 	}
 	return code, response
 }
+
+
 
 func (c companyService) GetApplicationByApplicationId(companyId string, repoId string, applicationId string) (httpCode int, data interface{}) {
 	var response interface{}

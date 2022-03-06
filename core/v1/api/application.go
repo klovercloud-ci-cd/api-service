@@ -8,4 +8,5 @@ import (
 type Application interface {
 	Update(context echo.Context) error
 	GetById(context echo.Context) error
+	GetAll(context echo.Context) error
 }
