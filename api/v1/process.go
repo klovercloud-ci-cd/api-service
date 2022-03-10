@@ -20,14 +20,16 @@ type processApi struct {
 // @Tags Process
 // @Produce json
 // @Param repositoryId query string false "Repository Id"
-// @Param appId query string true "App Id"
+// @Param appId query string false "App Id"
+// @Param commitId query string false "Commit Id"
 // @Param operation query string false "Operation[countTodaysProcessByCompanyId]"
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/processes [GET]
-func (p processApi) GetByCompanyIdAndRepositoryIdAndAppId(context echo.Context) error {
+func (p processApi) Get(context echo.Context) error {
 	var companyId string
 	repositoryId := context.QueryParam("repositoryId")
 	appId := context.QueryParam("appId")
+	commitId := context.QueryParam("commitId")
 	option := getProcessQueryOption(context)
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, p.jwtService)
@@ -39,7 +41,7 @@ func (p processApi) GetByCompanyIdAndRepositoryIdAndAppId(context echo.Context) 
 		}
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
-	return context.JSON(p.processService.GetByCompanyIdAndRepositoryIdAndAppName(companyId, repositoryId, appId, option))
+	return context.JSON(p.processService.Get(companyId, repositoryId, appId, commitId, option))
 }
 
 //this function is for set all query param

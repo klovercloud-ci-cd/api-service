@@ -11,12 +11,12 @@ type processService struct {
 	httpPublisher service.HttpClient
 }
 
-func (p processService) GetByCompanyIdAndRepositoryIdAndAppName(companyId string, repositoryId string, appId string, option v1.ProcessQueryOption) (httpCode int, body interface{}) {
+func (p processService) Get(companyId, repositoryId, appId, commitId string, option v1.ProcessQueryOption) (httpCode int, body interface{}) {
 	var response interface{}
 
 	header := make(map[string]string)
 	header["token"] = config.Token
-	code, b, err := p.httpPublisher.Get(config.KlovercloudEventStoreUrl+"/processes?"+"companyId="+companyId+"&repositoryId="+repositoryId+"&appId="+appId+"&page="+option.Pagination.Page+"&limit="+option.Pagination.Limit+"&step="+option.Step, header)
+	code, b, err := p.httpPublisher.Get(config.KlovercloudEventStoreUrl+"/processes?"+"companyId="+companyId+"&repositoryId="+repositoryId+"&appId="+appId+"&commitId="+commitId+"&page="+option.Pagination.Page+"&limit="+option.Pagination.Limit+"&step="+option.Step, header)
 
 	if err != nil {
 		return code, nil
