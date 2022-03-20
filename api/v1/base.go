@@ -50,7 +50,7 @@ func RepositoryRouter(g *echo.Group) {
 // PipelineRouter api/v1/pipelines/* router
 func PipelineRouter(g *echo.Group) {
 	pipelineApi := NewPipelineApi(dependency.GetV1PipelineService(), dependency.GetV1JwtService())
-	g.GET("/:id", pipelineApi.GetLogs)
+	g.GET("/:id", pipelineApi.Get)
 	g.GET("/ws", pipelineApi.GetEvents)
 }
 

@@ -82,21 +82,23 @@ func (p pipelineApi) GetEvents(context echo.Context) error {
 	}
 }
 
-// Get... Get logs [available if local storage is enabled]
-// @Summary Get Logs [available if local storage is enabled]
-// @Description Gets logs by pipeline processId [available if local storage is enabled]
+// Get... Get Pipeline or logs [available if local storage is enabled]
+// @Summary Get Pipeline or logs [available if local storage is enabled]
+// @Description Gets Pipeline or logs by pipeline processId [If action is "get_pipeline", then pipeline will be returned or logs will be returned. Available if local storage is enabled]
 // @Tags Pipeline
 // @Produce json
 // @Param processId path string true "Pipeline ProcessId"
+// @Param action query int64 false "action"
 // @Param page query int64 false "Page number"
 // @Param limit query int64 false "Record count"
-// @Success 200 {object} common.ResponseDTO
+// @Success 200 {object} common.ResponseDTO{data=[]string}
 // @Router /api/v1/pipelines/{processId} [GET]
-func (p pipelineApi) GetLogs(context echo.Context) error {
+func (p pipelineApi) Get(context echo.Context) error {
 	id := context.Param("id")
 	if id == "" {
 		return errors.New("Id required!")
 	}
+	action := context.QueryParam("action")
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, p.jwtService)
 		if err != nil {
@@ -107,7 +109,7 @@ func (p pipelineApi) GetLogs(context echo.Context) error {
 		}
 	}
 	option := getPipelineQueryOption(context)
-	code, data := p.pipelineService.GetByProcessId(id, option)
+	code, data := p.pipelineService.GetByProcessId(id, action, option)
 	return context.JSON(code, data)
 }
 
