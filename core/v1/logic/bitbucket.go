@@ -11,6 +11,22 @@ type bitbucketService struct {
 }
 
 //this function is responsible for forwarding the request to integration-manager
+func (b bitbucketService) GetBranches(repoName, userName, repositoryId string) (httpCode int, body interface{}) {
+	var response interface{}
+	header := make(map[string]string)
+	header["token"] = config.Token
+	code, res, err := b.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"bitbuckets?repoName="+repoName+"&userName="+userName+"&repoId="+repositoryId, header)
+	if err != nil {
+		return code, nil
+	}
+	er := json.Unmarshal(res, &response)
+	if er != nil {
+		return code, nil
+	}
+	return code, response
+}
+
+//this function is responsible for forwarding the request to integration-manager
 func (b bitbucketService) ListenEvent(payload interface{}, companyId string) error {
 	marshal, marshalErr := json.Marshal(payload)
 	if marshalErr != nil {

@@ -11,6 +11,11 @@ type v1BitbucketApi struct {
 	bitbucket service.Bitbucket
 }
 
+func (v v1BitbucketApi) GetBranches(context echo.Context) error {
+	//TODO implement me
+	panic("implement me")
+}
+
 // this is the main function that will be called by the api to listen bitbucket events
 func (v v1BitbucketApi) ListenEvent(context echo.Context) error {
 	var formData interface{}

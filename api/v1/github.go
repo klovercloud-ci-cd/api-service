@@ -11,6 +11,11 @@ type v1GithubApi struct {
 	github service.Github
 }
 
+func (v v1GithubApi) GetBranches(context echo.Context) error {
+	//TODO implement me
+	panic("implement me")
+}
+
 // this is the main function that will be called by the api to listen bitbucket events
 func (v v1GithubApi) ListenEvent(context echo.Context) error {
 	var formData interface{}
