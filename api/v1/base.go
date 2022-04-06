@@ -21,15 +21,17 @@ func Router(g *echo.Group) {
 // BitbucketEventRouter api/v1/bitbuckets event router
 func BitbucketEventRouter(g *echo.Group) {
 	var bitbucket api.Git
-	bitbucket = newBitbucketApi(dependency.GetV1BitbucketService())
+	bitbucket = newBitbucketApi(dependency.GetV1BitbucketService(), dependency.GetV1JwtService())
 	g.POST("", bitbucket.ListenEvent)
+	g.GET("", bitbucket.GetBranches)
 }
 
 // GithubEventRouter api/v1/githubs/* router
 func GithubEventRouter(g *echo.Group) {
 	var githubApi api.Git
-	githubApi = NewGithubApi(dependency.GetV1GithubService())
+	githubApi = NewGithubApi(dependency.GetV1GithubService(), dependency.GetV1JwtService())
 	g.POST("", githubApi.ListenEvent)
+	g.GET("", githubApi.GetBranches)
 }
 
 // ApplicationRouter api/v1/applications/* router

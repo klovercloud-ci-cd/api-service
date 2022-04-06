@@ -11,11 +11,11 @@ type githubService struct {
 }
 
 //this function is responsible for forwarding the request to integration-manager
-func (g githubService) GetBranches(repoName, userName, repositoryId string) (httpCode int, body interface{}) {
+func (g githubService) GetBranches(repoName, userName, repositoryId, companyId string) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)
 	header["token"] = config.Token
-	code, res, err := g.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"githubs?repoName="+repoName+"&userName="+userName+"&repoId="+repositoryId, header)
+	code, res, err := g.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/githubs?repoName="+repoName+"&userName="+userName+"&repoId="+repositoryId+"&companyId="+companyId, header)
 	if err != nil {
 		return code, nil
 	}
