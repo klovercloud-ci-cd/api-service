@@ -38,9 +38,6 @@ var EnableOpenTracing bool
 // PublicKeyForInternalCall refers to public key for service to service communication.
 var PublicKeyForInternalCall string
 
-// TokenForInternalCall refers to jwt token for service to service communication.
-var TokenForInternalCall string
-
 // RunMode refers to run mode.
 var RunMode string
 
@@ -88,6 +85,5 @@ func InitEnvironmentVariables() {
 	}
 
 	Token = os.Getenv("TOKEN")
-	PublicKeyForInternalCall = os.Getenv("PUBLIC_KEY_FOR_INTERNAL_CALL")
-	TokenForInternalCall = os.Getenv("TOKEN_FOR_INTERNAL_CALL")
+	PublicKeyForInternalCall = os.Getenv("PUBLIC_KEY_INTERNAL_CALL")
 }

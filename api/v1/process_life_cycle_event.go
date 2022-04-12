@@ -4,7 +4,6 @@ import (
 	"github.com/klovercloud-ci-cd/api-service/config"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/api"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/service"
-	"github.com/klovercloud-ci-cd/api-service/enums"
 	"github.com/labstack/echo/v4"
 )
 
@@ -28,18 +27,20 @@ func (p processLifeCycleEventApi) Pull(context echo.Context) error {
 	count := context.QueryParam("count")
 	steptype := context.QueryParam("step_type")
 	if config.EnableAuthentication {
-		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, p.jwtService)
+		client, err := GetClientNameFromBearerToken(context, p.jwtService)
 		if err != nil {
 			return context.JSON(401, "Unauthorized user!")
 		}
-		if err := checkAuthority(userResourcePermission, string(enums.PROCESS), "", string(enums.READ)); err != nil {
-			return context.JSON(401, "Unauthorized user!")
+		if steptype != "" {
+			return context.JSON(p.processLifeCycleEventService.PullNonInitializedAndAutoTriggerEnabledEventsByStepType(count, steptype))
 		}
+		return context.JSON(p.processLifeCycleEventService.PullPausedAndAutoTriggerEnabledResourcesByAgentName(count, client.Name))
+	} else {
+		if steptype != "" {
+			return context.JSON(p.processLifeCycleEventService.PullNonInitializedAndAutoTriggerEnabledEventsByStepType(count, steptype))
+		}
+		return context.JSON(p.processLifeCycleEventService.PullPausedAndAutoTriggerEnabledResourcesByAgentName(count, agentName))
 	}
-	if steptype != "" {
-		return context.JSON(p.processLifeCycleEventService.PullNonInitializedAndAutoTriggerEnabledEventsByStepType(count, steptype))
-	}
-	return context.JSON(p.processLifeCycleEventService.PullPausedAndAutoTriggerEnabledResourcesByAgentName(count, agentName))
 }
 
 // Save... Save process lifecycle event
@@ -60,11 +61,8 @@ func (p processLifeCycleEventApi) Save(context echo.Context) error {
 	}
 
 	if config.EnableAuthentication {
-		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, p.jwtService)
+		_, err := GetClientNameFromBearerToken(context, p.jwtService)
 		if err != nil {
-			return context.JSON(401, "Unauthorized user!")
-		}
-		if err := checkAuthority(userResourcePermission, string(enums.PROCESS), "", string(enums.CREATE)); err != nil {
 			return context.JSON(401, "Unauthorized user!")
 		}
 	}

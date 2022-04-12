@@ -39,3 +39,8 @@ func GetV1PipelineService() service.Pipeline {
 func GetV1JwtService() service.Jwt {
 	return logic.NewJwtService()
 }
+
+// GetLogEventService returns LogEvent service
+func GetLogEventService() service.LogEvent {
+	return logic.NewLogEventService(logic.NewHttpClientService())
+}

@@ -11,7 +11,6 @@ import (
 	"strings"
 )
 
-
 func checkAuthority(userResourcePermission v1.UserResourcePermission, resourceName, role, permission string) error {
 	var resourceWiseRoles v1.ResourceWiseRoles
 	for _, resource := range userResourcePermission.Resources {
@@ -26,7 +25,7 @@ func checkAuthority(userResourcePermission v1.UserResourcePermission, resourceNa
 				return nil
 			}
 		}
-	} else if permission!=""{
+	} else if permission != "" {
 		for _, each := range resourceWiseRoles.Roles {
 			for _, perm := range each.Permissions {
 				if perm.Name == permission {
@@ -39,32 +38,56 @@ func checkAuthority(userResourcePermission v1.UserResourcePermission, resourceNa
 	return errors.New("[ERROR]: Insufficient permission")
 }
 
-func GetUserResourcePermissionFromBearerToken(context echo.Context,  jwtService service.Jwt) (v1.UserResourcePermission, error) {
+func GetUserResourcePermissionFromBearerToken(context echo.Context, jwtService service.Jwt) (v1.UserResourcePermission, error) {
 	bearerToken := context.Request().Header.Get("Authorization")
 	if bearerToken == "" {
-		return v1.UserResourcePermission{}, errors.New("[ERROR]: No token found!")
+		return v1.UserResourcePermission{}, errors.New("[ERROR]: No token found")
 	}
 	var token string
 	if len(strings.Split(bearerToken, " ")) == 2 {
 		token = strings.Split(bearerToken, " ")[1]
 	} else {
-		return v1.UserResourcePermission{}, errors.New("[ERROR]: No token found!")
+		return v1.UserResourcePermission{}, errors.New("[ERROR]: No token found")
 	}
-	res, _ :=jwtService.ValidateToken(token)
+	res, _ := jwtService.ValidateToken(token)
 	if !res {
-		return v1.UserResourcePermission{}, errors.New("[ERROR]: Token is expired!")
+		return v1.UserResourcePermission{}, errors.New("[ERROR]: Token is expired")
 	}
 	claims := jwt.MapClaims{}
 	jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
 		return []byte(""), nil
 	})
-	jsonbody, err := json.Marshal(claims["data"])
+	jsonBody, err := json.Marshal(claims["data"])
 	if err != nil {
 		log.Println(err)
 	}
 	userResourcePermission := v1.UserResourcePermission{}
-	if err := json.Unmarshal(jsonbody, &userResourcePermission); err != nil {
-		return v1.UserResourcePermission{}, errors.New("[ERROR]: No resource permissions!")
+	if err := json.Unmarshal(jsonBody, &userResourcePermission); err != nil {
+		return v1.UserResourcePermission{}, errors.New("[ERROR]: No resource permissions")
 	}
 	return userResourcePermission, nil
+}
+
+func GetClientNameFromBearerToken(context echo.Context, jwtService service.Jwt) (v1.AgentData, error) {
+	bearerToken := context.Request().Header.Get("token")
+	if bearerToken == "" {
+		return v1.AgentData{}, errors.New("[ERROR]: No token found")
+	}
+	res, _ := jwtService.ValidateTokenForInternalCall(bearerToken)
+	if !res {
+		return v1.AgentData{}, errors.New("[ERROR]: Token is expired")
+	}
+	claims := jwt.MapClaims{}
+	jwt.ParseWithClaims(bearerToken, claims, func(token *jwt.Token) (interface{}, error) {
+		return []byte(""), nil
+	})
+	jsonBody, err := json.Marshal(claims["data"])
+	if err != nil {
+		log.Println(err)
+	}
+	agent := v1.AgentData{}
+	if err := json.Unmarshal(jsonBody, &agent); err != nil {
+		return v1.AgentData{}, errors.New("[ERROR]: No resource permissions")
+	}
+	return agent, nil
 }
