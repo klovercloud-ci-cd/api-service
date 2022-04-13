@@ -44,3 +44,7 @@ func GetV1JwtService() service.Jwt {
 func GetLogEventService() service.LogEvent {
 	return logic.NewLogEventService(logic.NewHttpClientService())
 }
+
+func GetProcessEvent() service.ProcessEvent {
+	return logic.NewProcessEvent(logic.NewHttpClientService())
+}

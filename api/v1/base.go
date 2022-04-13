@@ -17,6 +17,14 @@ func Router(g *echo.Group) {
 	BitbucketEventRouter(g.Group("/bitbuckets"))
 	ProcessLifeCycleEventRouter(g.Group("/process_life_cycle_events"))
 	LogEventRouter(g.Group("/logs"))
+	ProcessEventRouter(g.Group("/processes_events"))
+}
+
+// ProcessEventRouter api/v1/process_events router
+func ProcessEventRouter(g *echo.Group) {
+	var processEvent api.ProcessEvent
+	processEvent = NewProcessEvent(dependency.GetProcessEvent(), dependency.GetV1JwtService())
+	g.POST("", processEvent.Save)
 }
 
 // LogEventRouter api/v1/logs router
