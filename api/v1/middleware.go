@@ -5,7 +5,6 @@ import (
 	"github.com/klovercloud-ci-cd/api-service/config"
 	"github.com/klovercloud-ci-cd/api-service/dependency"
 	"github.com/labstack/echo/v4"
-	"log"
 	"strings"
 )
 
@@ -41,7 +40,6 @@ func AuthenticationHandlerForInternalCall(handler echo.HandlerFunc) echo.Handler
 				return common.GenerateUnauthorizedResponse(context, "[ERROR]: No token found!", "Please provide a valid token!")
 			}
 			var token string
-			log.Println(len(strings.Split(bearerToken, " ")))
 			if len(strings.Split(bearerToken, " ")) == 2 {
 				token = strings.Split(bearerToken, " ")[1]
 			} else {

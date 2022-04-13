@@ -29,7 +29,7 @@ func (p ProcessEvent) Save(context echo.Context) error {
 	}
 
 	if config.EnableAuthentication {
-		_, err := GetClientNameFromBearerToken(context, p.jwtService)
+		_, err := GetClientNameFromBearerToken(context)
 		if err != nil {
 			return context.JSON(401, "Unauthorized user!")
 		}

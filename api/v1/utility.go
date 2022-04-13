@@ -68,17 +68,14 @@ func GetUserResourcePermissionFromBearerToken(context echo.Context, jwtService s
 	return userResourcePermission, nil
 }
 
-func GetClientNameFromBearerToken(context echo.Context, jwtService service.Jwt) (v1.AgentData, error) {
-	bearerToken := context.Request().Header.Get("token")
-	if bearerToken == "" {
-		return v1.AgentData{}, errors.New("[ERROR]: No token found")
-	}
-	res, _ := jwtService.ValidateTokenForInternalCall(bearerToken)
-	if !res {
-		return v1.AgentData{}, errors.New("[ERROR]: Token is expired")
+func GetClientNameFromBearerToken(context echo.Context) (v1.AgentData, error) {
+	bearerToken := context.Request().Header.Get("Authorization")
+	var token string
+	if len(strings.Split(bearerToken, " ")) == 2 {
+		token = strings.Split(bearerToken, " ")[1]
 	}
 	claims := jwt.MapClaims{}
-	jwt.ParseWithClaims(bearerToken, claims, func(token *jwt.Token) (interface{}, error) {
+	jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
 		return []byte(""), nil
 	})
 	jsonBody, err := json.Marshal(claims["data"])

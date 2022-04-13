@@ -24,14 +24,14 @@ func Router(g *echo.Group) {
 func ProcessEventRouter(g *echo.Group) {
 	var processEvent api.ProcessEvent
 	processEvent = NewProcessEvent(dependency.GetProcessEvent(), dependency.GetV1JwtService())
-	g.POST("", processEvent.Save)
+	g.POST("", processEvent.Save, AuthenticationHandlerForInternalCall)
 }
 
 // LogEventRouter api/v1/logs router
 func LogEventRouter(g *echo.Group) {
 	var logEvent api.LogEvent
 	logEvent = NewLogEvent(dependency.GetLogEventService(), dependency.GetV1JwtService())
-	g.POST("", logEvent.Save)
+	g.POST("", logEvent.Save, AuthenticationHandlerForInternalCall)
 }
 
 // BitbucketEventRouter api/v1/bitbuckets event router

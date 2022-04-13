@@ -27,7 +27,7 @@ func (p processLifeCycleEventApi) Pull(context echo.Context) error {
 	count := context.QueryParam("count")
 	steptype := context.QueryParam("step_type")
 	if config.EnableAuthentication {
-		client, err := GetClientNameFromBearerToken(context, p.jwtService)
+		client, err := GetClientNameFromBearerToken(context)
 		if err != nil {
 			return context.JSON(401, "Unauthorized user!")
 		}
@@ -61,7 +61,7 @@ func (p processLifeCycleEventApi) Save(context echo.Context) error {
 	}
 
 	if config.EnableAuthentication {
-		_, err := GetClientNameFromBearerToken(context, p.jwtService)
+		_, err := GetClientNameFromBearerToken(context)
 		if err != nil {
 			return context.JSON(401, "Unauthorized user!")
 		}
