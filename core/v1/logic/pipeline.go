@@ -25,11 +25,11 @@ func (p pipelineService) GetByProcessId(processId, action string, option v1.Pagi
 	code, b, err := p.httpClient.Get(config.KlovercloudEventStoreUrl+"/pipelines/"+processId+"?action="+action+"&order=&page="+option.Page+"&limit="+option.Limit, header)
 
 	if err != nil {
-		return code, nil
+		return code, err
 	}
-	er := json.Unmarshal(b, &response)
-	if er != nil {
-		return code, nil
+	err = json.Unmarshal(b, &response)
+	if err != nil {
+		return http.StatusBadRequest, err
 	}
 	return code, response
 }

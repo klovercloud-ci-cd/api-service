@@ -22,11 +22,11 @@ func (c companyService) GetAllApplications(companyId string, option v1.CompanyQu
 	code, b, err := c.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/applications?page="+option.Pagination.Page+"&limit="+option.Pagination.Limit+"&companyId="+companyId, header)
 
 	if err != nil {
-		return code, nil
+		return code, err
 	}
-	er := json.Unmarshal(b, &response)
-	if er != nil {
-		return code, nil
+	err = json.Unmarshal(b, &response)
+	if err != nil {
+		return http.StatusBadRequest, err
 	}
 	return code, response
 }
@@ -39,11 +39,11 @@ func (c companyService) GetApplicationsByRepositoryId(repoId string, companyId s
 	code, b, err := c.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/repositories/"+repoId+"/applications?page="+option.Pagination.Page+"&limit="+option.Pagination.Limit+"&companyId="+companyId+"&status="+status, header)
 
 	if err != nil {
-		return code, nil
+		return code, err
 	}
-	er := json.Unmarshal(b, &response)
-	if er != nil {
-		return code, nil
+	err = json.Unmarshal(b, &response)
+	if err != nil {
+		return http.StatusBadRequest, err
 	}
 	return code, response
 }
@@ -56,12 +56,12 @@ func (c companyService) GetApplicationsByCompanyIdAndRepositoryType(id string, _
 	code, b, err := c.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/companies/"+id+"/applications"+"?repository_type="+_type+"&page="+option.Pagination.Page+"&limit="+option.Pagination.Limit+"&status="+status, header)
 
 	if err != nil {
-		return code, nil
+		return code, err
 	}
-	er := json.Unmarshal(b, &response)
-	if er != nil {
+	err = json.Unmarshal(b, &response)
+	if err != nil {
 		log.Println("[Error]", err.Error())
-		return code, nil
+		return http.StatusBadRequest, err
 	}
 	return code, response
 }
@@ -76,12 +76,12 @@ func (c companyService) GetApplicationByApplicationId(companyId string, repoId s
 	code, b, err := c.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/applications/"+applicationId+"?companyId="+companyId+"&repositoryId="+repoId, header)
 
 	if err != nil {
-		return code, nil
+		return code, err
 	}
-	er := json.Unmarshal(b, &response)
-	if er != nil {
+	err = json.Unmarshal(b, &response)
+	if err != nil {
 		log.Println("[Error]", err.Error())
-		return code, nil
+		return http.StatusBadRequest, err
 	}
 	return code, response
 }
@@ -89,35 +89,26 @@ func (c companyService) GetApplicationByApplicationId(companyId string, repoId s
 func (c companyService) UpdateApplication(id string, repoId string, payload interface{}, option string) (httpCode int, err error) {
 	marshal, err := json.Marshal(payload)
 	if err != nil {
-		return 0, err
+		return http.StatusBadRequest, err
 	}
 	header := make(map[string]string)
 	header["token"] = config.Token
 	header["Content-Type"] = "application/json"
 
-	post, err := c.httpPublisher.Post(config.KlovercloudIntegrationMangerUrl+"/applications?companyId="+id+"&repositoryId="+repoId+"&companyUpdateOption="+option, header, marshal)
-
-	if err != nil {
-		return 0, err
-	}
-	return post, nil
+	code, err := c.httpPublisher.Post(config.KlovercloudIntegrationMangerUrl+"/applications?companyId="+id+"&repositoryId="+repoId+"&companyUpdateOption="+option, header, marshal)
+	return code, err
 }
 
 func (c companyService) UpdateRepositories(companyId string, company interface{}, option string) (httpCode int, err error) {
 	marshal, err := json.Marshal(company)
 	if err != nil {
-		return 0, err
+		return http.StatusBadRequest, err
 	}
 	header := make(map[string]string)
 	header["token"] = config.Token
 	header["Content-Type"] = "application/json"
 	httpCode, err = c.httpPublisher.Put(config.KlovercloudIntegrationMangerUrl+"/companies/"+companyId+"/repositories?companyUpdateOption="+option, header, marshal)
-
-	if err != nil {
-		return 0, err
-	}
-
-	return httpCode, nil
+	return httpCode, err
 }
 
 func (c companyService) GetRepositoryByRepositoryId(id string, companyId string, loadApplications string) (httpCode int, body interface{}) {

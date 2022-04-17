@@ -5,6 +5,7 @@ import (
 	"github.com/klovercloud-ci-cd/api-service/config"
 	v1 "github.com/klovercloud-ci-cd/api-service/core/v1"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/service"
+	"net/http"
 )
 
 type processService struct {
@@ -19,11 +20,11 @@ func (p processService) Get(companyId, repositoryId, appId, commitId string, opt
 	code, b, err := p.httpPublisher.Get(config.KlovercloudEventStoreUrl+"/processes?"+"companyId="+companyId+"&repositoryId="+repositoryId+"&appId="+appId+"&commitId="+commitId+"&page="+option.Pagination.Page+"&limit="+option.Pagination.Limit+"&step="+option.Step, header)
 
 	if err != nil {
-		return code, nil
+		return code, err
 	}
-	er := json.Unmarshal(b, &response)
-	if er != nil {
-		return code, nil
+	err = json.Unmarshal(b, &response)
+	if err != nil {
+		return http.StatusBadRequest, err
 	}
 	return code, response
 }

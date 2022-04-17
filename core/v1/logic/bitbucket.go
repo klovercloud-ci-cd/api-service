@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/klovercloud-ci-cd/api-service/config"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/service"
+	"net/http"
 )
 
 type bitbucketService struct {
@@ -17,11 +18,11 @@ func (b bitbucketService) GetBranches(repoName, userName, repositoryId, companyI
 	header["token"] = config.Token
 	code, res, err := b.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/bitbuckets?repoName="+repoName+"&userName="+userName+"&repoId="+repositoryId+"&companyId="+companyId, header)
 	if err != nil {
-		return code, nil
+		return code, err
 	}
-	er := json.Unmarshal(res, &response)
-	if er != nil {
-		return code, nil
+	err = json.Unmarshal(res, &response)
+	if err != nil {
+		return http.StatusBadRequest, err
 	}
 	return code, response
 }

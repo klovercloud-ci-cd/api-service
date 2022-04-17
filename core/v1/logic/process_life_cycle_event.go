@@ -2,9 +2,9 @@ package logic
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/klovercloud-ci-cd/api-service/config"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/service"
+	"log"
 	"net/http"
 )
 
@@ -34,12 +34,12 @@ func (p processLifeCycleEventService) PullNonInitializedAndAutoTriggerEnabledEve
 	header["Content-Type"] = "application/json"
 	code, b, err := p.httpPublisher.Get(config.KlovercloudEventStoreUrl+"/process_life_cycle_events"+"?step_type="+stepType+"&count="+count, header)
 	if err != nil {
-		return code, nil
+		return code, err
 	}
-	er := json.Unmarshal(b, &response)
-	if er != nil {
-		fmt.Println(er)
-		return code, nil
+	err = json.Unmarshal(b, &response)
+	if err != nil {
+		log.Println(err)
+		return http.StatusBadRequest, err
 	}
 	return code, response
 }
@@ -51,12 +51,12 @@ func (p processLifeCycleEventService) PullPausedAndAutoTriggerEnabledResourcesBy
 	header["Content-Type"] = "application/json"
 	code, b, err := p.httpPublisher.Get(config.KlovercloudEventStoreUrl+"/process_life_cycle_events"+"?agent="+agent+"&count="+count, header)
 	if err != nil {
-		return code, nil
+		return code, err
 	}
-	er := json.Unmarshal(b, &response)
-	if er != nil {
-		fmt.Println(er)
-		return code, nil
+	err = json.Unmarshal(b, &response)
+	if err != nil {
+		log.Println(err)
+		return http.StatusBadRequest, nil
 	}
 	return code, response
 }

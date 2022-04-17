@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/klovercloud-ci-cd/api-service/config"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/service"
+	"net/http"
 )
 
 type githubService struct {
@@ -17,11 +18,11 @@ func (g githubService) GetBranches(repoName, userName, repositoryId, companyId s
 	header["token"] = config.Token
 	code, res, err := g.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/githubs?repoName="+repoName+"&userName="+userName+"&repoId="+repositoryId+"&companyId="+companyId, header)
 	if err != nil {
-		return code, nil
+		return code, err
 	}
-	er := json.Unmarshal(res, &response)
-	if er != nil {
-		return code, nil
+	err = json.Unmarshal(res, &response)
+	if err != nil {
+		return http.StatusBadRequest, err
 	}
 	return code, response
 }

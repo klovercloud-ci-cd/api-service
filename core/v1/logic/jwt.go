@@ -64,18 +64,6 @@ func (j jwtService) ValidateTokenForInternalCall(tokenString string) (bool, *jwt
 	return true, token
 }
 
-//func getPrivateKey() *rsa.PrivateKey {
-//	block, _ := pem.Decode([]byte(config.PrivateKey))
-//
-//	privateKeyImported, err := x509.ParsePKCS1PrivateKey(block.Bytes)
-//	if err != nil {
-//		log.Print(err.Error())
-//		return nil
-//	}
-//
-//	return privateKeyImported
-//}
-
 func getPublicKeyForInternalCall() *rsa.PublicKey {
 	block, _ := pem.Decode([]byte(config.PublicKeyForInternalCall))
 	publicKeyImported, err := x509.ParsePKCS1PublicKey(block.Bytes)

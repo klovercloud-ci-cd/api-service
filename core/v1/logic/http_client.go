@@ -29,14 +29,14 @@ func (h httpClientService) Put(url string, header map[string]string, body []byte
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Println("[ERROR] Failed communicate :", err.Error())
-		return http.StatusBadRequest, err
+		return resp.StatusCode, err
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
 		body, err := ioutil.ReadAll(resp.Body)
 		if err != nil {
-			return resp.StatusCode, err
 			log.Println("[ERROR] Failed communicate ", err.Error())
+			return resp.StatusCode, err
 		} else {
 			log.Println("[SUCCESS] Successful :", string(body))
 		}
