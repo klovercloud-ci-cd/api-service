@@ -32,6 +32,18 @@ info:
   title: api-service API
 paths:
   /api/v1/applications:
+    get:
+      description: Get all applications
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Get all applications
+      tags:
+      - Application
     post:
       consumes:
       - application/json
@@ -86,6 +98,69 @@ paths:
       summary: Get application by appliction id
       tags:
       - Application
+  /api/v1/bitbuckets/branches:
+    get:
+      description: Gets Branches
+      parameters:
+      - description: User Name
+        in: query
+        name: userName
+        required: true
+        type: string
+      - description: Repository Id
+        in: query
+        name: repoId
+        required: true
+        type: string
+      - description: Repository Name
+        in: query
+        name: repoName
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Get Branches
+      tags:
+      - Bitbucket
+  /api/v1/bitbuckets/commits:
+    get:
+      description: "Gets \tCommit By Branch"
+      parameters:
+      - description: User Name
+        in: query
+        name: userName
+        required: true
+        type: string
+      - description: Repository Id
+        in: query
+        name: repoId
+        required: true
+        type: string
+      - description: Repository Name
+        in: query
+        name: repoName
+        required: true
+        type: string
+      - description: Branch
+        in: query
+        name: branch
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Get Commit By Branch
+      tags:
+      - bitbucket
   /api/v1/companies:
     get:
       description: Gets companies
@@ -237,16 +312,110 @@ paths:
       summary: Update repositories by company id
       tags:
       - Company
+  /api/v1/githubs/branches:
+    get:
+      description: Gets Branches
+      parameters:
+      - description: User Name
+        in: query
+        name: userName
+        required: true
+        type: string
+      - description: Repository Id
+        in: query
+        name: repoId
+        required: true
+        type: string
+      - description: Repository Name
+        in: query
+        name: repoName
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Get Branches
+      tags:
+      - Github
+  /api/v1/githubs/commits:
+    get:
+      description: Gets commit by branch
+      parameters:
+      - description: User Name
+        in: query
+        name: userName
+        required: true
+        type: string
+      - description: branch
+        in: query
+        name: branch
+        required: true
+        type: string
+      - description: Repository Id
+        in: query
+        name: repoId
+        required: true
+        type: string
+      - description: Repository Name
+        in: query
+        name: repoName
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Get commit by branch
+      tags:
+      - Github
+  /api/v1/logs:
+    post:
+      consumes:
+      - application/json
+      description: Stores logs
+      parameters:
+      - description: LogEvent Data
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Save log
+      tags:
+      - Log
   /api/v1/pipelines/{processId}:
     get:
-      description: Gets logs by pipeline processId [available if local storage is
-        enabled]
+      description: Gets Pipeline or logs by pipeline processId [If action is "get_pipeline",
+        then pipeline will be returned or logs will be returned. Available if local
+        storage is enabled]
       parameters:
       - description: Pipeline ProcessId
         in: path
         name: processId
         required: true
         type: string
+      - description: action
+        in: query
+        name: action
+        type: integer
       - description: Page number
         in: query
         name: page
@@ -261,8 +430,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/common.ResponseDTO'
-      summary: Get Logs [available if local storage is enabled]
+            allOf:
+            - $ref: '#/definitions/common.ResponseDTO'
+            - properties:
+                data:
+                  items:
+                    type: string
+                  type: array
+              type: object
+      summary: Get Pipeline or logs [available if local storage is enabled]
       tags:
       - Pipeline
   /api/v1/pipelines/ws:
@@ -348,7 +524,10 @@ paths:
       - description: App Id
         in: query
         name: appId
-        required: true
+        type: string
+      - description: Commit Id
+        in: query
+        name: commitId
         type: string
       - description: Operation[countTodaysProcessByCompanyId]
         in: query
@@ -364,6 +543,32 @@ paths:
       summary: Get Process List or count process
       tags:
       - Process
+  /api/v1/processes_events:
+    post:
+      consumes:
+      - application/json
+      description: Stores Pipeline process event
+      parameters:
+      - description: PipelineProcessEvent Data
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Save Pipeline process event
+      tags:
+      - ProcessEvent
   /api/v1/repositories/{id}:
     get:
       description: Get repository by repository id

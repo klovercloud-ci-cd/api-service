@@ -7,6 +7,24 @@
     },
     "paths": {
         "/api/v1/applications": {
+            "get": {
+                "description": "Get all applications",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Application"
+                ],
+                "summary": "Get all applications",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            },
             "post": {
                 "description": "Update Application by company id and  repository id",
                 "consumes": [
@@ -75,6 +93,99 @@
                         "type": "string",
                         "description": "repository id",
                         "name": "repositoryId",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/bitbuckets/branches": {
+            "get": {
+                "description": "Gets Branches",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Bitbucket"
+                ],
+                "summary": "Get Branches",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User Name",
+                        "name": "userName",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Repository Id",
+                        "name": "repoId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Repository Name",
+                        "name": "repoName",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/bitbuckets/commits": {
+            "get": {
+                "description": "Gets \tCommit By Branch",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "bitbucket"
+                ],
+                "summary": "Get Commit By Branch",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User Name",
+                        "name": "userName",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Repository Id",
+                        "name": "repoId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Repository Name",
+                        "name": "repoName",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Branch",
+                        "name": "branch",
                         "in": "query",
                         "required": true
                     }
@@ -318,6 +429,139 @@
                 }
             }
         },
+        "/api/v1/githubs/branches": {
+            "get": {
+                "description": "Gets Branches",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Github"
+                ],
+                "summary": "Get Branches",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User Name",
+                        "name": "userName",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Repository Id",
+                        "name": "repoId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Repository Name",
+                        "name": "repoName",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/githubs/commits": {
+            "get": {
+                "description": "Gets commit by branch",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Github"
+                ],
+                "summary": "Get commit by branch",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "User Name",
+                        "name": "userName",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "branch",
+                        "name": "branch",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Repository Id",
+                        "name": "repoId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Repository Name",
+                        "name": "repoName",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/logs": {
+            "post": {
+                "description": "Stores logs",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Log"
+                ],
+                "summary": "Save log",
+                "parameters": [
+                    {
+                        "description": "LogEvent Data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/pipelines/ws": {
             "get": {
                 "description": "Get events by process id",
@@ -349,14 +593,14 @@
         },
         "/api/v1/pipelines/{processId}": {
             "get": {
-                "description": "Gets logs by pipeline processId [available if local storage is enabled]",
+                "description": "Gets Pipeline or logs by pipeline processId [If action is \"get_pipeline\", then pipeline will be returned or logs will be returned. Available if local storage is enabled]",
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "Pipeline"
                 ],
-                "summary": "Get Logs [available if local storage is enabled]",
+                "summary": "Get Pipeline or logs [available if local storage is enabled]",
                 "parameters": [
                     {
                         "type": "string",
@@ -364,6 +608,12 @@
                         "name": "processId",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "action",
+                        "name": "action",
+                        "in": "query"
                     },
                     {
                         "type": "integer",
@@ -382,7 +632,22 @@
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/common.ResponseDTO"
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/common.ResponseDTO"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     }
                 }
@@ -489,8 +754,13 @@
                         "type": "string",
                         "description": "App Id",
                         "name": "appId",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Commit Id",
+                        "name": "commitId",
+                        "in": "query"
                     },
                     {
                         "type": "string",
@@ -502,6 +772,46 @@
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/processes_events": {
+            "post": {
+                "description": "Stores Pipeline process event",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "ProcessEvent"
+                ],
+                "summary": "Save Pipeline process event",
+                "parameters": [
+                    {
+                        "description": "PipelineProcessEvent Data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
                         "schema": {
                             "$ref": "#/definitions/common.ResponseDTO"
                         }

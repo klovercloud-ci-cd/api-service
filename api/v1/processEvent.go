@@ -12,13 +12,13 @@ type ProcessEvent struct {
 	jwtService   service.Jwt
 }
 
-// Save ... Save Pipeline process event
+// Save... Save Pipeline process event
 // @Summary Save Pipeline process event
 // @Description Stores Pipeline process event
 // @Tags ProcessEvent
 // @Accept json
 // @Produce json
-// @Param data body v1.PipelineProcessEvent true "PipelineProcessEvent Data"
+// @Param data body interface{} true "PipelineProcessEvent Data"
 // @Success 200 {object} common.ResponseDTO
 // @Failure 404 {object} common.ResponseDTO
 // @Router /api/v1/processes_events [POST]

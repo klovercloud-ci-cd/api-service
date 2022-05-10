@@ -12,7 +12,7 @@ type LogEvent struct {
 	jwtService      service.Jwt
 }
 
-// Save ... Save log
+// Save... Save log
 // @Summary Save log
 // @Description Stores logs
 // @Tags Log
