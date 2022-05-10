@@ -39,7 +39,8 @@ func BitbucketEventRouter(g *echo.Group) {
 	var bitbucket api.Git
 	bitbucket = newBitbucketApi(dependency.GetV1BitbucketService(), dependency.GetV1JwtService())
 	g.POST("", bitbucket.ListenEvent)
-	g.GET("", bitbucket.GetBranches)
+	g.GET("/branches", bitbucket.GetBranches)
+	g.GET("/commits", bitbucket.GetCommitByBranch)
 }
 
 // GithubEventRouter api/v1/githubs/* router
@@ -47,7 +48,8 @@ func GithubEventRouter(g *echo.Group) {
 	var githubApi api.Git
 	githubApi = NewGithubApi(dependency.GetV1GithubService(), dependency.GetV1JwtService())
 	g.POST("", githubApi.ListenEvent)
-	g.GET("", githubApi.GetBranches)
+	g.GET("/branches", githubApi.GetBranches)
+	g.GET("/commits", githubApi.GetCommitByBranch)
 }
 
 // ApplicationRouter api/v1/applications/* router

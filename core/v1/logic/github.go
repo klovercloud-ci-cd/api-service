@@ -11,12 +11,27 @@ type githubService struct {
 	httpPublisher service.HttpClient
 }
 
+func (g githubService) GetCommitByBranch(username, repositoryName, branch, companyId, repoId string) (httpCode int, body interface{}) {
+	var response interface{}
+	header := make(map[string]string)
+	header["token"] = config.Token
+	code, res, err := g.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/githubs/commits?repoName="+repositoryName+"&userName="+username+"&repoId="+repoId+"&companyId="+companyId+"&branch="+branch, header)
+	if err != nil {
+		return code, err
+	}
+	err = json.Unmarshal(res, &response)
+	if err != nil {
+		return http.StatusBadRequest, err
+	}
+	return code, response
+}
+
 //this function is responsible for forwarding the request to integration-manager
 func (g githubService) GetBranches(repoName, userName, repositoryId, companyId string) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)
 	header["token"] = config.Token
-	code, res, err := g.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/githubs?repoName="+repoName+"&userName="+userName+"&repoId="+repositoryId+"&companyId="+companyId, header)
+	code, res, err := g.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/githubs/branches?repoName="+repoName+"&userName="+userName+"&repoId="+repositoryId+"&companyId="+companyId, header)
 	if err != nil {
 		return code, err
 	}

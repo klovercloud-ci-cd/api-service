@@ -14,16 +14,46 @@ type v1BitbucketApi struct {
 	jwtService service.Jwt
 }
 
+// GetCommitByBranch... Get Commit By Branch
+// @Summary Get Commit By Branch
+// @Description Gets 	Commit By Branch
+// @Tags bitbucket
+// @Produce json
+// @Param userName query string true "User Name"
+// @Param repoId query string true "Repository Id"
+// @Param repoName query string true "Repository Name"
+// @Param branch query string true "Branch"
+// @Success 200 {object} common.ResponseDTO
+// @Router /api/v1/bitbuckets/commits [GET]
+func (v v1BitbucketApi) GetCommitByBranch(context echo.Context) error {
+	var companyId string
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, v.jwtService)
+		if err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.REPOSITORY), "", string(enums.READ)); err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+		companyId = userResourcePermission.Metadata.CompanyId
+	}
+	repoId := context.QueryParam("repoId")
+	userName := context.QueryParam("userName")
+	repoName := context.QueryParam("repoName")
+	branch := context.QueryParam("branch")
+	return context.JSON(v.bitbucket.GetCommitByBranch(repoName, userName, repoId, branch, companyId))
+}
+
 // GetBranches... Get Branches
 // @Summary Get Branches
 // @Description Gets Branches
-// @Tags Github
+// @Tags Bitbucket
 // @Produce json
 // @Param userName query string true "User Name"
 // @Param repoId query string true "Repository Id"
 // @Param repoName query string true "Repository Name"
 // @Success 200 {object} common.ResponseDTO
-// @Router /api/v1/githubs [GET]
+// @Router /api/v1/bitbuckets/branches [GET]
 func (v v1BitbucketApi) GetBranches(context echo.Context) error {
 	var companyId string
 	if config.EnableAuthentication {

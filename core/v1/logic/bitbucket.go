@@ -11,12 +11,27 @@ type bitbucketService struct {
 	httpPublisher service.HttpClient
 }
 
+func (b bitbucketService) GetCommitByBranch(repoName, userName, repoId, branch, companyId string) (httpCode int, body interface{}) {
+	var response interface{}
+	header := make(map[string]string)
+	header["token"] = config.Token
+	code, res, err := b.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/bitbuckets/branches?repoName="+repoName+"&userName="+userName+"&repoId="+repoId+"&companyId="+companyId+"&branch="+branch, header)
+	if err != nil {
+		return code, err
+	}
+	err = json.Unmarshal(res, &response)
+	if err != nil {
+		return http.StatusBadRequest, err
+	}
+	return code, response
+}
+
 //this function is responsible for forwarding the request to integration-manager
 func (b bitbucketService) GetBranches(repoName, userName, repositoryId, companyId string) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)
 	header["token"] = config.Token
-	code, res, err := b.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/bitbuckets?repoName="+repoName+"&userName="+userName+"&repoId="+repositoryId+"&companyId="+companyId, header)
+	code, res, err := b.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/bitbuckets/branches?repoName="+repoName+"&userName="+userName+"&repoId="+repositoryId+"&companyId="+companyId, header)
 	if err != nil {
 		return code, err
 	}

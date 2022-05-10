@@ -14,6 +14,36 @@ type v1GithubApi struct {
 	jwtService service.Jwt
 }
 
+// GetCommitByBranch... Get commit by branch
+// @Summary Get commit by branch
+// @Description Gets commit by branch
+// @Tags Github
+// @Produce json
+// @Param userName query string true "User Name"
+// @Param branch query string true "branch"
+// @Param repoId query string true "Repository Id"
+// @Param repoName query string true "Repository Name"
+// @Success 200 {object} common.ResponseDTO
+// @Router /api/v1/githubs/commits [GET]
+func (v v1GithubApi) GetCommitByBranch(context echo.Context) error {
+	var companyId string
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, v.jwtService)
+		if err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.REPOSITORY), "", string(enums.READ)); err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+		companyId = userResourcePermission.Metadata.CompanyId
+	}
+	repoId := context.QueryParam("repoId")
+	userName := context.QueryParam("userName")
+	repoName := context.QueryParam("repoName")
+	branch := context.QueryParam("branch")
+	return context.JSON(v.github.GetCommitByBranch(userName, repoName, branch, companyId, repoId))
+}
+
 // GetBranches... Get Branches
 // @Summary Get Branches
 // @Description Gets Branches
@@ -23,7 +53,7 @@ type v1GithubApi struct {
 // @Param repoId query string true "Repository Id"
 // @Param repoName query string true "Repository Name"
 // @Success 200 {object} common.ResponseDTO
-// @Router /api/v1/githubs [GET]
+// @Router /api/v1/githubs/branches [GET]
 func (v v1GithubApi) GetBranches(context echo.Context) error {
 	var companyId string
 	if config.EnableAuthentication {
