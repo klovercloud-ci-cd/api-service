@@ -18,6 +18,35 @@ import (
 type httpClientService struct {
 }
 
+// Delete method that fires a Delete request.
+func (h httpClientService) Delete(url string, header map[string]string) (httpCode int, err error) {
+	req, err := http.NewRequest("DELETE", url, nil)
+	for k, v := range header {
+		req.Header.Set(k, v)
+		log.Println("[DEBUG] Header: ", k, ":", v)
+	}
+	if err != nil {
+		log.Println(err.Error())
+	}
+	client := &http.Client{}
+	startTraceSpan(req, url, "DELETE")
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Println(err.Error())
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != 200 {
+		body, err := ioutil.ReadAll(resp.Body)
+		if err != nil {
+			log.Println(err.Error())
+			return resp.StatusCode, err
+		} else {
+			log.Println("[ERROR] Failed to communicate :", string(body))
+		}
+	}
+	return resp.StatusCode, nil
+}
+
 // Put method that fires a Put request.
 func (h httpClientService) Put(url string, header map[string]string, body []byte) (httpCode int, err error) {
 	req, err := http.NewRequest("PUT", url, bytes.NewBuffer(body))

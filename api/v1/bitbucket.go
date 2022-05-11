@@ -14,6 +14,82 @@ type v1BitbucketApi struct {
 	jwtService service.Jwt
 }
 
+// EnableWebhook... Enable Webhook
+// @Summary Enable Webhook
+// @Description Enable Webhook
+// @Tags bitbucket
+// @Produce json
+// @Param userName query string true "User Name"
+// @Param repoId query string true "Repository Id"
+// @Param repoName query string true "Repository Name"
+// @Success 200 {object} common.ResponseDTO
+// @Failure 400 {object} common.ResponseDTO
+// @Router /api/v1/bitbuckets/webhooks [PUT]
+func (v v1BitbucketApi) EnableWebhook(context echo.Context) error {
+	var companyId string
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, v.jwtService)
+		if err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.REPOSITORY), "", string(enums.READ)); err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+		companyId = userResourcePermission.Metadata.CompanyId
+	}
+	repoId := context.QueryParam("repoId")
+	userName := context.QueryParam("userName")
+	repoName := context.QueryParam("repoName")
+	code, err := v.bitbucket.EnableWebhook(companyId, repoId, userName, repoName)
+	if err != nil {
+		return err
+	}
+	if code == 200 {
+		return context.JSON(200, "Webhook is enabled")
+	} else {
+		return context.JSON(code, "Webhook is not enabled")
+	}
+}
+
+// DisableWebhook... Disable Webhook
+// @Summary Disable Webhook
+// @Description Disable Webhook
+// @Tags bitbucket
+// @Produce json
+// @Param userName query string true "User Name"
+// @Param repoId query string true "Repository Id"
+// @Param repoName query string true "Repository Name"
+// @Param webhookId query string true "Webhook Id"
+// @Success 200 {object} common.ResponseDTO
+// @Failure 400 {object} common.ResponseDTO
+// @Router /api/v1/bitbuckets/webhooks [DELETE]
+func (v v1BitbucketApi) DisableWebhook(context echo.Context) error {
+	var companyId string
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, v.jwtService)
+		if err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.REPOSITORY), "", string(enums.READ)); err != nil {
+			return context.JSON(401, "Unauthorized user!")
+		}
+		companyId = userResourcePermission.Metadata.CompanyId
+	}
+	repoId := context.QueryParam("repoId")
+	userName := context.QueryParam("userName")
+	repoName := context.QueryParam("repoName")
+	webhookId := context.QueryParam("webhookId")
+	code, err := v.bitbucket.DisableWebhook(companyId, repoId, userName, repoName, webhookId)
+	if err != nil {
+		return err
+	}
+	if code == 200 {
+		return context.JSON(200, "Webhook is disabled")
+	} else {
+		return context.JSON(code, "Webhook is not disabled")
+	}
+}
+
 // GetCommitByBranch... Get Commit By Branch
 // @Summary Get Commit By Branch
 // @Description Gets 	Commit By Branch

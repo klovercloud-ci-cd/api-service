@@ -161,6 +161,76 @@ paths:
       summary: Get Commit By Branch
       tags:
       - bitbucket
+  /api/v1/bitbuckets/webhooks:
+    delete:
+      description: Disable Webhook
+      parameters:
+      - description: User Name
+        in: query
+        name: userName
+        required: true
+        type: string
+      - description: Repository Id
+        in: query
+        name: repoId
+        required: true
+        type: string
+      - description: Repository Name
+        in: query
+        name: repoName
+        required: true
+        type: string
+      - description: Webhook Id
+        in: query
+        name: webhookId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Disable Webhook
+      tags:
+      - bitbucket
+    put:
+      description: Enable Webhook
+      parameters:
+      - description: User Name
+        in: query
+        name: userName
+        required: true
+        type: string
+      - description: Repository Id
+        in: query
+        name: repoId
+        required: true
+        type: string
+      - description: Repository Name
+        in: query
+        name: repoName
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Enable Webhook
+      tags:
+      - bitbucket
   /api/v1/companies:
     get:
       description: Gets companies
@@ -373,6 +443,76 @@ paths:
           schema:
             $ref: '#/definitions/common.ResponseDTO'
       summary: Get commit by branch
+      tags:
+      - Github
+  /api/v1/githubs/webhooks:
+    delete:
+      description: Disable Webhook
+      parameters:
+      - description: User Name
+        in: query
+        name: userName
+        required: true
+        type: string
+      - description: Repository Id
+        in: query
+        name: repoId
+        required: true
+        type: string
+      - description: Repository Name
+        in: query
+        name: repoName
+        required: true
+        type: string
+      - description: Webhook Id
+        in: query
+        name: webhookId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Disable Webhook
+      tags:
+      - Github
+    put:
+      description: Enable Webhook
+      parameters:
+      - description: User Name
+        in: query
+        name: userName
+        required: true
+        type: string
+      - description: Repository Id
+        in: query
+        name: repoId
+        required: true
+        type: string
+      - description: Repository Name
+        in: query
+        name: repoName
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Enable Webhook
       tags:
       - Github
   /api/v1/logs:

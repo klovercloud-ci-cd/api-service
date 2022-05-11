@@ -11,6 +11,26 @@ type bitbucketService struct {
 	httpPublisher service.HttpClient
 }
 
+func (b bitbucketService) EnableWebhook(companyId, repoId, userName, repoName string) (httpCode int, err error) {
+	header := make(map[string]string)
+	header["token"] = config.Token
+	code, err := b.httpPublisher.Put(config.KlovercloudIntegrationMangerUrl+"/bitbuckets/webhook?repoName="+repoName+"&userName="+userName+"&repoId="+repoId+"&companyId="+companyId, header, nil)
+	if err != nil {
+		return code, err
+	}
+	return code, nil
+}
+
+func (b bitbucketService) DisableWebhook(companyId, repoId, userName, repoName, webhookId string) (httpCode int, err error) {
+	header := make(map[string]string)
+	header["token"] = config.Token
+	code, err := b.httpPublisher.Delete(config.KlovercloudIntegrationMangerUrl+"/bitbuckets/webhook?repoName="+repoName+"&userName="+userName+"&repoId="+repoId+"&companyId="+companyId+"&webhookId="+webhookId, header)
+	if err != nil {
+		return code, err
+	}
+	return code, nil
+}
+
 func (b bitbucketService) GetCommitByBranch(repoName, userName, repoId, branch, companyId string) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)

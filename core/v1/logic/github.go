@@ -11,6 +11,16 @@ type githubService struct {
 	httpPublisher service.HttpClient
 }
 
+func (g githubService) EnableWebhook(companyId, repoId, userName, repoName string) (httpCode int, err error) {
+	//TODO implement me
+	panic("implement me")
+}
+
+func (g githubService) DisableWebhook(companyId, repoId, userName, repoName, webhookId string) (httpCode int, err error) {
+	//TODO implement me
+	panic("implement me")
+}
+
 func (g githubService) GetCommitByBranch(username, repositoryName, branch, companyId, repoId string) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)
