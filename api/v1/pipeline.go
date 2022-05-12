@@ -105,7 +105,7 @@ func (p pipelineApi) Get(context echo.Context) error {
 			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		if err := checkAuthority(userResourcePermission, string(enums.PIPELINE), "", string(enums.READ)); err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 	}
 	option := getPipelineQueryOption(context)
