@@ -41,8 +41,7 @@ func BitbucketEventRouter(g *echo.Group) {
 	g.POST("", bitbucket.ListenEvent)
 	g.GET("/branches", bitbucket.GetBranches)
 	g.GET("/commits", bitbucket.GetCommitByBranch)
-	g.PUT("/webhooks", bitbucket.EnableWebhook)
-	g.PUT("/webhooks", bitbucket.DisableWebhook)
+	g.PUT("/webhooks", bitbucket.UpdateWebhook)
 }
 
 // GithubEventRouter api/v1/githubs event router
@@ -52,8 +51,7 @@ func GithubEventRouter(g *echo.Group) {
 	g.POST("", githubApi.ListenEvent)
 	g.GET("/branches", githubApi.GetBranches)
 	g.GET("/commits", githubApi.GetCommitByBranch)
-	g.PUT("/webhooks", githubApi.EnableWebhook)
-	g.PUT("/webhooks", githubApi.DisableWebhook)
+	g.PUT("/webhooks", githubApi.UpdateWebhook)
 }
 
 // ApplicationRouter api/v1/applications/* router

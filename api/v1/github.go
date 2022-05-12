@@ -14,17 +14,29 @@ type v1GithubApi struct {
 	jwtService service.Jwt
 }
 
-// EnableWebhook... Enable Webhook
-// @Summary Enable Webhook
-// @Description Enable Webhook
-// @Tags Github
+// UpdateWebhook... Update Webhook
+// @Summary Update Webhook to Enable or Disable
+// @Description Update Webhook
+// @Tags Bitbucket
 // @Produce json
-// @Param userName query string true "User Name"
+// @Param action query string true "action type [enable/disable]"
+// @Param companyId query string true "Company Id"
 // @Param repoId query string true "Repository Id"
-// @Param repoName query string true "Repository Name"
+// @Param url query string true "Url"
+// @Param webhookId query string true "Webhook Id"
 // @Success 200 {object} common.ResponseDTO
 // @Failure 400 {object} common.ResponseDTO
 // @Router /api/v1/githubs/webhooks [PUT]
+func (g v1GithubApi) UpdateWebhook(context echo.Context) error {
+	action := context.QueryParam("action")
+	if action == "enable" {
+		return g.EnableWebhook(context)
+	} else if action == "disable" {
+		return g.DisableWebhook(context)
+	}
+	return common.GenerateErrorResponse(context, nil, "Provide valid action. [enable/disable]")
+}
+
 func (v v1GithubApi) EnableWebhook(context echo.Context) error {
 	var companyId string
 	if config.EnableAuthentication {
@@ -43,18 +55,6 @@ func (v v1GithubApi) EnableWebhook(context echo.Context) error {
 	return context.JSON(v.github.EnableWebhook(companyId, repoId, userName, repoName))
 }
 
-// DisableWebhook... Disable Webhook
-// @Summary Disable Webhook
-// @Description Disable Webhook
-// @Tags Github
-// @Produce json
-// @Param userName query string true "User Name"
-// @Param repoId query string true "Repository Id"
-// @Param repoName query string true "Repository Name"
-// @Param webhookId query string true "Webhook Id"
-// @Success 200 {object} common.ResponseDTO
-// @Failure 400 {object} common.ResponseDTO
-// @Router /api/v1/githubs/webhooks [PUT]
 func (v v1GithubApi) DisableWebhook(context echo.Context) error {
 	var companyId string
 	if config.EnableAuthentication {

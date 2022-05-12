@@ -14,17 +14,29 @@ type v1BitbucketApi struct {
 	jwtService service.Jwt
 }
 
-// EnableWebhook... Enable Webhook
-// @Summary Enable Webhook
-// @Description Enable Webhook
+// UpdateWebhook... Update Webhook
+// @Summary Update Webhook to Enable or Disable
+// @Description Update Webhook
 // @Tags Bitbucket
 // @Produce json
-// @Param userName query string true "User Name"
+// @Param action query string true "action type [enable/disable]"
+// @Param companyId query string true "Company Id"
 // @Param repoId query string true "Repository Id"
-// @Param repoName query string true "Repository Name"
+// @Param url query string true "Url"
+// @Param webhookId query string true "Webhook Id"
 // @Success 200 {object} common.ResponseDTO
 // @Failure 400 {object} common.ResponseDTO
 // @Router /api/v1/bitbuckets/webhooks [PUT]
+func (b v1BitbucketApi) UpdateWebhook(context echo.Context) error {
+	action := context.QueryParam("action")
+	if action == "enable" {
+		return b.EnableWebhook(context)
+	} else if action == "disable" {
+		return b.DisableWebhook(context)
+	}
+	return common.GenerateErrorResponse(context, nil, "Provide valid action. [enable/disable]")
+}
+
 func (v v1BitbucketApi) EnableWebhook(context echo.Context) error {
 	var companyId string
 	if config.EnableAuthentication {
@@ -51,18 +63,6 @@ func (v v1BitbucketApi) EnableWebhook(context echo.Context) error {
 	}
 }
 
-// DisableWebhook... Disable Webhook
-// @Summary Disable Webhook
-// @Description Disable Webhook
-// @Tags Bitbucket
-// @Produce json
-// @Param userName query string true "User Name"
-// @Param repoId query string true "Repository Id"
-// @Param repoName query string true "Repository Name"
-// @Param webhookId query string true "Webhook Id"
-// @Success 200 {object} common.ResponseDTO
-// @Failure 400 {object} common.ResponseDTO
-// @Router /api/v1/bitbuckets/webhooks [PUT]
 func (v v1BitbucketApi) DisableWebhook(context echo.Context) error {
 	var companyId string
 	if config.EnableAuthentication {
