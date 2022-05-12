@@ -2,8 +2,8 @@ package v1
 
 import (
 	"encoding/json"
-	"errors"
 	"github.com/gorilla/websocket"
+	"github.com/klovercloud-ci-cd/api-service/api/common"
 	"github.com/klovercloud-ci-cd/api-service/config"
 	v1 "github.com/klovercloud-ci-cd/api-service/core/v1"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/api"
@@ -42,10 +42,10 @@ func (p pipelineApi) GetEvents(context echo.Context) error {
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, p.jwtService)
 		if err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		if err := checkAuthority(userResourcePermission, string(enums.PIPELINE), "", string(enums.READ)); err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 	}
 	defer func(ws *websocket.Conn) {
@@ -96,13 +96,13 @@ func (p pipelineApi) GetEvents(context echo.Context) error {
 func (p pipelineApi) Get(context echo.Context) error {
 	id := context.Param("id")
 	if id == "" {
-		return errors.New("Id required!")
+		return common.GenerateErrorResponse(context, "[ERROR] no processId is provided", "Please provide processId")
 	}
 	action := context.QueryParam("action")
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, p.jwtService)
 		if err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		if err := checkAuthority(userResourcePermission, string(enums.PIPELINE), "", string(enums.READ)); err != nil {
 			return context.JSON(401, "Unauthorized user!")
