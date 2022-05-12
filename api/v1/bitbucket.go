@@ -146,7 +146,16 @@ func (v v1BitbucketApi) GetBranches(context echo.Context) error {
 	return context.JSON(v.bitbucket.GetBranches(url, repoId, companyId))
 }
 
-// this is the main function that will be called by the api to listen bitbucket events
+// Listen ... Listen Bitbucket Web hook event
+// @Summary  Listen Bitbucket Web hook event
+// @Description Listens Bitbucket Web hook events. Register this endpoint as Bitbucket web hook endpoint
+// @Tags Bitbucket
+// @Accept json
+// @Produce json
+// @Param data body v1.BitbucketWebHookEvent true "GithubWebHookEvent Data"
+// @Success 200 {object} common.ResponseDTO{data=string}
+// @Failure 404 {object} common.ResponseDTO
+// @Router /api/v1/bitbuckets [POST]
 func (v v1BitbucketApi) ListenEvent(context echo.Context) error {
 	var formData interface{}
 	if err := context.Bind(&formData); err != nil {

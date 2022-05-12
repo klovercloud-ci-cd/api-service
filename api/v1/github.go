@@ -130,7 +130,16 @@ func (v v1GithubApi) GetBranches(context echo.Context) error {
 	return context.JSON(v.github.GetBranches(url, repoId, companyId))
 }
 
-// this is the main function that will be called by the api to listen bitbucket events
+// ListenEvent... Listen Github Web hook event
+// @Summary  Listen Github Web hook event
+// @Description Listens Github Web hook events. Register this endpoint as github web hook endpoint
+// @Tags Github
+// @Accept json
+// @Produce json
+// @Param data body v1.GithubWebHookEvent true "GithubWebHookEvent Data"
+// @Success 200 {object} common.ResponseDTO{data=string}
+// @Failure 404 {object} common.ResponseDTO
+// @Router /api/v1/githubs [POST]
 func (v v1GithubApi) ListenEvent(context echo.Context) error {
 	var formData interface{}
 	if err := context.Bind(&formData); err != nil {
