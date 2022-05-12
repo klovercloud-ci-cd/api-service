@@ -92,7 +92,7 @@ func (v v1BitbucketApi) DisableWebhook(context echo.Context) error {
 
 // GetCommitByBranch... Get Commit By Branch
 // @Summary Get Commit By Branch
-// @Description Gets 	Commit By Branch
+// @Description Gets Commit By Branch
 // @Tags Bitbucket
 // @Produce json
 // @Param repoId query string true "Repository Id"

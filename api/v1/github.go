@@ -17,7 +17,7 @@ type v1GithubApi struct {
 // UpdateWebhook... Update Webhook
 // @Summary Update Webhook to Enable or Disable
 // @Description Update Webhook
-// @Tags Bitbucket
+// @Tags Github
 // @Produce json
 // @Param action query string true "action type [enable/disable]"
 // @Param companyId query string true "Company Id"
