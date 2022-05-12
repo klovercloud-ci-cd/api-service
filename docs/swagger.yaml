@@ -129,7 +129,7 @@ paths:
       - Bitbucket
   /api/v1/bitbuckets/commits:
     get:
-      description: "Gets \tCommit By Branch"
+      description: Gets Commit By Branch
       parameters:
       - description: Repository Id
         in: query
@@ -157,7 +157,7 @@ paths:
       tags:
       - Bitbucket
   /api/v1/bitbuckets/webhooks:
-    put:
+    patch:
       description: Update Webhook
       parameters:
       - description: action type [enable/disable]
@@ -409,7 +409,7 @@ paths:
       tags:
       - Github
   /api/v1/githubs/webhooks:
-    put:
+    patch:
       description: Update Webhook
       parameters:
       - description: action type [enable/disable]
@@ -450,7 +450,7 @@ paths:
             $ref: '#/definitions/common.ResponseDTO'
       summary: Update Webhook to Enable or Disable
       tags:
-      - Bitbucket
+      - Github
   /api/v1/logs:
     post:
       consumes:
