@@ -167,7 +167,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "bitbucket"
+                    "Bitbucket"
                 ],
                 "summary": "Get Commit By Branch",
                 "parameters": [
@@ -217,7 +217,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "bitbucket"
+                    "Bitbucket"
                 ],
                 "summary": "Enable Webhook",
                 "parameters": [
@@ -264,7 +264,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "bitbucket"
+                    "Bitbucket"
                 ],
                 "summary": "Disable Webhook",
                 "parameters": [

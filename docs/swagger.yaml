@@ -160,7 +160,7 @@ paths:
             $ref: '#/definitions/common.ResponseDTO'
       summary: Get Commit By Branch
       tags:
-      - bitbucket
+      - Bitbucket
   /api/v1/bitbuckets/webhooks:
     delete:
       description: Disable Webhook
@@ -198,7 +198,7 @@ paths:
             $ref: '#/definitions/common.ResponseDTO'
       summary: Disable Webhook
       tags:
-      - bitbucket
+      - Bitbucket
     put:
       description: Enable Webhook
       parameters:
@@ -230,7 +230,7 @@ paths:
             $ref: '#/definitions/common.ResponseDTO'
       summary: Enable Webhook
       tags:
-      - bitbucket
+      - Bitbucket
   /api/v1/companies:
     get:
       description: Gets companies

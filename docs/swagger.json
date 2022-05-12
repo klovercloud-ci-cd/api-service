@@ -157,7 +157,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "bitbucket"
+                    "Bitbucket"
                 ],
                 "summary": "Get Commit By Branch",
                 "parameters": [
@@ -207,7 +207,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "bitbucket"
+                    "Bitbucket"
                 ],
                 "summary": "Enable Webhook",
                 "parameters": [
@@ -254,7 +254,7 @@
                     "application/json"
                 ],
                 "tags": [
-                    "bitbucket"
+                    "Bitbucket"
                 ],
                 "summary": "Disable Webhook",
                 "parameters": [

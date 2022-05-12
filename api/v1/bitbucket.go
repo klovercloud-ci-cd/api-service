@@ -17,7 +17,7 @@ type v1BitbucketApi struct {
 // EnableWebhook... Enable Webhook
 // @Summary Enable Webhook
 // @Description Enable Webhook
-// @Tags bitbucket
+// @Tags Bitbucket
 // @Produce json
 // @Param userName query string true "User Name"
 // @Param repoId query string true "Repository Id"
@@ -54,7 +54,7 @@ func (v v1BitbucketApi) EnableWebhook(context echo.Context) error {
 // DisableWebhook... Disable Webhook
 // @Summary Disable Webhook
 // @Description Disable Webhook
-// @Tags bitbucket
+// @Tags Bitbucket
 // @Produce json
 // @Param userName query string true "User Name"
 // @Param repoId query string true "Repository Id"
@@ -93,7 +93,7 @@ func (v v1BitbucketApi) DisableWebhook(context echo.Context) error {
 // GetCommitByBranch... Get Commit By Branch
 // @Summary Get Commit By Branch
 // @Description Gets 	Commit By Branch
-// @Tags bitbucket
+// @Tags Bitbucket
 // @Produce json
 // @Param userName query string true "User Name"
 // @Param repoId query string true "Repository Id"
