@@ -1,7 +1,7 @@
 package v1
 
 import (
-	"errors"
+	"github.com/klovercloud-ci-cd/api-service/api/common"
 	"github.com/klovercloud-ci-cd/api-service/config"
 	v1 "github.com/klovercloud-ci-cd/api-service/core/v1"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/api"
@@ -30,15 +30,15 @@ func (r repositoryApi) GetApplicationsById(context echo.Context) error {
 	var companyId string
 	id := context.Param("id")
 	if id == "" {
-		return errors.New("repository id required")
+		return common.GenerateErrorResponse(context, "[ERROR] no repositoryId is provided", "Please provide repositoryId")
 	}
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, r.jwtService)
 		if err != nil {
-			return context.JSON(401, err.Error())
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		if err := checkAuthority(userResourcePermission, string(enums.REPOSITORY), "", string(enums.READ)); err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
@@ -67,16 +67,16 @@ func (r repositoryApi) GetById(context echo.Context) error {
 	var companyId string
 	id := context.Param("id")
 	if id == "" {
-		return errors.New("repository id required")
+		return common.GenerateErrorResponse(context, "[ERROR] no repositoryId is provided", "Please provide repositoryId")
 	}
 	loadApplications := context.QueryParam("loadApplications")
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, r.jwtService)
 		if err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		if err := checkAuthority(userResourcePermission, string(enums.REPOSITORY), "", string(enums.READ)); err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
