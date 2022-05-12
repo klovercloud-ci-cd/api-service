@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"github.com/klovercloud-ci-cd/api-service/api/common"
 	"github.com/klovercloud-ci-cd/api-service/config"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/api"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/service"
@@ -29,7 +30,7 @@ func (p processLifeCycleEventApi) Pull(context echo.Context) error {
 	if config.EnableAuthentication {
 		client, err := GetClientNameFromBearerToken(context)
 		if err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		if steptype != "" {
 			return context.JSON(p.processLifeCycleEventService.PullNonInitializedAndAutoTriggerEnabledEventsByStepType(count, steptype))
@@ -63,7 +64,7 @@ func (p processLifeCycleEventApi) Save(context echo.Context) error {
 	if config.EnableAuthentication {
 		_, err := GetClientNameFromBearerToken(context)
 		if err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 	}
 
