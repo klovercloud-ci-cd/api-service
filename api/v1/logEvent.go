@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"github.com/klovercloud-ci-cd/api-service/api/common"
 	"github.com/klovercloud-ci-cd/api-service/config"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/api"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/service"
@@ -31,7 +32,7 @@ func (l LogEvent) Save(context echo.Context) error {
 	if config.EnableAuthentication {
 		_, err := GetClientNameFromBearerToken(context)
 		if err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 	}
 
