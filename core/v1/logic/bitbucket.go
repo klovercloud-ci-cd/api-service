@@ -47,11 +47,11 @@ func (b bitbucketService) GetCommitByBranch(repoName, userName, repoId, branch, 
 }
 
 //this function is responsible for forwarding the request to integration-manager
-func (b bitbucketService) GetBranches(repoName, userName, repositoryId, companyId string) (httpCode int, body interface{}) {
+func (b bitbucketService) GetBranches(url, repositoryId, companyId string) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)
 	header["token"] = config.Token
-	code, res, err := b.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/bitbuckets/branches?repoName="+repoName+"&userName="+userName+"&repoId="+repositoryId+"&companyId="+companyId, header)
+	code, res, err := b.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/bitbuckets/branches?url="+url+"&repoId="+repositoryId+"&companyId="+companyId, header)
 	if err != nil {
 		return code, err
 	}

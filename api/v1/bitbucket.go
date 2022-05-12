@@ -30,10 +30,10 @@ func (v v1BitbucketApi) EnableWebhook(context echo.Context) error {
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, v.jwtService)
 		if err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		if err := checkAuthority(userResourcePermission, string(enums.REPOSITORY), "", string(enums.READ)); err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
@@ -68,10 +68,10 @@ func (v v1BitbucketApi) DisableWebhook(context echo.Context) error {
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, v.jwtService)
 		if err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		if err := checkAuthority(userResourcePermission, string(enums.REPOSITORY), "", string(enums.READ)); err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
@@ -95,9 +95,8 @@ func (v v1BitbucketApi) DisableWebhook(context echo.Context) error {
 // @Description Gets 	Commit By Branch
 // @Tags Bitbucket
 // @Produce json
-// @Param userName query string true "User Name"
 // @Param repoId query string true "Repository Id"
-// @Param repoName query string true "Repository Name"
+// @Param url query string true "Url"
 // @Param branch query string true "Branch"
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/bitbuckets/commits [GET]
@@ -106,10 +105,10 @@ func (v v1BitbucketApi) GetCommitByBranch(context echo.Context) error {
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, v.jwtService)
 		if err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		if err := checkAuthority(userResourcePermission, string(enums.REPOSITORY), "", string(enums.READ)); err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
@@ -135,17 +134,16 @@ func (v v1BitbucketApi) GetBranches(context echo.Context) error {
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, v.jwtService)
 		if err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		if err := checkAuthority(userResourcePermission, string(enums.REPOSITORY), "", string(enums.READ)); err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
 	repoId := context.QueryParam("repoId")
-	userName := context.QueryParam("userName")
-	repoName := context.QueryParam("repoName")
-	return context.JSON(v.bitbucket.GetBranches(repoName, userName, repoId, companyId))
+	url := context.QueryParam("url")
+	return context.JSON(v.bitbucket.GetBranches(url, repoId, companyId))
 }
 
 // this is the main function that will be called by the api to listen bitbucket events

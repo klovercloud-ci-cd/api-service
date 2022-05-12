@@ -30,10 +30,10 @@ func (v v1GithubApi) EnableWebhook(context echo.Context) error {
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, v.jwtService)
 		if err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		if err := checkAuthority(userResourcePermission, string(enums.REPOSITORY), "", string(enums.READ)); err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
@@ -60,10 +60,10 @@ func (v v1GithubApi) DisableWebhook(context echo.Context) error {
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, v.jwtService)
 		if err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		if err := checkAuthority(userResourcePermission, string(enums.REPOSITORY), "", string(enums.READ)); err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
@@ -90,10 +90,10 @@ func (v v1GithubApi) GetCommitByBranch(context echo.Context) error {
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, v.jwtService)
 		if err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		if err := checkAuthority(userResourcePermission, string(enums.REPOSITORY), "", string(enums.READ)); err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
@@ -109,9 +109,8 @@ func (v v1GithubApi) GetCommitByBranch(context echo.Context) error {
 // @Description Gets Branches
 // @Tags Github
 // @Produce json
-// @Param userName query string true "User Name"
 // @Param repoId query string true "Repository Id"
-// @Param repoName query string true "Repository Name"
+// @Param url query string true "Url"
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/githubs/branches [GET]
 func (v v1GithubApi) GetBranches(context echo.Context) error {
@@ -119,17 +118,16 @@ func (v v1GithubApi) GetBranches(context echo.Context) error {
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, v.jwtService)
 		if err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		if err := checkAuthority(userResourcePermission, string(enums.REPOSITORY), "", string(enums.READ)); err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
 	repoId := context.QueryParam("repoId")
-	userName := context.QueryParam("userName")
-	repoName := context.QueryParam("repoName")
-	return context.JSON(v.github.GetBranches(repoName, userName, repoId, companyId))
+	url := context.QueryParam("url")
+	return context.JSON(v.github.GetBranches(url, repoId, companyId))
 }
 
 // this is the main function that will be called by the api to listen bitbucket events
