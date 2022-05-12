@@ -45,7 +45,7 @@ func BitbucketEventRouter(g *echo.Group) {
 	g.DELETE("/webhooks", bitbucket.DisableWebhook)
 }
 
-// GithubEventRouter api/v1/githubs/* router
+// GithubEventRouter api/v1/githubs event router
 func GithubEventRouter(g *echo.Group) {
 	var githubApi api.Git
 	githubApi = NewGithubApi(dependency.GetV1GithubService(), dependency.GetV1JwtService())
