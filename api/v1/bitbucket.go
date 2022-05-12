@@ -62,7 +62,7 @@ func (v v1BitbucketApi) EnableWebhook(context echo.Context) error {
 // @Param webhookId query string true "Webhook Id"
 // @Success 200 {object} common.ResponseDTO
 // @Failure 400 {object} common.ResponseDTO
-// @Router /api/v1/bitbuckets/webhooks [DELETE]
+// @Router /api/v1/bitbuckets/webhooks [PUT]
 func (v v1BitbucketApi) DisableWebhook(context echo.Context) error {
 	var companyId string
 	if config.EnableAuthentication {

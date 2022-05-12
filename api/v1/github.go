@@ -54,7 +54,7 @@ func (v v1GithubApi) EnableWebhook(context echo.Context) error {
 // @Param webhookId query string true "Webhook Id"
 // @Success 200 {object} common.ResponseDTO
 // @Failure 400 {object} common.ResponseDTO
-// @Router /api/v1/githubs/webhooks [DELETE]
+// @Router /api/v1/githubs/webhooks [PUT]
 func (v v1GithubApi) DisableWebhook(context echo.Context) error {
 	var companyId string
 	if config.EnableAuthentication {
