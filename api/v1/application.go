@@ -26,10 +26,10 @@ func (a applicationApi) GetAll(context echo.Context) error {
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, a.jwtService)
 		if err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		if err := checkAuthority(userResourcePermission, string(enums.APPLICATION), "", string(enums.READ)); err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
@@ -61,10 +61,10 @@ func (a applicationApi) GetById(context echo.Context) error {
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, a.jwtService)
 		if err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		if err := checkAuthority(userResourcePermission, string(enums.APPLICATION), "", string(enums.READ)); err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
@@ -94,10 +94,10 @@ func (a applicationApi) Update(context echo.Context) error {
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, a.jwtService)
 		if err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		if err := checkAuthority(userResourcePermission, string(enums.APPLICATION), "", string(enums.UPDATE)); err != nil {
-			return context.JSON(401, "Unauthorized user!")
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
