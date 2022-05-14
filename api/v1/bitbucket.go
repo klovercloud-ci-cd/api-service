@@ -20,10 +20,9 @@ type v1BitbucketApi struct {
 // @Tags Bitbucket
 // @Produce json
 // @Param action query string true "action type [enable/disable]"
-// @Param companyId query string true "Company Id"
 // @Param repoId query string true "Repository Id"
 // @Param url query string true "Url"
-// @Param webhookId query string true "Webhook Id"
+// @Param webhookId query string false "Webhook Id to disable webhook"
 // @Success 200 {object} common.ResponseDTO
 // @Failure 400 {object} common.ResponseDTO
 // @Router /api/v1/bitbuckets/webhooks [PATCH]
@@ -50,9 +49,8 @@ func (v v1BitbucketApi) EnableWebhook(context echo.Context) error {
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
 	repoId := context.QueryParam("repoId")
-	userName := context.QueryParam("userName")
-	repoName := context.QueryParam("repoName")
-	code, err := v.bitbucket.EnableWebhook(companyId, repoId, userName, repoName)
+	url := context.QueryParam("url")
+	code, err := v.bitbucket.EnableWebhook(companyId, repoId, url)
 	if err != nil {
 		return err
 	}
@@ -76,10 +74,9 @@ func (v v1BitbucketApi) DisableWebhook(context echo.Context) error {
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
 	repoId := context.QueryParam("repoId")
-	userName := context.QueryParam("userName")
-	repoName := context.QueryParam("repoName")
+	url := context.QueryParam("url")
 	webhookId := context.QueryParam("webhookId")
-	code, err := v.bitbucket.DisableWebhook(companyId, repoId, userName, repoName, webhookId)
+	code, err := v.bitbucket.DisableWebhook(companyId, repoId, url, webhookId)
 	if err != nil {
 		return err
 	}
@@ -113,10 +110,9 @@ func (v v1BitbucketApi) GetCommitByBranch(context echo.Context) error {
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
 	repoId := context.QueryParam("repoId")
-	userName := context.QueryParam("userName")
-	repoName := context.QueryParam("repoName")
+	url := context.QueryParam("url")
 	branch := context.QueryParam("branch")
-	return context.JSON(v.bitbucket.GetCommitByBranch(repoName, userName, repoId, branch, companyId))
+	return context.JSON(v.bitbucket.GetCommitByBranch(url, repoId, branch, companyId))
 }
 
 // GetBranches... Get Branches

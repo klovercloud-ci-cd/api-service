@@ -23,7 +23,7 @@ type v1GithubApi struct {
 // @Param companyId query string true "Company Id"
 // @Param repoId query string true "Repository Id"
 // @Param url query string true "Url"
-// @Param webhookId query string true "Webhook Id"
+// @Param webhookId query string false "Webhook Id to disable webhook"
 // @Success 200 {object} common.ResponseDTO
 // @Failure 400 {object} common.ResponseDTO
 // @Router /api/v1/githubs/webhooks [PATCH]
@@ -50,9 +50,8 @@ func (v v1GithubApi) EnableWebhook(context echo.Context) error {
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
 	repoId := context.QueryParam("repoId")
-	userName := context.QueryParam("userName")
-	repoName := context.QueryParam("repoName")
-	return context.JSON(v.github.EnableWebhook(companyId, repoId, userName, repoName))
+	url := context.QueryParam("url")
+	return context.JSON(v.github.EnableWebhook(companyId, repoId, url))
 }
 
 func (v v1GithubApi) DisableWebhook(context echo.Context) error {
@@ -68,10 +67,9 @@ func (v v1GithubApi) DisableWebhook(context echo.Context) error {
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
 	repoId := context.QueryParam("repoId")
-	userName := context.QueryParam("userName")
-	repoName := context.QueryParam("repoName")
+	url := context.QueryParam("url")
 	webhookId := context.QueryParam("webhookId")
-	return context.JSON(v.github.DisableWebhook(companyId, repoId, userName, repoName, webhookId))
+	return context.JSON(v.github.DisableWebhook(companyId, repoId, url, webhookId))
 }
 
 // GetCommitByBranch... Get commit by branch
@@ -79,10 +77,9 @@ func (v v1GithubApi) DisableWebhook(context echo.Context) error {
 // @Description Gets commit by branch
 // @Tags Github
 // @Produce json
-// @Param userName query string true "User Name"
+// @Param url query string true "Url"
 // @Param branch query string true "branch"
 // @Param repoId query string true "Repository Id"
-// @Param repoName query string true "Repository Name"
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/githubs/commits [GET]
 func (v v1GithubApi) GetCommitByBranch(context echo.Context) error {
@@ -98,10 +95,9 @@ func (v v1GithubApi) GetCommitByBranch(context echo.Context) error {
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
 	repoId := context.QueryParam("repoId")
-	userName := context.QueryParam("userName")
-	repoName := context.QueryParam("repoName")
+	url := context.QueryParam("url")
 	branch := context.QueryParam("branch")
-	return context.JSON(v.github.GetCommitByBranch(userName, repoName, branch, companyId, repoId))
+	return context.JSON(v.github.GetCommitByBranch(url, repoId, branch, companyId))
 }
 
 // GetBranches... Get Branches

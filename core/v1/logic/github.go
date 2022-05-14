@@ -11,21 +11,31 @@ type githubService struct {
 	httpPublisher service.HttpClient
 }
 
-func (g githubService) EnableWebhook(companyId, repoId, userName, repoName string) (httpCode int, err error) {
-	//TODO implement me
-	panic("implement me")
+func (g githubService) EnableWebhook(companyId, repoId, url string) (httpCode int, err error) {
+	header := make(map[string]string)
+	header["token"] = config.Token
+	code, err := g.httpPublisher.Put(config.KlovercloudIntegrationMangerUrl+"/githubs/webhook?url="+url+"&repoId="+repoId+"&companyId="+companyId, header, nil)
+	if err != nil {
+		return code, err
+	}
+	return code, nil
 }
 
-func (g githubService) DisableWebhook(companyId, repoId, userName, repoName, webhookId string) (httpCode int, err error) {
-	//TODO implement me
-	panic("implement me")
+func (g githubService) DisableWebhook(companyId, repoId, url, webhookId string) (httpCode int, err error) {
+	header := make(map[string]string)
+	header["token"] = config.Token
+	code, err := g.httpPublisher.Delete(config.KlovercloudIntegrationMangerUrl+"/githubs/webhook?url="+url+"&repoId="+repoId+"&companyId="+companyId+"&webhookId="+webhookId, header)
+	if err != nil {
+		return code, err
+	}
+	return code, nil
 }
 
-func (g githubService) GetCommitByBranch(username, repositoryName, branch, companyId, repoId string) (httpCode int, body interface{}) {
+func (g githubService) GetCommitByBranch(url, repoId, branch, companyId string) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)
 	header["token"] = config.Token
-	code, res, err := g.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/githubs/commits?repoName="+repositoryName+"&userName="+username+"&repoId="+repoId+"&companyId="+companyId+"&branch="+branch, header)
+	code, res, err := g.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/githubs/commits?url="+url+"&repoId="+repoId+"&companyId="+companyId+"&branch="+branch, header)
 	if err != nil {
 		return code, err
 	}

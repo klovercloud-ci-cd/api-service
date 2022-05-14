@@ -11,31 +11,31 @@ type bitbucketService struct {
 	httpPublisher service.HttpClient
 }
 
-func (b bitbucketService) EnableWebhook(companyId, repoId, userName, repoName string) (httpCode int, err error) {
+func (b bitbucketService) EnableWebhook(companyId, repoId, url string) (httpCode int, err error) {
 	header := make(map[string]string)
 	header["token"] = config.Token
-	code, err := b.httpPublisher.Put(config.KlovercloudIntegrationMangerUrl+"/bitbuckets/webhook?repoName="+repoName+"&userName="+userName+"&repoId="+repoId+"&companyId="+companyId, header, nil)
+	code, err := b.httpPublisher.Put(config.KlovercloudIntegrationMangerUrl+"/bitbuckets/webhook?url="+url+"&repoId="+repoId+"&companyId="+companyId, header, nil)
 	if err != nil {
 		return code, err
 	}
 	return code, nil
 }
 
-func (b bitbucketService) DisableWebhook(companyId, repoId, userName, repoName, webhookId string) (httpCode int, err error) {
+func (b bitbucketService) DisableWebhook(companyId, repoId, url, webhookId string) (httpCode int, err error) {
 	header := make(map[string]string)
 	header["token"] = config.Token
-	code, err := b.httpPublisher.Delete(config.KlovercloudIntegrationMangerUrl+"/bitbuckets/webhook?repoName="+repoName+"&userName="+userName+"&repoId="+repoId+"&companyId="+companyId+"&webhookId="+webhookId, header)
+	code, err := b.httpPublisher.Delete(config.KlovercloudIntegrationMangerUrl+"/bitbuckets/webhook?url="+url+"&repoId="+repoId+"&companyId="+companyId+"&webhookId="+webhookId, header)
 	if err != nil {
 		return code, err
 	}
 	return code, nil
 }
 
-func (b bitbucketService) GetCommitByBranch(repoName, userName, repoId, branch, companyId string) (httpCode int, body interface{}) {
+func (b bitbucketService) GetCommitByBranch(url, repoId, branch, companyId string) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)
 	header["token"] = config.Token
-	code, res, err := b.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/bitbuckets/branches?repoName="+repoName+"&userName="+userName+"&repoId="+repoId+"&companyId="+companyId+"&branch="+branch, header)
+	code, res, err := b.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/bitbuckets/branches?url="+url+"&repoId="+repoId+"&companyId="+companyId+"&branch="+branch, header)
 	if err != nil {
 		return code, err
 	}

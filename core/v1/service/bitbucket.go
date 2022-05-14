@@ -3,7 +3,7 @@ package service
 type Bitbucket interface {
 	ListenEvent(payload interface{}, companyId string) error
 	GetBranches(url, repositoryId, companyId string) (httpCode int, body interface{})
-	GetCommitByBranch(repoName, userName, repoId, branch, companyId string) (httpCode int, body interface{})
-	EnableWebhook(companyId, repoId, userName, repoName string) (httpCode int, err error)
-	DisableWebhook(companyId, repoId, userName, repoName, webhookId string) (httpCode int, err error)
+	GetCommitByBranch(url, repoId, branch, companyId string) (httpCode int, body interface{})
+	EnableWebhook(companyId, repoId, url string) (httpCode int, err error)
+	DisableWebhook(companyId, repoId, url, webhookId string) (httpCode int, err error)
 }
