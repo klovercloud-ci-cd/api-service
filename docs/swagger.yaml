@@ -165,11 +165,6 @@ paths:
         name: action
         required: true
         type: string
-      - description: Company Id
-        in: query
-        name: companyId
-        required: true
-        type: string
       - description: Repository Id
         in: query
         name: repoId
@@ -180,10 +175,9 @@ paths:
         name: url
         required: true
         type: string
-      - description: Webhook Id
+      - description: Webhook Id to disable webhook
         in: query
         name: webhookId
-        required: true
         type: string
       produces:
       - application/json
@@ -378,9 +372,9 @@ paths:
     get:
       description: Gets commit by branch
       parameters:
-      - description: User Name
+      - description: Url
         in: query
-        name: userName
+        name: url
         required: true
         type: string
       - description: branch
@@ -391,11 +385,6 @@ paths:
       - description: Repository Id
         in: query
         name: repoId
-        required: true
-        type: string
-      - description: Repository Name
-        in: query
-        name: repoName
         required: true
         type: string
       produces:
@@ -432,10 +421,9 @@ paths:
         name: url
         required: true
         type: string
-      - description: Webhook Id
+      - description: Webhook Id to disable webhook
         in: query
         name: webhookId
-        required: true
         type: string
       produces:
       - application/json

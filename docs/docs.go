@@ -223,13 +223,6 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "Company Id",
-                        "name": "companyId",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
                         "description": "Repository Id",
                         "name": "repoId",
                         "in": "query",
@@ -244,10 +237,9 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "Webhook Id",
+                        "description": "Webhook Id to disable webhook",
                         "name": "webhookId",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -544,8 +536,8 @@ const docTemplate = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "User Name",
-                        "name": "userName",
+                        "description": "Url",
+                        "name": "url",
                         "in": "query",
                         "required": true
                     },
@@ -560,13 +552,6 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Repository Id",
                         "name": "repoId",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Repository Name",
-                        "name": "repoName",
                         "in": "query",
                         "required": true
                     }
@@ -622,10 +607,9 @@ const docTemplate = `{
                     },
                     {
                         "type": "string",
-                        "description": "Webhook Id",
+                        "description": "Webhook Id to disable webhook",
                         "name": "webhookId",
-                        "in": "query",
-                        "required": true
+                        "in": "query"
                     }
                 ],
                 "responses": {
