@@ -81,7 +81,14 @@ func (c companyApi) UpdateRepositories(context echo.Context) error {
 		}
 	}
 	companyUpdateOption := context.QueryParam("companyUpdateOption")
-	return context.JSON(c.companyService.UpdateRepositories(id, formData, companyUpdateOption))
+	code, err := c.companyService.UpdateRepositories(id, formData, companyUpdateOption)
+	if err != nil {
+		return common.GenerateErrorResponse(context, nil, err.Error())
+	}
+	if code == 200 {
+		return common.GenerateSuccessResponse(context, nil, nil, "Repositories updated successfully")
+	}
+	return common.GenerateErrorResponse(context, nil, err.Error())
 }
 
 // Save... Save company

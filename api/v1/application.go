@@ -101,7 +101,14 @@ func (a applicationApi) Update(context echo.Context) error {
 		}
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
-	return context.JSON(a.applicationService.UpdateApplication(companyId, repoId, formData, companyUpdateOption))
+	code, err := a.applicationService.UpdateApplication(companyId, repoId, formData, companyUpdateOption)
+	if err != nil {
+		return common.GenerateErrorResponse(context, nil, err.Error())
+	}
+	if code == 200 {
+		return common.GenerateSuccessResponse(context, nil, nil, "Applications updated successfully")
+	}
+	return common.GenerateErrorResponse(context, nil, err.Error())
 }
 
 // NewApplicationApi returns Application type api

@@ -39,3 +39,20 @@ func GenerateUnauthorizedResponse(c echo.Context, data interface{}, message stri
 		Data:    data,
 	})
 }
+
+// GenerateSuccessResponse Http success response
+func GenerateSuccessResponse(c echo.Context, data interface{}, metadata *MetaData, message string) error {
+	if metadata != nil {
+		return c.JSON(http.StatusOK, ResponseDTO{
+			Status:   "success",
+			Message:  message,
+			Data:     data,
+			Metadata: metadata,
+		})
+	}
+	return c.JSON(http.StatusOK, ResponseDTO{
+		Status:  "success",
+		Message: message,
+		Data:    data,
+	})
+}
