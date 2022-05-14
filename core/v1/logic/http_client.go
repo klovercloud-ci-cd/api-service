@@ -3,7 +3,9 @@ package logic
 import (
 	"bytes"
 	"context"
+	"encoding/json"
 	"errors"
+	"github.com/klovercloud-ci-cd/api-service/api/common"
 	"github.com/klovercloud-ci-cd/api-service/config"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/service"
 	"github.com/klovercloud-ci-cd/api-service/opentracing"
@@ -37,11 +39,14 @@ func (h httpClientService) Delete(url string, header map[string]string) (httpCod
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
 		body, err := ioutil.ReadAll(resp.Body)
+		var resBody common.ResponseDTO
+		json.Unmarshal(body, &resBody)
 		if err != nil {
 			log.Println(err.Error())
 			return resp.StatusCode, err
 		} else {
 			log.Println("[ERROR] Failed to communicate :", string(body))
+			return resp.StatusCode, errors.New(resBody.Message)
 		}
 	}
 	return resp.StatusCode, nil
@@ -63,11 +68,14 @@ func (h httpClientService) Put(url string, header map[string]string, body []byte
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
 		body, err := ioutil.ReadAll(resp.Body)
+		var resBody common.ResponseDTO
+		json.Unmarshal(body, &resBody)
 		if err != nil {
 			log.Println("[ERROR] Failed communicate ", err.Error())
 			return resp.StatusCode, err
 		} else {
 			log.Println("[SUCCESS] Successful :", string(body))
+			return resp.StatusCode, errors.New(resBody.Message)
 		}
 	}
 	return resp.StatusCode, nil
@@ -119,11 +127,14 @@ func (h httpClientService) Post(url string, header map[string]string, body []byt
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
 		body, err := ioutil.ReadAll(resp.Body)
+		var resBody common.ResponseDTO
+		json.Unmarshal(body, &resBody)
 		if err != nil {
 			log.Println("[ERROR] Failed to communicate ", err.Error())
 			return resp.StatusCode, err
 		} else {
 			log.Println("[ERROR] Failed to communicate :", string(body))
+			return resp.StatusCode, errors.New(resBody.Message)
 		}
 	}
 	return resp.StatusCode, nil
