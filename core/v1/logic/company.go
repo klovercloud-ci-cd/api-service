@@ -66,8 +66,6 @@ func (c companyService) GetApplicationsByCompanyIdAndRepositoryType(id string, _
 	return code, response
 }
 
-
-
 func (c companyService) GetApplicationByApplicationId(companyId string, repoId string, applicationId string) (httpCode int, data interface{}) {
 	var response interface{}
 	header := make(map[string]string)
@@ -185,6 +183,14 @@ func (c companyService) GetById(headers map[string]string, id string, option v1.
 		return code, nil
 	}
 	return code, response
+}
+
+func (c companyService) UpdateWebhook(id, repoId, url, webhookId, action, repoType string) (httpCode int, error error) {
+	header := make(map[string]string)
+	header["token"] = config.Token
+	header["Content-Type"] = "application/json"
+	httpCode, err := c.httpPublisher.Patch(config.KlovercloudIntegrationMangerUrl+"/companies/"+id+"/repositories/"+repoId+"/webhooks"+"?url="+url+"&webhookId="+webhookId+"&action="+action+"&repoType="+repoType, header, nil)
+	return httpCode, err
 }
 
 // NewCompanyService returns Company type service

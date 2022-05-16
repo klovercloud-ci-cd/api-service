@@ -14,64 +14,6 @@ type v1GithubApi struct {
 	jwtService service.Jwt
 }
 
-// UpdateWebhook... Update Webhook
-// @Summary Update Webhook to Enable or Disable
-// @Description Update Webhook
-// @Tags Github
-// @Produce json
-// @Param action query string true "action type [enable/disable]"
-// @Param companyId query string true "Company Id"
-// @Param repoId query string true "Repository Id"
-// @Param url query string true "Url"
-// @Param webhookId query string false "Webhook Id to disable webhook"
-// @Success 200 {object} common.ResponseDTO
-// @Failure 400 {object} common.ResponseDTO
-// @Router /api/v1/githubs/webhooks [PATCH]
-func (g v1GithubApi) UpdateWebhook(context echo.Context) error {
-	action := context.QueryParam("action")
-	if action == "enable" {
-		return g.EnableWebhook(context)
-	} else if action == "disable" {
-		return g.DisableWebhook(context)
-	}
-	return common.GenerateErrorResponse(context, nil, "Provide valid action. [enable/disable]")
-}
-
-func (v v1GithubApi) EnableWebhook(context echo.Context) error {
-	var companyId string
-	if config.EnableAuthentication {
-		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, v.jwtService)
-		if err != nil {
-			return common.GenerateUnauthorizedResponse(context, err, err.Error())
-		}
-		if err := checkAuthority(userResourcePermission, string(enums.REPOSITORY), "", string(enums.READ)); err != nil {
-			return common.GenerateUnauthorizedResponse(context, err, err.Error())
-		}
-		companyId = userResourcePermission.Metadata.CompanyId
-	}
-	repoId := context.QueryParam("repoId")
-	url := context.QueryParam("url")
-	return context.JSON(v.github.EnableWebhook(companyId, repoId, url))
-}
-
-func (v v1GithubApi) DisableWebhook(context echo.Context) error {
-	var companyId string
-	if config.EnableAuthentication {
-		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, v.jwtService)
-		if err != nil {
-			return common.GenerateUnauthorizedResponse(context, err, err.Error())
-		}
-		if err := checkAuthority(userResourcePermission, string(enums.REPOSITORY), "", string(enums.READ)); err != nil {
-			return common.GenerateUnauthorizedResponse(context, err, err.Error())
-		}
-		companyId = userResourcePermission.Metadata.CompanyId
-	}
-	repoId := context.QueryParam("repoId")
-	url := context.QueryParam("url")
-	webhookId := context.QueryParam("webhookId")
-	return context.JSON(v.github.DisableWebhook(companyId, repoId, url, webhookId))
-}
-
 // GetCommitByBranch... Get commit by branch
 // @Summary Get commit by branch
 // @Description Gets commit by branch

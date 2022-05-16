@@ -6,4 +6,5 @@ type HttpClient interface {
 	Post(url string, header map[string]string, body []byte) (httpCode int, err error)
 	Put(url string, header map[string]string, body []byte) (httpCode int, err error)
 	Delete(url string, header map[string]string) (httpCode int, err error)
+	Patch(url string, header map[string]string, body []byte) (httpCode int, err error)
 }

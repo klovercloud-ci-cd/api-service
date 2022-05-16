@@ -167,7 +167,7 @@ func (c companyApi) GetById(context echo.Context) error {
 			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		if id != userResourcePermission.Metadata.CompanyId {
-			return context.JSON(404, "Company not found!")
+			return common.GenerateErrorResponse(context, "[ERROR] company not found", "Please provide valid company id")
 		}
 	}
 	option := getQueryOption(context)
@@ -199,6 +199,49 @@ func (c companyApi) Get(context echo.Context) error {
 		}
 	}
 	return context.JSON(c.companyService.Get(option, status))
+}
+
+// UpdateWebhook... Update Webhook
+// @Summary Update Webhook to Enable or Disable
+// @Description Update Webhook
+// @Tags Github
+// @Produce json
+// @Param action query string true "action type [enable/disable]"
+// @Param repoType query string true "Repository type [github/bitbucket]"
+// @Param id path string true "Company id"
+// @Param repoId path string true "Repository id"
+// @Param url query string true "Url"
+// @Param webhookId query string false "Webhook Id to disable webhook"
+// @Success 200 {object} common.ResponseDTO
+// @Failure 400 {object} common.ResponseDTO
+// @Router /api/v1/companies/{id}/repositories/{repoId}/webhooks [PATCH]
+func (c companyApi) UpdateWebhook(context echo.Context) error {
+	id := context.Param("id")
+	if id == "" {
+		return common.GenerateErrorResponse(context, "[ERROR] no companyId is provided", "Please provide companyId")
+	}
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, c.jwtService)
+		if err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.COMPANY), "", string(enums.READ)); err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		if id != userResourcePermission.Metadata.CompanyId {
+			return common.GenerateErrorResponse(context, "[ERROR] company not found", "Please provide valid company id")
+		}
+	}
+	repoId := context.Param("repoId")
+	url := context.QueryParam("url")
+	webhookId := context.QueryParam("webhookId")
+	action := context.QueryParam("action")
+	repoType := context.QueryParam("repoType")
+	_, err := c.companyService.UpdateWebhook(id, repoId, url, webhookId, action, repoType)
+	if err != nil {
+		return common.GenerateErrorResponse(context, "[ERROR] webhook update failed", err.Error())
+	}
+	return common.GenerateSuccessResponse(context, "[SUCCESS]: webhook update successful", nil, "Webhook Updated!")
 }
 
 //this function is for set all query param

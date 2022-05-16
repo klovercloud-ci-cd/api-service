@@ -22,7 +22,7 @@ type httpClientService struct {
 
 // Delete method that fires a Delete request.
 func (h httpClientService) Delete(url string, header map[string]string) (httpCode int, err error) {
-	req, err := http.NewRequest("DELETE", url, nil)
+	req, err := http.NewRequest(http.MethodDelete, url, nil)
 	for k, v := range header {
 		req.Header.Set(k, v)
 		log.Println("[DEBUG] Header: ", k, ":", v)
@@ -31,7 +31,7 @@ func (h httpClientService) Delete(url string, header map[string]string) (httpCod
 		log.Println(err.Error())
 	}
 	client := &http.Client{}
-	startTraceSpan(req, url, "DELETE")
+	startTraceSpan(req, url, http.MethodDelete)
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Println(err.Error())
@@ -54,12 +54,12 @@ func (h httpClientService) Delete(url string, header map[string]string) (httpCod
 
 // Put method that fires a Put request.
 func (h httpClientService) Put(url string, header map[string]string, body []byte) (httpCode int, err error) {
-	req, err := http.NewRequest("PUT", url, bytes.NewBuffer(body))
+	req, err := http.NewRequest(http.MethodPut, url, bytes.NewBuffer(body))
 	for k, v := range header {
 		req.Header.Set(k, v)
 	}
 	client := &http.Client{}
-	startTraceSpan(req, url, "PUT")
+	startTraceSpan(req, url, http.MethodPut)
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Println("[ERROR] Failed communicate :", err.Error())
@@ -84,7 +84,7 @@ func (h httpClientService) Put(url string, header map[string]string, body []byte
 // Get method that fires a get request.
 func (h httpClientService) Get(url string, header map[string]string) (httpCode int, body []byte, err error) {
 	client := http.Client{}
-	req, err := http.NewRequest("GET", url, nil)
+	req, err := http.NewRequest(http.MethodGet, url, nil)
 	for k, v := range header {
 		req.Header.Set(k, v)
 	}
@@ -92,7 +92,7 @@ func (h httpClientService) Get(url string, header map[string]string) (httpCode i
 		log.Println(err.Error())
 		return http.StatusBadRequest, nil, err
 	}
-	startTraceSpan(req, url, "GET")
+	startTraceSpan(req, url, http.MethodGet)
 
 	res, err := client.Do(req)
 	if err != nil {
@@ -113,12 +113,12 @@ func (h httpClientService) Get(url string, header map[string]string) (httpCode i
 
 // Post method that fires a Post request.
 func (h httpClientService) Post(url string, header map[string]string, body []byte) (httpCode int, err error) {
-	req, err := http.NewRequest("POST", url, bytes.NewBuffer(body))
+	req, err := http.NewRequest(http.MethodPost, url, bytes.NewBuffer(body))
 	for k, v := range header {
 		req.Header.Set(k, v)
 	}
 	client := &http.Client{}
-	startTraceSpan(req, url, "POST")
+	startTraceSpan(req, url, http.MethodPost)
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Println("[ERROR] Failed communicate :", err.Error())
@@ -131,6 +131,39 @@ func (h httpClientService) Post(url string, header map[string]string, body []byt
 		json.Unmarshal(body, &resBody)
 		if err != nil {
 			log.Println("[ERROR] Failed to communicate ", err.Error())
+			return resp.StatusCode, err
+		} else {
+			log.Println("[ERROR] Failed to communicate :", string(body))
+			return resp.StatusCode, errors.New(resBody.Message)
+		}
+	}
+	return resp.StatusCode, nil
+}
+
+// Patch method that fires a Patch request.
+func (h httpClientService) Patch(url string, header map[string]string, body []byte) (httpCode int, err error) {
+	req, err := http.NewRequest("PATCH", url, bytes.NewBuffer(body))
+	for k, v := range header {
+		req.Header.Set(k, v)
+		log.Println("[DEBUG] Header: ", k, ":", v)
+	}
+	if err != nil {
+		log.Println(err.Error())
+	}
+	client := &http.Client{}
+	startTraceSpan(req, url, "PATCH")
+	resp, err := client.Do(req)
+	if err != nil {
+		log.Println(err.Error())
+		return resp.StatusCode, err
+	}
+	defer resp.Body.Close()
+	if resp.StatusCode != 200 {
+		body, err := ioutil.ReadAll(resp.Body)
+		var resBody common.ResponseDTO
+		json.Unmarshal(body, &resBody)
+		if err != nil {
+			log.Println(err.Error())
 			return resp.StatusCode, err
 		} else {
 			log.Println("[ERROR] Failed to communicate :", string(body))
