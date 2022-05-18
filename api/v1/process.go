@@ -15,6 +15,35 @@ type processApi struct {
 	jwtService     service.Jwt
 }
 
+// GetFootmarksByProcessIdAndStep... Get Footmarks By Process Id And Step
+// @Summary Get Footmarks By Process Id And Step
+// @Description Get Footmarks By Process Id And Step
+// @Tags Process
+// @Produce json
+// @Param processId path string true "Process Id"
+// @Param step path string true "Step"
+// @Success 200 {object} common.ResponseDTO
+// @Failure 400 {object} common.ResponseDTO
+// @Router /api/v1/processes/{processId}/steps/{step}/footmarks [GET]
+func (p processApi) GetFootmarksByProcessIdAndStep(context echo.Context) error {
+	process := context.Param("processId")
+	step := context.Param("step")
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, p.jwtService)
+		if err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.PROCESS), "", string(enums.READ)); err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+	}
+	code, res := p.processService.GetFootmarksByProcessIdAndStep(process, step)
+	if code != 200 {
+		return common.GenerateErrorResponse(context, code, "Footmarks not found")
+	}
+	return common.GenerateSuccessResponse(context, res, nil, "Footmarks found")
+}
+
 // Get... Get Process List or count process
 // @Summary Get Process List or count process
 // @Description Get Process List or count process

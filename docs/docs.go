@@ -203,61 +203,6 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/bitbuckets/webhooks": {
-            "patch": {
-                "description": "Update Webhook",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Bitbucket"
-                ],
-                "summary": "Update Webhook to Enable or Disable",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "action type [enable/disable]",
-                        "name": "action",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Repository Id",
-                        "name": "repoId",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Url",
-                        "name": "url",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Webhook Id to disable webhook",
-                        "name": "webhookId",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseDTO"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseDTO"
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/companies": {
             "get": {
                 "description": "Gets companies",
@@ -487,6 +432,75 @@ const docTemplate = `{
                 }
             }
         },
+        "/api/v1/companies/{id}/repositories/{repoId}/webhooks": {
+            "patch": {
+                "description": "Update Webhook",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Github"
+                ],
+                "summary": "Update Webhook to Enable or Disable",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "action type [enable/disable]",
+                        "name": "action",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Repository type [github/bitbucket]",
+                        "name": "repoType",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Company id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Repository id",
+                        "name": "repoId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Url",
+                        "name": "url",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Webhook Id to disable webhook",
+                        "name": "webhookId",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/githubs/branches": {
             "get": {
                 "description": "Gets Branches",
@@ -559,68 +573,6 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseDTO"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/githubs/webhooks": {
-            "patch": {
-                "description": "Update Webhook",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Github"
-                ],
-                "summary": "Update Webhook to Enable or Disable",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "action type [enable/disable]",
-                        "name": "action",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Company Id",
-                        "name": "companyId",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Repository Id",
-                        "name": "repoId",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Url",
-                        "name": "url",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "Webhook Id to disable webhook",
-                        "name": "webhookId",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/common.ResponseDTO"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/common.ResponseDTO"
                         }
@@ -878,6 +830,48 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/processes/{processId}/steps/{step}/footmarks": {
+            "get": {
+                "description": "Get Footmarks By Process Id And Step",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Process"
+                ],
+                "summary": "Get Footmarks By Process Id And Step",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Process Id",
+                        "name": "processId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Step",
+                        "name": "step",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
                         "schema": {
                             "$ref": "#/definitions/common.ResponseDTO"
                         }

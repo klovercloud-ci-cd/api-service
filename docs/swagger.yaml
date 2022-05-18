@@ -156,43 +156,6 @@ paths:
       summary: Get Commit By Branch
       tags:
       - Bitbucket
-  /api/v1/bitbuckets/webhooks:
-    patch:
-      description: Update Webhook
-      parameters:
-      - description: action type [enable/disable]
-        in: query
-        name: action
-        required: true
-        type: string
-      - description: Repository Id
-        in: query
-        name: repoId
-        required: true
-        type: string
-      - description: Url
-        in: query
-        name: url
-        required: true
-        type: string
-      - description: Webhook Id to disable webhook
-        in: query
-        name: webhookId
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/common.ResponseDTO'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/common.ResponseDTO'
-      summary: Update Webhook to Enable or Disable
-      tags:
-      - Bitbucket
   /api/v1/companies:
     get:
       description: Gets companies
@@ -344,6 +307,53 @@ paths:
       summary: Update repositories by company id
       tags:
       - Company
+  /api/v1/companies/{id}/repositories/{repoId}/webhooks:
+    patch:
+      description: Update Webhook
+      parameters:
+      - description: action type [enable/disable]
+        in: query
+        name: action
+        required: true
+        type: string
+      - description: Repository type [github/bitbucket]
+        in: query
+        name: repoType
+        required: true
+        type: string
+      - description: Company id
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Repository id
+        in: path
+        name: repoId
+        required: true
+        type: string
+      - description: Url
+        in: query
+        name: url
+        required: true
+        type: string
+      - description: Webhook Id to disable webhook
+        in: query
+        name: webhookId
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Update Webhook to Enable or Disable
+      tags:
+      - Github
   /api/v1/githubs/branches:
     get:
       description: Gets Branches
@@ -395,48 +405,6 @@ paths:
           schema:
             $ref: '#/definitions/common.ResponseDTO'
       summary: Get commit by branch
-      tags:
-      - Github
-  /api/v1/githubs/webhooks:
-    patch:
-      description: Update Webhook
-      parameters:
-      - description: action type [enable/disable]
-        in: query
-        name: action
-        required: true
-        type: string
-      - description: Company Id
-        in: query
-        name: companyId
-        required: true
-        type: string
-      - description: Repository Id
-        in: query
-        name: repoId
-        required: true
-        type: string
-      - description: Url
-        in: query
-        name: url
-        required: true
-        type: string
-      - description: Webhook Id to disable webhook
-        in: query
-        name: webhookId
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/common.ResponseDTO'
-        "400":
-          description: Bad Request
-          schema:
-            $ref: '#/definitions/common.ResponseDTO'
-      summary: Update Webhook to Enable or Disable
       tags:
       - Github
   /api/v1/logs:
@@ -605,6 +573,34 @@ paths:
           schema:
             $ref: '#/definitions/common.ResponseDTO'
       summary: Get Process List or count process
+      tags:
+      - Process
+  /api/v1/processes/{processId}/steps/{step}/footmarks:
+    get:
+      description: Get Footmarks By Process Id And Step
+      parameters:
+      - description: Process Id
+        in: path
+        name: processId
+        required: true
+        type: string
+      - description: Step
+        in: path
+        name: step
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Get Footmarks By Process Id And Step
       tags:
       - Process
   /api/v1/processes_events:
