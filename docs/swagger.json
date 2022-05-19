@@ -869,6 +869,61 @@
                 }
             }
         },
+        "/api/v1/processes/{processId}/steps/{step}/footmarks/{footmark}/logs": {
+            "get": {
+                "description": "Get logs by Footmarks, Process Id And Step",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Process"
+                ],
+                "summary": "Get logs by Footmarks, Process Id And Step",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Process Id",
+                        "name": "processId",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Step",
+                        "name": "step",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Footmark",
+                        "name": "footmark",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Claims",
+                        "name": "claims",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/processes_events": {
             "post": {
                 "description": "Stores Pipeline process event",

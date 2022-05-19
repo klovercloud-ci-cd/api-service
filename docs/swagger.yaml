@@ -603,6 +603,43 @@ paths:
       summary: Get Footmarks By Process Id And Step
       tags:
       - Process
+  /api/v1/processes/{processId}/steps/{step}/footmarks/{footmark}/logs:
+    get:
+      description: Get logs by Footmarks, Process Id And Step
+      parameters:
+      - description: Process Id
+        in: path
+        name: processId
+        required: true
+        type: string
+      - description: Step
+        in: path
+        name: step
+        required: true
+        type: string
+      - description: Footmark
+        in: path
+        name: footmark
+        required: true
+        type: string
+      - description: Claims
+        in: query
+        name: claims
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Get logs by Footmarks, Process Id And Step
+      tags:
+      - Process
   /api/v1/processes_events:
     post:
       consumes:

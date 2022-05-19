@@ -15,6 +15,31 @@ type processApi struct {
 	jwtService     service.Jwt
 }
 
+// GetLogsByProcessIdAndStepAndFootmark... Get logs by Footmarks, Process Id And Step
+// @Summary Get logs by Footmarks, Process Id And Step
+// @Description Get logs by Footmarks, Process Id And Step
+// @Tags Process
+// @Produce json
+// @Param processId path string true "Process Id"
+// @Param step path string true "Step"
+// @Param footmark path string true "Footmark"
+// @Param claims query string false "Claims"
+// @Success 200 {object} common.ResponseDTO
+// @Failure 400 {object} common.ResponseDTO
+// @Router /api/v1/processes/{processId}/steps/{step}/footmarks/{footmark}/logs [GET]
+func (p processApi) GetLogsByProcessIdAndStepAndFootmark(context echo.Context) error {
+	processId := context.Param("processId")
+	step := context.Param("step")
+	footmark := context.Param("footmark")
+	claims := context.QueryParam("claims")
+	option := getQueryOption(context)
+	code, res := p.processService.GetLogsByProcessIdAndStepAndFootmark(processId, step, footmark, claims, option)
+	if code != 200 {
+		return common.GenerateErrorResponse(context, "", "Logs not found")
+	}
+	return common.GenerateSuccessResponse(context, res, nil, "Logs found")
+}
+
 // GetFootmarksByProcessIdAndStep... Get Footmarks By Process Id And Step
 // @Summary Get Footmarks By Process Id And Step
 // @Description Get Footmarks By Process Id And Step
