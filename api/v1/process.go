@@ -39,7 +39,7 @@ func (p processApi) GetFootmarksByProcessIdAndStep(context echo.Context) error {
 	}
 	code, res := p.processService.GetFootmarksByProcessIdAndStep(process, step)
 	if code != 200 {
-		return common.GenerateErrorResponse(context, code, "Footmarks not found")
+		return common.GenerateErrorResponse(context, "", "Footmarks not found")
 	}
 	return common.GenerateSuccessResponse(context, res, nil, "Footmarks found")
 }
