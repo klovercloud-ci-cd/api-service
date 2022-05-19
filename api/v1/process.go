@@ -33,6 +33,15 @@ func (p processApi) GetLogsByProcessIdAndStepAndFootmark(context echo.Context) e
 	footmark := context.Param("footmark")
 	claims := context.QueryParam("claims")
 	option := getQueryOption(context)
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, p.jwtService)
+		if err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.PROCESS), "", string(enums.READ)); err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+	}
 	code, res := p.processService.GetLogsByProcessIdAndStepAndFootmark(processId, step, footmark, claims, option)
 	if code != 200 {
 		return common.GenerateErrorResponse(context, "", "Logs not found")
