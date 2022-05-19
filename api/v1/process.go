@@ -23,7 +23,7 @@ type processApi struct {
 // @Param processId path string true "Process Id"
 // @Param step path string true "Step"
 // @Param footmark path string true "Footmark"
-// @Param claims query string false "Claims"
+// @Param claims query string true "Claims"
 // @Success 200 {object} common.ResponseDTO
 // @Failure 400 {object} common.ResponseDTO
 // @Router /api/v1/processes/{processId}/steps/{step}/footmarks/{footmark}/logs [GET]

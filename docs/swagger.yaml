@@ -625,6 +625,7 @@ paths:
       - description: Claims
         in: query
         name: claims
+        required: true
         type: string
       produces:
       - application/json

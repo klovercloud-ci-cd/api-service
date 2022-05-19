@@ -915,7 +915,8 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Claims",
                         "name": "claims",
-                        "in": "query"
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
