@@ -18,6 +18,7 @@ func Router(g *echo.Group) {
 	ProcessLifeCycleEventRouter(g.Group("/process_life_cycle_events"))
 	LogEventRouter(g.Group("/logs"))
 	ProcessEventRouter(g.Group("/processes_events"))
+	KubeEventRouter(g.Group("/kube_events"))
 }
 
 // ProcessEventRouter api/v1/process_events router
@@ -100,4 +101,10 @@ func ProcessLifeCycleEventRouter(g *echo.Group) {
 	processLifeCycleEventApi := NewProcessLifeCycleEventApi(dependency.GetV1ProcessLifeCycleEventService(), dependency.GetV1JwtService())
 	g.POST("", processLifeCycleEventApi.Save, AuthenticationHandlerForInternalCall)
 	g.GET("", processLifeCycleEventApi.Pull, AuthenticationHandlerForInternalCall)
+}
+
+// KubeEventRouter api/v1/kube_events/* router
+func KubeEventRouter(g *echo.Group) {
+	kubeEventApi := NewKubeEventApi(dependency.GetKubeEvent(), dependency.GetV1JwtService())
+	g.POST("", kubeEventApi.Save, AuthenticationHandlerForInternalCall)
 }
