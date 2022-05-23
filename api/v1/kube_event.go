@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"github.com/klovercloud-ci-cd/api-service/api/common"
 	"github.com/klovercloud-ci-cd/api-service/config"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/api"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/service"
@@ -8,8 +9,8 @@ import (
 )
 
 type kubeEvent struct {
-	kubeEventService 	service.KubeEvent
-	jwtService          service.Jwt
+	kubeEventService service.KubeEvent
+	jwtService       service.Jwt
 }
 
 // Save... Save k8s event
@@ -33,7 +34,11 @@ func (k kubeEvent) Save(context echo.Context) error {
 			return context.JSON(401, "Unauthorized user!")
 		}
 	}
-	return context.JSON(k.kubeEventService.Store(formData))
+	_, err := k.kubeEventService.Store(formData)
+	if err != nil {
+		return common.GenerateErrorResponse(context, err, err.Error())
+	}
+	return common.GenerateSuccessResponse(context, "[SUCCESS]: k8s events saved successfully", nil, "k8s events saved!")
 }
 
 // NewKubeEventApi returns KubeEvent type api

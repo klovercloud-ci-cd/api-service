@@ -20,6 +20,12 @@ var KlovercloudEventStoreUrl string
 // KlovercloudEventStoreWebSocketUrl refers to event-stores socket url.
 var KlovercloudEventStoreWebSocketUrl string
 
+// LighthouseCommandServerUrl refers to lighthouse command servers base url
+var LighthouseCommandServerUrl string
+
+// LighthouseQueryServerUrl refers to lighthouse query servers base url
+var LighthouseQueryServerUrl string
+
 // PrivateKey refers to PrivateKey of EventStoreToken.
 var PrivateKey string
 
@@ -63,6 +69,8 @@ func InitEnvironmentVariables() {
 	PrivateKey = os.Getenv("PRIVATE_KEY")
 	PublicKey = os.Getenv("PUBLIC_KEY")
 	KlovercloudEventStoreWebSocketUrl = os.Getenv("KLOVERCLOUD_CI_EVENT_STORE_WS")
+	LighthouseCommandServerUrl = os.Getenv("LIGHTHOUSE_COMMAND_SERVER_URL")
+	LighthouseQueryServerUrl = os.Getenv("LIGHTHOUSE_QUERY_SERVER_URL")
 
 	if os.Getenv("ENABLE_AUTHENTICATION") == "" {
 		EnableAuthentication = false
