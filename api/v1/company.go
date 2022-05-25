@@ -98,7 +98,7 @@ func (c companyApi) UpdateRepositories(context echo.Context) error {
 // @Produce json
 // @Param data body interface{} true "Company data"
 // @Success 200 {object} common.ResponseDTO
-// @Router /api/v1/companies [POST]
+// @Router /api/v1/companies [POST_AGENT_JOB]
 func (c companyApi) Save(context echo.Context) error {
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, c.jwtService)

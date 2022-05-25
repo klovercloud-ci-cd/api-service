@@ -32,7 +32,7 @@ var (
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/pipelines/ws [GET]
 func (p pipelineApi) GetEvents(context echo.Context) error {
-	processId := context.QueryParam("processId")
+	processId := context.QueryParam("companyId")
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 	ws, err := upgrader.Upgrade(context.Response(), context.Request(), nil)
 	if err != nil {

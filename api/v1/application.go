@@ -82,7 +82,7 @@ func (a applicationApi) GetById(context echo.Context) error {
 // @Param repositoryId query string true "repository Id"
 // @Success 200 {object} common.ResponseDTO
 // @Failure 404 {object} common.ResponseDTO
-// @Router /api/v1/applications [POST]
+// @Router /api/v1/applications [POST_AGENT_JOB]
 func (a applicationApi) Update(context echo.Context) error {
 	var formData interface{}
 	if err := context.Bind(&formData); err != nil {
