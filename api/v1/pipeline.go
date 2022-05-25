@@ -28,11 +28,11 @@ var (
 // @Description Get events by process id
 // @Tags Pipeline
 // @Produce json
-// @Param processId query string true "process id"
+// @Param processId query string true "company_id"
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/pipelines/ws [GET]
 func (p pipelineApi) GetEvents(context echo.Context) error {
-	processId := context.QueryParam("companyId")
+	processId := context.QueryParam("company_id")
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 	ws, err := upgrader.Upgrade(context.Response(), context.Request(), nil)
 	if err != nil {
