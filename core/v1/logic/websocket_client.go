@@ -25,9 +25,9 @@ func (w websocketClientService) Get(c chan map[string]interface{}, url string, h
 			conn.Close()
 			return
 		}
-		err = json.Unmarshal(m, &c)
+		err = json.Unmarshal(m, &channel)
 		if err != nil {
-			log.Println("[ERROR] Failed to Unmarshal:", err)
+			log.Println("[ERROR] Failed to Unmarshal data from socket:", err.Error())
 			conn.Close()
 			return
 		}

@@ -33,7 +33,6 @@ func (p pipelineService) Get(companyId, repositoryId, url, revision, action stri
 	return code, response
 }
 
-
 func (p pipelineService) GetByProcessId(processId, action string, option v1.Pagination) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)
