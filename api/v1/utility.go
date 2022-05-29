@@ -41,7 +41,10 @@ func checkAuthority(userResourcePermission v1.UserResourcePermission, resourceNa
 func GetUserResourcePermissionFromBearerToken(context echo.Context, jwtService service.Jwt) (v1.UserResourcePermission, error) {
 	bearerToken := context.Request().Header.Get("Authorization")
 	if bearerToken == "" {
-		return v1.UserResourcePermission{}, errors.New("[ERROR]: No token found")
+		bearerToken = context.QueryParam("token")
+		if bearerToken == "" {
+			return v1.UserResourcePermission{}, errors.New("[ERROR]: No token found")
+		}
 	}
 	var token string
 	if len(strings.Split(bearerToken, " ")) == 2 {
