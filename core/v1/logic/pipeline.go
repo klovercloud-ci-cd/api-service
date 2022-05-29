@@ -13,8 +13,8 @@ type pipelineService struct {
 	websocketClient service.WebsocketClient
 }
 
-func (p pipelineService) ReadEventsByProcessId(c chan map[string]interface{}, processId string) {
-	p.websocketClient.Get(c, config.KlovercloudEventStoreWebSocketUrl+"/pipelines/ws?processId="+processId, http.Header{"token": {config.Token}})
+func (p pipelineService) ReadEventsByCompanyId(c chan map[string]interface{}, companyId string) {
+	p.websocketClient.Get(c, config.KlovercloudEventStoreWebSocketUrl+"/pipelines/ws?company_id="+companyId, http.Header{"token": {config.Token}})
 }
 
 func (p pipelineService) GetByProcessId(processId, action string, option v1.Pagination) (httpCode int, body interface{}) {

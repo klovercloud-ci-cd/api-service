@@ -32,7 +32,7 @@ var (
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/pipelines/ws [GET]
 func (p pipelineApi) GetEvents(context echo.Context) error {
-	processId := context.QueryParam("company_id")
+	companyId := context.QueryParam("company_id")
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 	ws, err := upgrader.Upgrade(context.Response(), context.Request(), nil)
 	if err != nil {
@@ -47,6 +47,7 @@ func (p pipelineApi) GetEvents(context echo.Context) error {
 		if err := checkAuthority(userResourcePermission, string(enums.PIPELINE), "", string(enums.READ)); err != nil {
 			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
+		companyId=userResourcePermission.Metadata.CompanyId
 	}
 	defer func(ws *websocket.Conn) {
 		err := ws.Close()
@@ -57,7 +58,7 @@ func (p pipelineApi) GetEvents(context echo.Context) error {
 
 	status := make(chan map[string]interface{})
 	for {
-		go p.pipelineService.ReadEventsByProcessId(status, processId)
+		go p.pipelineService.ReadEventsByCompanyId(status, companyId)
 		jsonStr, err := json.Marshal(<-status)
 		if err != nil {
 			log.Println(err.Error())
