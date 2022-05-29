@@ -13,6 +13,23 @@ type pipelineService struct {
 	websocketClient service.WebsocketClient
 }
 
+func (p pipelineService) Get(companyId, repositoryId, url, revision, action string) (httpCode int, body interface{}) {
+	var response interface{}
+	header := make(map[string]string)
+	header["token"] = config.Token
+
+	code, b, err := p.httpClient.Get(config.KlovercloudIntegrationMangerUrl+"/pipelines?action="+action+"&companyId="+companyId+"&repositoryId="+repositoryId+"&url="+url+"&revision="+revision, header)
+
+	if err != nil {
+		return code, err
+	}
+	err = json.Unmarshal(b, &response)
+	if err != nil {
+		return http.StatusBadRequest, err
+	}
+	return code, response
+}
+
 func (p pipelineService) ReadEventsByProcessId(c chan map[string]interface{}, processId string) {
 	p.websocketClient.Get(c, config.KlovercloudEventStoreWebSocketUrl+"/pipelines/ws?processId="+processId, http.Header{"token": {config.Token}})
 }

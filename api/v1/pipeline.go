@@ -23,6 +23,38 @@ var (
 	upgrader = websocket.Upgrader{}
 )
 
+// Get... Get pipeline for validation
+// @Summary  Get Pipeline for validation
+// @Description Get Pipeline for validation by repository id, application url and revision
+// @Tags Pipeline
+// @Accept json
+// @Produce json
+// @Param action query string true "action [GET_PIPELINE_FOR_VALIDATION]"
+// @Param repositoryId query string true "repository id"
+// @Param url query string true "application url"
+// @Param revision query string true "commit id or branch name"
+// @Success 200 {object} common.ResponseDTO{data=v1.PipelineForValidation}
+// @Failure 404 {object} common.ResponseDTO
+// @Router /api/v1/pipelines [GET]
+func (p pipelineApi) Get(context echo.Context) error {
+	var companyId string
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, p.jwtService)
+		if err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.PIPELINE), "", string(enums.READ)); err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		companyId = userResourcePermission.Metadata.CompanyId
+	}
+	action := context.QueryParam("action")
+	repoId := context.QueryParam("repositoryId")
+	url := context.QueryParam("url")
+	revision := context.QueryParam("revision")
+	return context.JSON(p.pipelineService.Get(companyId, repoId, url, revision, action))
+}
+
 // Get.. Get events by process id
 // @Summary Get events by process id
 // @Description Get events by process id
@@ -93,7 +125,7 @@ func (p pipelineApi) GetEvents(context echo.Context) error {
 // @Param limit query int64 false "Record count"
 // @Success 200 {object} common.ResponseDTO{data=[]string}
 // @Router /api/v1/pipelines/{processId} [GET]
-func (p pipelineApi) Get(context echo.Context) error {
+func (p pipelineApi) GetByProcessId(context echo.Context) error {
 	id := context.Param("id")
 	if id == "" {
 		return common.GenerateErrorResponse(context, "[ERROR] no processId is provided", "Please provide processId")
