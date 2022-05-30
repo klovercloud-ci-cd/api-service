@@ -14,6 +14,78 @@ type applicationApi struct {
 	jwtService         service.Jwt
 }
 
+// CreatePipeline.. Create application pipeline
+// @Summary Create application pipeline
+// @Description Create application pipeline
+// @Tags Application
+// @Produce json
+// @Param pipeline body interface{} true "pipeline"
+// @Param id path string true "application id"
+// @Param repositoryId query string false "repository id"
+// @Success 200 {object} common.ResponseDTO
+// @Failure 400 {object} common.ResponseDTO
+// @Router /api/v1/applications/{id}/pipeline [POST]
+func (a applicationApi) CreatePipeline(context echo.Context) error {
+	var formData interface{}
+	if err := context.Bind(&formData); err != nil {
+		return err
+	}
+	repoId := context.QueryParam("repositoryId")
+	var companyId string
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, a.jwtService)
+		if err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.APPLICATION), "", string(enums.UPDATE)); err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		companyId = userResourcePermission.Metadata.CompanyId
+	}
+	appId := context.Param("id")
+	code, body := a.applicationService.CreateApplicationPipeline(companyId, repoId, appId, formData)
+	if code == 200 {
+		return common.GenerateSuccessResponse(context, body, nil, "success")
+	}
+	return common.GenerateErrorResponse(context, "Application pipeline creation failed", "operation failed")
+}
+
+// UpdatePipeline.. Update application pipeline
+// @Summary Update application pipeline
+// @Description Update application pipeline
+// @Tags Application
+// @Produce json
+// @Param pipeline body interface{} true "pipeline"
+// @Param id path string true "application id"
+// @Param repositoryId query string false "repository id"
+// @Success 200 {object} common.ResponseDTO
+// @Failure 400 {object} common.ResponseDTO
+// @Router /api/v1/applications/{id}/pipeline [PUT]
+func (a applicationApi) UpdatePipeline(context echo.Context) error {
+	var formData interface{}
+	if err := context.Bind(&formData); err != nil {
+		return err
+	}
+	repoId := context.QueryParam("repositoryId")
+	var companyId string
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, a.jwtService)
+		if err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.APPLICATION), "", string(enums.UPDATE)); err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		companyId = userResourcePermission.Metadata.CompanyId
+	}
+	appId := context.Param("id")
+	code, body := a.applicationService.UpdateApplicationPipeline(companyId, repoId, appId, formData)
+	if code == 200 {
+		return common.GenerateSuccessResponse(context, body, nil, "success")
+	}
+	return common.GenerateErrorResponse(context, "Application pipeline update failed", "operation failed")
+}
+
 // GetAll.. Get all applications
 // @Summary Get all applications
 // @Description Get all applications
@@ -82,7 +154,7 @@ func (a applicationApi) GetById(context echo.Context) error {
 // @Param repositoryId query string true "repository Id"
 // @Success 200 {object} common.ResponseDTO
 // @Failure 404 {object} common.ResponseDTO
-// @Router /api/v1/applications [POST_AGENT_JOB]
+// @Router /api/v1/applications [POST]
 func (a applicationApi) Update(context echo.Context) error {
 	var formData interface{}
 	if err := context.Bind(&formData); err != nil {

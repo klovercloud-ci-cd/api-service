@@ -14,6 +14,32 @@ type companyService struct {
 	httpPublisher service.HttpClient
 }
 
+func (c companyService) CreateApplicationPipeline(companyId, repositoryId, appId string, payload interface{}) (httpCode int, body interface{}) {
+	marshal, err := json.Marshal(payload)
+	if err != nil {
+		return http.StatusBadRequest, err
+	}
+	header := make(map[string]string)
+	header["token"] = config.Token
+	header["Content-Type"] = "application/json"
+
+	code, err := c.httpPublisher.Post(config.KlovercloudIntegrationMangerUrl+"/applications/"+appId+"pipelines?companyId="+companyId+"&repositoryId="+repositoryId, header, marshal)
+	return code, err
+}
+
+func (c companyService) UpdateApplicationPipeline(companyId, repositoryId, appId string, payload interface{}) (httpCode int, body interface{}) {
+	marshal, err := json.Marshal(payload)
+	if err != nil {
+		return http.StatusBadRequest, err
+	}
+	header := make(map[string]string)
+	header["token"] = config.Token
+	header["Content-Type"] = "application/json"
+
+	code, err := c.httpPublisher.Put(config.KlovercloudIntegrationMangerUrl+"/applications/"+appId+"pipelines?companyId="+companyId+"&repositoryId="+repositoryId, header, marshal)
+	return code, err
+}
+
 func (c companyService) GetAllApplications(companyId string, option v1.CompanyQueryOption) (httpCode int, data interface{}) {
 	var response interface{}
 	header := make(map[string]string)

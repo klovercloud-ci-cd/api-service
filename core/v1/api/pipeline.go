@@ -7,4 +7,6 @@ type Pipeline interface {
 	Get(context echo.Context) error
 	GetByProcessId(context echo.Context) error
 	GetEvents(context echo.Context) error
+	Create(context echo.Context) error
+	Update(context echo.Context) error
 }

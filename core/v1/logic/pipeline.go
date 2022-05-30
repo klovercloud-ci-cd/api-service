@@ -13,6 +13,32 @@ type pipelineService struct {
 	websocketClient service.WebsocketClient
 }
 
+func (p pipelineService) Create(companyId, repositoryId, url string, payload interface{}) (httpCode int, body interface{}) {
+	marshal, err := json.Marshal(payload)
+	if err != nil {
+		return http.StatusBadRequest, err
+	}
+	header := make(map[string]string)
+	header["token"] = config.Token
+	header["Content-Type"] = "application/json"
+
+	code, err := p.httpClient.Post(config.KlovercloudIntegrationMangerUrl+"/pipelines?url="+url+"&companyId="+companyId+"&repositoryId="+repositoryId, header, marshal)
+	return code, err
+}
+
+func (p pipelineService) Update(companyId, repositoryId, url string, payload interface{}) (httpCode int, body interface{}) {
+	marshal, err := json.Marshal(payload)
+	if err != nil {
+		return http.StatusBadRequest, err
+	}
+	header := make(map[string]string)
+	header["token"] = config.Token
+	header["Content-Type"] = "application/json"
+
+	code, err := p.httpClient.Put(config.KlovercloudIntegrationMangerUrl+"/pipelines?url="+url+"&companyId="+companyId+"&repositoryId="+repositoryId, header, marshal)
+	return code, err
+}
+
 func (p pipelineService) ReadEventsByCompanyId(c chan map[string]interface{}, companyId string) {
 	p.websocketClient.Get(c, config.KlovercloudEventStoreWebSocketUrl+"/pipelines/ws?company_id="+companyId, http.Header{"token": {config.Token}})
 }
@@ -32,7 +58,6 @@ func (p pipelineService) Get(companyId, repositoryId, url, revision, action stri
 	}
 	return code, response
 }
-
 
 func (p pipelineService) GetByProcessId(processId, action string, option v1.Pagination) (httpCode int, body interface{}) {
 	var response interface{}

@@ -59,6 +59,8 @@ func ApplicationRouter(g *echo.Group) {
 	g.POST("", applicationApi.Update)
 	g.GET("/:id", applicationApi.GetById)
 	g.GET("", applicationApi.GetAll)
+	g.POST("/:id/pipelines", applicationApi.CreatePipeline)
+	g.PUT("/:id/pipelines", applicationApi.UpdatePipeline)
 }
 
 // RepositoryRouter api/v1/repositories/* router
@@ -74,6 +76,8 @@ func PipelineRouter(g *echo.Group) {
 	g.GET("", pipelineApi.Get)
 	g.GET("/:id", pipelineApi.GetByProcessId)
 	g.GET("/ws", pipelineApi.GetEvents)
+	g.POST("", pipelineApi.Create)
+	g.PUT("", pipelineApi.Update)
 }
 
 // ProcessRouter api/v1/processes/* router

@@ -19,6 +19,76 @@ type pipelineApi struct {
 	jwtService      service.Jwt
 }
 
+// Create... Create pipeline
+// @Summary  Create Pipeline
+// @Description Create Pipeline by repository id, application url
+// @Tags Pipeline
+// @Accept json
+// @Produce json
+// @Param pipeline body interface{} true "pipeline"
+// @Success 200 {object} common.ResponseDTO
+// @Failure 404 {object} common.ResponseDTO
+// @Router /api/v1/pipelines [POST]
+func (p pipelineApi) Create(context echo.Context) error {
+	var formData interface{}
+	if err := context.Bind(&formData); err != nil {
+		return err
+	}
+	var companyId string
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, p.jwtService)
+		if err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.PIPELINE), "", string(enums.CREATE)); err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		companyId = userResourcePermission.Metadata.CompanyId
+	}
+	repoId := context.QueryParam("repositoryId")
+	url := context.QueryParam("url")
+	code, res := p.pipelineService.Create(companyId, repoId, url, formData)
+	if code == 200 {
+		return common.GenerateSuccessResponse(context, res, nil, "successful")
+	}
+	return common.GenerateErrorResponse(context, "pipeline creation failed", "operation failed")
+}
+
+// Update... Update pipeline
+// @Summary  Update Pipeline
+// @Description Update Pipeline by repository id, application url
+// @Tags Pipeline
+// @Accept json
+// @Produce json
+// @Param pipeline body interface{} true "pipeline"
+// @Success 200 {object} common.ResponseDTO
+// @Failure 404 {object} common.ResponseDTO
+// @Router /api/v1/pipelines [PUT]
+func (p pipelineApi) Update(context echo.Context) error {
+	var formData interface{}
+	if err := context.Bind(&formData); err != nil {
+		return err
+	}
+	var companyId string
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, p.jwtService)
+		if err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.PIPELINE), "", string(enums.UPDATE)); err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		companyId = userResourcePermission.Metadata.CompanyId
+	}
+	repoId := context.QueryParam("repositoryId")
+	url := context.QueryParam("url")
+	code, res := p.pipelineService.Update(companyId, repoId, url, formData)
+	if code == 200 {
+		return common.GenerateSuccessResponse(context, res, nil, "successful")
+	}
+	return common.GenerateErrorResponse(context, "pipeline update failed", "operation failed")
+}
+
 var (
 	upgrader = websocket.Upgrader{}
 )
@@ -33,7 +103,7 @@ var (
 // @Param repositoryId query string true "repository id"
 // @Param url query string true "application url"
 // @Param revision query string true "commit id or branch name"
-// @Success 200 {object} common.ResponseDTO{data=v1.PipelineForValidation}
+// @Success 200 {object} common.ResponseDTO
 // @Failure 404 {object} common.ResponseDTO
 // @Router /api/v1/pipelines [GET]
 func (p pipelineApi) Get(context echo.Context) error {
@@ -79,7 +149,7 @@ func (p pipelineApi) GetEvents(context echo.Context) error {
 		if err := checkAuthority(userResourcePermission, string(enums.PIPELINE), "", string(enums.READ)); err != nil {
 			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
-		companyId=userResourcePermission.Metadata.CompanyId
+		companyId = userResourcePermission.Metadata.CompanyId
 	}
 	defer func(ws *websocket.Conn) {
 		err := ws.Close()
