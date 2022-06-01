@@ -16,4 +16,6 @@ type Company interface {
 	GetAllApplications(companyId string, option v1.CompanyQueryOption) (httpCode int, data interface{})
 	GetApplicationsByCompanyIdAndRepositoryType(id string, _type string, option v1.CompanyQueryOption, status string) (httpCode int, data interface{})
 	UpdateWebhook(id, repoId, url, webhookId, action, repoType string) (httpCode int, error error)
+	CreateApplicationPipeline(companyId, repositoryId, appId string, payload interface{}) (httpCode int, body interface{})
+	UpdateApplicationPipeline(companyId, repositoryId, appId string, payload interface{}) (httpCode int, body interface{})
 }
