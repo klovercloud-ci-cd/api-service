@@ -21,6 +21,7 @@ func main() {
 		AllowOrigins: []string{"*"},
 		AllowMethods: []string{http.MethodGet, http.MethodPut, http.MethodPost, http.MethodDelete, http.MethodPatch},
 	}))
+
 	api.Routes(e)
 	e.Logger.Fatal(e.Start(":" + config.ServerPort))
 }

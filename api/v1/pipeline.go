@@ -55,6 +55,8 @@ func (p pipelineApi) Get(context echo.Context) error {
 	return context.JSON(p.pipelineService.Get(companyId, repoId, url, revision, action))
 }
 
+
+
 // Get.. Get events by process id
 // @Summary Get events by process id
 // @Description Get events by process id
@@ -81,12 +83,13 @@ func (p pipelineApi) GetEvents(context echo.Context) error {
 		}
 		companyId=userResourcePermission.Metadata.CompanyId
 	}
-	defer func(ws *websocket.Conn) {
-		err := ws.Close()
-		if err != nil {
-
-		}
-	}(ws)
+	//defer func(ws *websocket.Conn) {
+	//	err := ws.Close()
+	//	if err != nil {
+	//		log.Println(err.Error())
+	//		return err
+	//	}
+	//}(ws)
 
 	status := make(chan map[string]interface{})
 	for {
@@ -95,6 +98,7 @@ func (p pipelineApi) GetEvents(context echo.Context) error {
 		if err != nil {
 			log.Println(err.Error())
 		}
+
 		err = ws.WriteMessage(websocket.TextMessage, []byte(jsonStr))
 		if err != nil {
 			log.Println("[ERROR]: Failed to write", err.Error())
