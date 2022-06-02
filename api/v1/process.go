@@ -15,6 +15,34 @@ type processApi struct {
 	jwtService     service.Jwt
 }
 
+// Get... Get Process by Id
+// @Summary Get Process by Id
+// @Description Get Process by Id
+// @Tags Process
+// @Produce json
+// @Param processId path string true "ProcessId"
+// @Success 200 {object} common.ResponseDTO{v1.Process}
+// @Router /api/v1/processes/{processId} [GET]
+func (p processApi) GetById(context echo.Context) error {
+	processId := context.Param("processId")
+	var companyId string
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, p.jwtService)
+		if err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.PROCESS), "", string(enums.READ)); err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		companyId = userResourcePermission.Metadata.CompanyId
+	}
+	code, data := p.processService.GetById(companyId, processId)
+	if code != 200 {
+		return common.GenerateErrorResponse(context, "[ERROR]: Process not found", "Operation failed")
+	}
+	return common.GenerateSuccessResponse(context, data, nil, "Operation Succesful")
+}
+
 // GetLogsByProcessIdAndStepAndFootmark... Get logs by Footmarks, Process Id And Step
 // @Summary Get logs by Footmarks, Process Id And Step
 // @Description Get logs by Footmarks, Process Id And Step
