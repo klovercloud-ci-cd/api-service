@@ -84,10 +84,9 @@ func PipelineRouter(g *echo.Group) {
 func ProcessRouter(g *echo.Group) {
 	processApi := NewProcessApi(dependency.GetV1ProcessService(), dependency.GetV1JwtService())
 	g.GET("", processApi.Get)
-	g.GET(":/processId", processApi.GetById)
+	g.GET("/:processId", processApi.GetById)
 	g.GET("/:processId/steps/:step/footmarks", processApi.GetFootmarksByProcessIdAndStep)
 	g.GET("/:processId/steps/:step/footmarks/:footmark/logs", processApi.GetLogsByProcessIdAndStepAndFootmark)
-
 }
 
 // CompanyRouter api/v1/companies/* router
