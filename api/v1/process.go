@@ -74,7 +74,7 @@ func (p processApi) GetLogsByProcessIdAndStepAndFootmark(context echo.Context) e
 	if code != 200 {
 		return common.GenerateErrorResponse(context, "", "Logs not found")
 	}
-	return common.GenerateSuccessResponse(context, res, nil, "Logs found")
+	return context.JSON(code, res)
 }
 
 // GetFootmarksByProcessIdAndStep... Get Footmarks By Process Id And Step
@@ -103,7 +103,7 @@ func (p processApi) GetFootmarksByProcessIdAndStep(context echo.Context) error {
 	if code != 200 {
 		return common.GenerateErrorResponse(context, "", "Footmarks not found")
 	}
-	return common.GenerateSuccessResponse(context, res, nil, "Footmarks found")
+	return context.JSON(code, res)
 }
 
 // Get... Get Process List or count process
@@ -135,7 +135,7 @@ func (p processApi) Get(context echo.Context) error {
 	}
 	code, data := p.processService.Get(companyId, repositoryId, appId, commitId, option)
 	if code == 200 {
-		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+		return context.JSON(code, data)
 	}
 	return common.GenerateErrorResponse(context, "Processes Query Failed", "Operation Failed")
 }

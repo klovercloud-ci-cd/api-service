@@ -54,7 +54,7 @@ func (p processLifeCycleEventApi) Pull(context echo.Context) error {
 		}
 		code, data := p.processLifeCycleEventService.PullPausedAndAutoTriggerEnabledResourcesByAgentName(count, agentName)
 		if code == 200 {
-			return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+			return context.JSON(code, data)
 		}
 		return common.GenerateErrorResponse(context, "Steps Query Failed", "Operation Failed")
 	}

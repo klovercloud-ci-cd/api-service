@@ -48,7 +48,7 @@ func (c companyApi) GetApplicationsByCompanyIdAndRepositoryType(context echo.Con
 	status := context.QueryParam("status")
 	code, data := c.companyService.GetApplicationsByCompanyIdAndRepositoryType(id, repositoryType, option, status)
 	if code == 200 {
-		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+		return context.JSON(code, data)
 	}
 	return common.GenerateErrorResponse(context, "Applications Query Failed", "Operation Failed")
 }
@@ -90,7 +90,7 @@ func (c companyApi) UpdateRepositories(context echo.Context) error {
 		return common.GenerateErrorResponse(context, nil, err.Error())
 	}
 	if code == 200 {
-		return common.GenerateSuccessResponse(context, nil, nil, "Repositories Updated Successfully")
+		return context.JSON(code, "Repositories Updated Successfully")
 	}
 	return common.GenerateErrorResponse(context, nil, err.Error())
 }
@@ -122,7 +122,7 @@ func (c companyApi) Save(context echo.Context) error {
 		return common.GenerateErrorResponse(context, nil, err.Error())
 	}
 	if code == 200 {
-		return common.GenerateSuccessResponse(context, nil, nil, "Company Saved Successfully")
+		return context.JSON(code, "Company Created Successfully")
 	}
 	return common.GenerateErrorResponse(context, nil, err.Error())
 }
@@ -155,7 +155,7 @@ func (c companyApi) GetRepositoriesById(context echo.Context) error {
 	option := getQueryOption(context)
 	code, data := c.companyService.GetRepositoriesById(id, option)
 	if code == 200 {
-		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+		return context.JSON(code, data)
 	}
 	return common.GenerateErrorResponse(context, "Repositories Query Failed", "Operation Failed")
 }
@@ -188,7 +188,7 @@ func (c companyApi) GetById(context echo.Context) error {
 	option := getQueryOption(context)
 	code, data := c.companyService.GetById(nil, id, option)
 	if code == 200 {
-		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+		return context.JSON(code, data)
 	}
 	return common.GenerateErrorResponse(context, "Company Query by ID Failed", "Operation Failed")
 }
@@ -219,7 +219,7 @@ func (c companyApi) Get(context echo.Context) error {
 	}
 	code, data := c.companyService.Get(option, status)
 	if code == 200 {
-		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+		return context.JSON(code, data)
 	}
 	return common.GenerateErrorResponse(context, "Companies Query Failed", "Operation Failed")
 }

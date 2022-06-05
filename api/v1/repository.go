@@ -46,7 +46,7 @@ func (r repositoryApi) GetApplicationsById(context echo.Context) error {
 	status := context.QueryParam("status")
 	code, data := r.repositoryService.GetApplicationsByRepositoryId(id, companyId, option, status)
 	if code == 200 {
-		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+		return context.JSON(code, data)
 	}
 	return common.GenerateErrorResponse(context, "Applications Query by Repository ID Failed", "Operation Failed")
 }
@@ -86,7 +86,7 @@ func (r repositoryApi) GetById(context echo.Context) error {
 	}
 	code, data := r.repositoryService.GetRepositoryByRepositoryId(id, companyId, loadApplications)
 	if code == 200 {
-		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+		return context.JSON(code, data)
 	}
 	return common.GenerateErrorResponse(context, "Repository Query by ID Failed", "Operation Failed")
 }

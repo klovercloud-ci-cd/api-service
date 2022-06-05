@@ -49,7 +49,7 @@ func (p pipelineApi) Create(context echo.Context) error {
 	url := context.QueryParam("url")
 	code, res := p.pipelineService.Create(companyId, repoId, url, formData)
 	if code == 200 {
-		return common.GenerateSuccessResponse(context, res, nil, "successful")
+		return context.JSON(http.StatusOK, res)
 	}
 	return common.GenerateErrorResponse(context, "pipeline creation failed", "operation failed")
 }
@@ -84,7 +84,7 @@ func (p pipelineApi) Update(context echo.Context) error {
 	url := context.QueryParam("url")
 	code, res := p.pipelineService.Update(companyId, repoId, url, formData)
 	if code == 200 {
-		return common.GenerateSuccessResponse(context, res, nil, "successful")
+		return context.JSON(http.StatusOK, res)
 	}
 	return common.GenerateErrorResponse(context, "pipeline update failed", "operation failed")
 }
@@ -124,7 +124,7 @@ func (p pipelineApi) Get(context echo.Context) error {
 	revision := context.QueryParam("revision")
 	code, data := p.pipelineService.Get(companyId, repoId, url, revision, action)
 	if code == 200 {
-		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+		return context.JSON(http.StatusOK, data)
 	}
 	return common.GenerateErrorResponse(context, "Pipeline Query Failed", "Operation Failed")
 }
@@ -220,7 +220,7 @@ func (p pipelineApi) GetByProcessId(context echo.Context) error {
 	option := getPipelineQueryOption(context)
 	code, data := p.pipelineService.GetByProcessId(id, action, option)
 	if code == 200 {
-		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+		return context.JSON(http.StatusOK, data)
 	}
 	return common.GenerateErrorResponse(context, "Pipeline/Logs Query Failed", "Operation Failed")
 }

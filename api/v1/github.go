@@ -41,7 +41,7 @@ func (v v1GithubApi) GetCommitByBranch(context echo.Context) error {
 	branch := context.QueryParam("branch")
 	code, data := v.github.GetCommitByBranch(url, repoId, branch, companyId)
 	if code == 200 {
-		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+		return context.JSON(code, data)
 	}
 	return common.GenerateErrorResponse(context, "Commit Query by Branch Failed", "Operation Failed")
 }
@@ -71,7 +71,7 @@ func (v v1GithubApi) GetBranches(context echo.Context) error {
 	url := context.QueryParam("url")
 	code, data := v.github.GetBranches(url, repoId, companyId)
 	if code == 200 {
-		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+		return context.JSON(code, data)
 	}
 	return common.GenerateErrorResponse(context, "Branches Query Failed", "Operation Failed")
 }

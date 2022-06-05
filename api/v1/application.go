@@ -45,7 +45,7 @@ func (a applicationApi) CreatePipeline(context echo.Context) error {
 	appId := context.Param("id")
 	code, body := a.applicationService.CreateApplicationPipeline(companyId, repoId, appId, formData)
 	if code == 200 {
-		return common.GenerateSuccessResponse(context, body, nil, "success")
+		return context.JSON(code, body)
 	}
 	return common.GenerateErrorResponse(context, "Application pipeline creation failed", "Operation Failed")
 }
@@ -81,7 +81,7 @@ func (a applicationApi) UpdatePipeline(context echo.Context) error {
 	appId := context.Param("id")
 	code, body := a.applicationService.UpdateApplicationPipeline(companyId, repoId, appId, formData)
 	if code == 200 {
-		return common.GenerateSuccessResponse(context, body, nil, "success")
+		return context.JSON(code, body)
 	}
 	return common.GenerateErrorResponse(context, "Application pipeline update failed", "Operation Failed")
 }
@@ -108,7 +108,7 @@ func (a applicationApi) GetAll(context echo.Context) error {
 	option := getQueryOption(context)
 	code, data := a.applicationService.GetAllApplications(companyId, option)
 	if code == 200 {
-		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+		return context.JSON(code, data)
 	}
 	return common.GenerateErrorResponse(context, "Applications Query Failed", "Operation Failed")
 }
@@ -146,7 +146,7 @@ func (a applicationApi) GetById(context echo.Context) error {
 	}
 	code, data := a.applicationService.GetApplicationByApplicationId(companyId, repositoryId, id)
 	if code == 200 {
-		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+		return context.JSON(code, data)
 	}
 	return common.GenerateErrorResponse(context, "Application Query by ID Failed", "Operation Failed")
 }
@@ -185,7 +185,7 @@ func (a applicationApi) Update(context echo.Context) error {
 		return common.GenerateErrorResponse(context, nil, err.Error())
 	}
 	if code == 200 {
-		return common.GenerateSuccessResponse(context, nil, nil, "Applications updated successfully")
+		return context.JSON(code, "Successfully updated")
 	}
 	return common.GenerateErrorResponse(context, nil, err.Error())
 }
