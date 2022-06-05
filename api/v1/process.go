@@ -133,7 +133,11 @@ func (p processApi) Get(context echo.Context) error {
 		}
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
-	return context.JSON(p.processService.Get(companyId, repositoryId, appId, commitId, option))
+	code, data := p.processService.Get(companyId, repositoryId, appId, commitId, option)
+	if code == 200 {
+		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+	}
+	return common.GenerateErrorResponse(context, "Processes Query Failed", "Operation Failed")
 }
 
 //this function is for set all query param

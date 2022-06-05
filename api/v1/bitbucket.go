@@ -39,7 +39,11 @@ func (v v1BitbucketApi) GetCommitByBranch(context echo.Context) error {
 	repoId := context.QueryParam("repoId")
 	url := context.QueryParam("url")
 	branch := context.QueryParam("branch")
-	return context.JSON(v.bitbucket.GetCommitByBranch(url, repoId, branch, companyId))
+	code, data := v.bitbucket.GetCommitByBranch(url, repoId, branch, companyId)
+	if code == 200 {
+		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+	}
+	return common.GenerateErrorResponse(context, "Commit Query by Branch Failed", "Operation Failed")
 }
 
 // GetBranches... Get Branches
@@ -66,7 +70,11 @@ func (v v1BitbucketApi) GetBranches(context echo.Context) error {
 	}
 	repoId := context.QueryParam("repoId")
 	url := context.QueryParam("url")
-	return context.JSON(v.bitbucket.GetBranches(url, repoId, companyId))
+	code, data := v.bitbucket.GetBranches(url, repoId, companyId)
+	if code == 200 {
+		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+	}
+	return common.GenerateErrorResponse(context, "Branches Query Failed", "Operation Failed")
 }
 
 // this is the main function that will be called by the api to listen bitbucket events

@@ -33,14 +33,30 @@ func (p processLifeCycleEventApi) Pull(context echo.Context) error {
 			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		if steptype != "" {
-			return context.JSON(p.processLifeCycleEventService.PullNonInitializedAndAutoTriggerEnabledEventsByStepType(count, steptype))
+			code, data := p.processLifeCycleEventService.PullNonInitializedAndAutoTriggerEnabledEventsByStepType(count, steptype)
+			if code == 200 {
+				return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+			}
+			return common.GenerateErrorResponse(context, "Steps Query Failed", "Operation Failed")
 		}
-		return context.JSON(p.processLifeCycleEventService.PullPausedAndAutoTriggerEnabledResourcesByAgentName(count, client.Name))
+		code, data := p.processLifeCycleEventService.PullPausedAndAutoTriggerEnabledResourcesByAgentName(count, client.Name)
+		if code == 200 {
+			return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+		}
+		return common.GenerateErrorResponse(context, "Steps Query Failed", "Operation Failed")
 	} else {
 		if steptype != "" {
-			return context.JSON(p.processLifeCycleEventService.PullNonInitializedAndAutoTriggerEnabledEventsByStepType(count, steptype))
+			code, data := p.processLifeCycleEventService.PullNonInitializedAndAutoTriggerEnabledEventsByStepType(count, steptype)
+			if code == 200 {
+				return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+			}
+			return common.GenerateErrorResponse(context, "Steps Query Failed", "Operation Failed")
 		}
-		return context.JSON(p.processLifeCycleEventService.PullPausedAndAutoTriggerEnabledResourcesByAgentName(count, agentName))
+		code, data := p.processLifeCycleEventService.PullPausedAndAutoTriggerEnabledResourcesByAgentName(count, agentName)
+		if code == 200 {
+			return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+		}
+		return common.GenerateErrorResponse(context, "Steps Query Failed", "Operation Failed")
 	}
 }
 
@@ -67,8 +83,14 @@ func (p processLifeCycleEventApi) Save(context echo.Context) error {
 			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 	}
-
-	return context.JSON(p.processLifeCycleEventService.Store(formData))
+	code, err := p.processLifeCycleEventService.Store(formData)
+	if err != nil {
+		return common.GenerateErrorResponse(context, nil, err.Error())
+	}
+	if code == 200 {
+		return common.GenerateSuccessResponse(context, nil, nil, "Process Life Cycle Event Saved Successfully")
+	}
+	return common.GenerateErrorResponse(context, nil, err.Error())
 }
 
 // NewProcessLifeCycleEventApi returns ProcessLifeCycleEvent type api

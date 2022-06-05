@@ -46,7 +46,11 @@ func (c companyApi) GetApplicationsByCompanyIdAndRepositoryType(context echo.Con
 	repositoryType := context.QueryParam("repository_type")
 	option := getQueryOption(context)
 	status := context.QueryParam("status")
-	return context.JSON(c.companyService.GetApplicationsByCompanyIdAndRepositoryType(id, repositoryType, option, status))
+	code, data := c.companyService.GetApplicationsByCompanyIdAndRepositoryType(id, repositoryType, option, status)
+	if code == 200 {
+		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+	}
+	return common.GenerateErrorResponse(context, "Applications Query Failed", "Operation Failed")
 }
 
 // Update... Update repositories
@@ -86,7 +90,7 @@ func (c companyApi) UpdateRepositories(context echo.Context) error {
 		return common.GenerateErrorResponse(context, nil, err.Error())
 	}
 	if code == 200 {
-		return common.GenerateSuccessResponse(context, nil, nil, "Repositories updated successfully")
+		return common.GenerateSuccessResponse(context, nil, nil, "Repositories Updated Successfully")
 	}
 	return common.GenerateErrorResponse(context, nil, err.Error())
 }
@@ -113,7 +117,14 @@ func (c companyApi) Save(context echo.Context) error {
 	if err := context.Bind(&formData); err != nil {
 		return err
 	}
-	return context.JSON(c.companyService.Store(formData))
+	code, err := c.companyService.Store(formData)
+	if err != nil {
+		return common.GenerateErrorResponse(context, nil, err.Error())
+	}
+	if code == 200 {
+		return common.GenerateSuccessResponse(context, nil, nil, "Company Saved Successfully")
+	}
+	return common.GenerateErrorResponse(context, nil, err.Error())
 }
 
 // Get.. Get RepositoriesDto by company id
@@ -142,7 +153,11 @@ func (c companyApi) GetRepositoriesById(context echo.Context) error {
 		}
 	}
 	option := getQueryOption(context)
-	return context.JSON(c.companyService.GetRepositoriesById(id, option))
+	code, data := c.companyService.GetRepositoriesById(id, option)
+	if code == 200 {
+		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+	}
+	return common.GenerateErrorResponse(context, "Repositories Query Failed", "Operation Failed")
 }
 
 // Get.. Get company
@@ -171,7 +186,11 @@ func (c companyApi) GetById(context echo.Context) error {
 		}
 	}
 	option := getQueryOption(context)
-	return context.JSON(c.companyService.GetById(nil, id, option))
+	code, data := c.companyService.GetById(nil, id, option)
+	if code == 200 {
+		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+	}
+	return common.GenerateErrorResponse(context, "Company Query by ID Failed", "Operation Failed")
 }
 
 // Get... Get companies
@@ -198,7 +217,11 @@ func (c companyApi) Get(context echo.Context) error {
 			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 	}
-	return context.JSON(c.companyService.Get(option, status))
+	code, data := c.companyService.Get(option, status)
+	if code == 200 {
+		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+	}
+	return common.GenerateErrorResponse(context, "Companies Query Failed", "Operation Failed")
 }
 
 // UpdateWebhook... Update Webhook

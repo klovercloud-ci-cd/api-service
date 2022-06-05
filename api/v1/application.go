@@ -47,7 +47,7 @@ func (a applicationApi) CreatePipeline(context echo.Context) error {
 	if code == 200 {
 		return common.GenerateSuccessResponse(context, body, nil, "success")
 	}
-	return common.GenerateErrorResponse(context, "Application pipeline creation failed", "operation failed")
+	return common.GenerateErrorResponse(context, "Application pipeline creation failed", "Operation Failed")
 }
 
 // UpdatePipeline.. Update application pipeline
@@ -83,7 +83,7 @@ func (a applicationApi) UpdatePipeline(context echo.Context) error {
 	if code == 200 {
 		return common.GenerateSuccessResponse(context, body, nil, "success")
 	}
-	return common.GenerateErrorResponse(context, "Application pipeline update failed", "operation failed")
+	return common.GenerateErrorResponse(context, "Application pipeline update failed", "Operation Failed")
 }
 
 // GetAll.. Get all applications
@@ -106,7 +106,11 @@ func (a applicationApi) GetAll(context echo.Context) error {
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
 	option := getQueryOption(context)
-	return context.JSON(a.applicationService.GetAllApplications(companyId, option))
+	code, data := a.applicationService.GetAllApplications(companyId, option)
+	if code == 200 {
+		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+	}
+	return common.GenerateErrorResponse(context, "Applications Query Failed", "Operation Failed")
 }
 
 // Get.. Get application by appliction id
@@ -140,8 +144,11 @@ func (a applicationApi) GetById(context echo.Context) error {
 		}
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
-
-	return context.JSON(a.applicationService.GetApplicationByApplicationId(companyId, repositoryId, id))
+	code, data := a.applicationService.GetApplicationByApplicationId(companyId, repositoryId, id)
+	if code == 200 {
+		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+	}
+	return common.GenerateErrorResponse(context, "Application Query by ID Failed", "Operation Failed")
 }
 
 // Update... Update Application

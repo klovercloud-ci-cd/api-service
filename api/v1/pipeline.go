@@ -122,10 +122,12 @@ func (p pipelineApi) Get(context echo.Context) error {
 	repoId := context.QueryParam("repositoryId")
 	url := context.QueryParam("url")
 	revision := context.QueryParam("revision")
-	return context.JSON(p.pipelineService.Get(companyId, repoId, url, revision, action))
+	code, data := p.pipelineService.Get(companyId, repoId, url, revision, action)
+	if code == 200 {
+		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+	}
+	return common.GenerateErrorResponse(context, "Pipeline Query Failed", "Operation Failed")
 }
-
-
 
 // Get.. Get events by process id
 // @Summary Get events by process id
@@ -217,7 +219,10 @@ func (p pipelineApi) GetByProcessId(context echo.Context) error {
 	}
 	option := getPipelineQueryOption(context)
 	code, data := p.pipelineService.GetByProcessId(id, action, option)
-	return context.JSON(code, data)
+	if code == 200 {
+		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+	}
+	return common.GenerateErrorResponse(context, "Pipeline/Logs Query Failed", "Operation Failed")
 }
 
 func getPipelineQueryOption(context echo.Context) v1.Pagination {

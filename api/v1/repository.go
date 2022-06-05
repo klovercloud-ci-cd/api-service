@@ -44,7 +44,11 @@ func (r repositoryApi) GetApplicationsById(context echo.Context) error {
 	}
 	option := getRepositoryQueryOption(context)
 	status := context.QueryParam("status")
-	return context.JSON(r.repositoryService.GetApplicationsByRepositoryId(id, companyId, option, status))
+	code, data := r.repositoryService.GetApplicationsByRepositoryId(id, companyId, option, status)
+	if code == 200 {
+		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+	}
+	return common.GenerateErrorResponse(context, "Applications Query by Repository ID Failed", "Operation Failed")
 }
 func getRepositoryQueryOption(context echo.Context) v1.RepositoryQueryOption {
 	option := v1.RepositoryQueryOption{}
@@ -80,7 +84,11 @@ func (r repositoryApi) GetById(context echo.Context) error {
 		}
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
-	return context.JSON(r.repositoryService.GetRepositoryByRepositoryId(id, companyId, loadApplications))
+	code, data := r.repositoryService.GetRepositoryByRepositoryId(id, companyId, loadApplications)
+	if code == 200 {
+		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+	}
+	return common.GenerateErrorResponse(context, "Repository Query by ID Failed", "Operation Failed")
 }
 
 // NewRepositoryApi returns Repository type api

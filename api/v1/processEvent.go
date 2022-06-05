@@ -35,8 +35,14 @@ func (p ProcessEvent) Save(context echo.Context) error {
 			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 	}
-
-	return context.JSON(p.processEvent.Store(formData))
+	code, err := p.processEvent.Store(formData)
+	if err != nil {
+		return common.GenerateErrorResponse(context, nil, err.Error())
+	}
+	if code == 200 {
+		return common.GenerateSuccessResponse(context, nil, nil, "Pipeline Process Event Saved Successfully")
+	}
+	return common.GenerateErrorResponse(context, nil, err.Error())
 }
 
 func NewProcessEvent(processEvent service.ProcessEvent, jwtService service.Jwt) api.ProcessEvent {

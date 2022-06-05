@@ -36,7 +36,14 @@ func (l LogEvent) Save(context echo.Context) error {
 		}
 	}
 
-	return context.JSON(l.logEventService.Store(formData))
+	code, err := l.logEventService.Store(formData)
+	if err != nil {
+		return common.GenerateErrorResponse(context, nil, err.Error())
+	}
+	if code == 200 {
+		return common.GenerateSuccessResponse(context, nil, nil, "Log Saved Successfully")
+	}
+	return common.GenerateErrorResponse(context, nil, err.Error())
 }
 
 func NewLogEvent(logEventService service.LogEvent, jwtService service.Jwt) api.LogEvent {
