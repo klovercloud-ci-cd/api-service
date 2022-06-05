@@ -7,6 +7,12 @@ type CompanyQueryOption struct {
 	LoadApplications string
 }
 
+// ResourceQueryOption contains resource query options
+type ResourceQueryOption struct {
+	Pagination    Pagination
+	AscendingSort string
+}
+
 // Pagination Pagination query params
 type Pagination struct {
 	Page  string
@@ -21,7 +27,6 @@ type RepositoryQueryOption struct {
 
 // ProcessQueryOption process query option
 type ProcessQueryOption struct {
-	Pagination       Pagination
-	Step string
+	Pagination Pagination
+	Step       string
 }
-
