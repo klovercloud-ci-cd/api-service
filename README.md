@@ -11,3 +11,21 @@
   \__,_| | .__/  |_|         |___/  \___| |_|      \_/   |_|  \___|  \___|
          |_|                                                              
 ```
+
+## Responsibility
+- Gateway for external users.
+- Authenticates and authorizes users using security service
+
+
+
+| Versions | 
+|----------|
+| 0.0.1    |
+
+## Want to contribute
+
+- See [CONTRIBUTING.md](markdownfiles/CONTRIBUTING.md)
+- See [DEVELOPMENT.md](markdownfiles/DEVELOPMENT.md) to get start
+- See [architecture](https://github.com/klovercloud-ci-cd/architecture)
+- Look at our
+  [our issues](https://github.com/klovercloud-ci-cd/api-service/issues)
