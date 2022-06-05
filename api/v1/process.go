@@ -40,7 +40,7 @@ func (p processApi) GetById(context echo.Context) error {
 	if code != 200 {
 		return common.GenerateErrorResponse(context, "[ERROR]: Process not found", "Operation failed")
 	}
-	return common.GenerateSuccessResponse(context, data, nil, "Operation Succesful")
+	return context.JSON(code, data)
 }
 
 // GetLogsByProcessIdAndStepAndFootmark... Get logs by Footmarks, Process Id And Step
