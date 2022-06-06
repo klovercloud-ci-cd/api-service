@@ -18,9 +18,10 @@
 
 
 
-| Versions | 
-|----------|
-| 0.0.1    |
+| Version | Kubernetes api | Kubernetes client-go | kubernetes apimachinery |
+|---------|----------------|----------------------|-------------------------|
+| v1      | 1.12.9         | 1.12.9               | 1.12.9                  |
+
 
 ## Want to contribute
 
