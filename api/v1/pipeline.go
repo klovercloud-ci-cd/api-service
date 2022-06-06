@@ -155,13 +155,6 @@ func (p pipelineApi) GetEvents(context echo.Context) error {
 		}
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
-	//defer func(ws *websocket.Conn) {
-	//	err := ws.Close()
-	//	if err != nil {
-	//		log.Println(err.Error())
-	//		return err
-	//	}
-	//}(ws)
 
 	status := make(chan map[string]interface{})
 	for {
