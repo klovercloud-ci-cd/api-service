@@ -20,7 +20,7 @@ type kubeObject struct {
 // @Description Api for getting all kube objects by object name, agent name, owner reference and process id
 // @Tags KubeObject
 // @Produce json
-// @Param owner-reference query string true "Owner Reference"
+// @Param owner-reference query string false "Owner Reference"
 // @Param processId query string true "Process Id"
 // @Param agent query string true "Agent Name"
 // @Param page query int64 false "Page Number"
