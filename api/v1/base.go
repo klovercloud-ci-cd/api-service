@@ -20,6 +20,7 @@ func Router(g *echo.Group) {
 	ProcessEventRouter(g.Group("/processes_events"))
 	KubeEventRouter(g.Group("/kube_events"))
 	KubeObjectRouter(g.Group("/kube_objects"))
+	AgentRouter(g.Group("/agents"))
 }
 
 // ProcessEventRouter api/v1/process_events router
@@ -119,4 +120,12 @@ func KubeEventRouter(g *echo.Group) {
 func KubeObjectRouter(g *echo.Group) {
 	kubeObjectApi := NewKubeObjectApi(dependency.GetKubeObjectService(), dependency.GetV1JwtService())
 	g.GET("", kubeObjectApi.Get, AuthenticationHandlerForInternalCall)
+}
+
+
+// AgentRouter api/v1/agents/* router
+func AgentRouter(g *echo.Group) {
+	agentApi := NewAgentApi(dependency.GetV1Agent(), dependency.GetV1JwtService())
+	g.POST("", agentApi.Save, AuthenticationHandlerForInternalCall)
+	g.GET("/:name", agentApi.Get, AuthenticationHandlerForInternalCall)
 }

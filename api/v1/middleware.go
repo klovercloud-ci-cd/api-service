@@ -35,14 +35,8 @@ func AuthenticationHandler(handler echo.HandlerFunc) echo.HandlerFunc {
 func AuthenticationHandlerForInternalCall(handler echo.HandlerFunc) echo.HandlerFunc {
 	return func(context echo.Context) (err error) {
 		if config.EnableAuthentication {
-			bearerToken := context.Request().Header.Get("Authorization")
-			if bearerToken == "" {
-				return common.GenerateUnauthorizedResponse(context, "[ERROR]: No token found!", "Please provide a valid token!")
-			}
-			var token string
-			if len(strings.Split(bearerToken, " ")) == 2 {
-				token = strings.Split(bearerToken, " ")[1]
-			} else {
+			token := context.Request().Header.Get("token")
+			if token == "" {
 				return common.GenerateUnauthorizedResponse(context, "[ERROR]: No token found!", "Please provide a valid token!")
 			}
 			res, _ := dependency.GetV1JwtService().ValidateTokenForInternalCall(token)

@@ -29,7 +29,7 @@ func (k kubeEvent) Save(context echo.Context) error {
 		return err
 	}
 	if config.EnableAuthentication {
-		_, err := GetClientNameFromBearerToken(context)
+		_, err := GetClientNameFromToken(context,k.jwtService)
 		if err != nil {
 			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}

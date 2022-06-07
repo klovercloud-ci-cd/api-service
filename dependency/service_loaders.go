@@ -59,3 +59,8 @@ func GetProcessEvent() service.ProcessEvent {
 func GetKubeEvent() service.KubeEvent {
 	return logic.NewKubeEventEventService(logic.NewHttpClientService())
 }
+
+// GetAgent returns Agent service
+func GetV1Agent() service.Agent {
+	return logic.NewAgentService(logic.NewHttpClientService())
+}

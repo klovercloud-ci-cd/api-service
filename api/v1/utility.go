@@ -71,19 +71,15 @@ func GetUserResourcePermissionFromBearerToken(context echo.Context, jwtService s
 	return userResourcePermission, nil
 }
 
-func GetClientNameFromBearerToken(context echo.Context) (v1.AgentData, error) {
-	bearerToken := context.Request().Header.Get("Authorization")
-	var token string
-	if len(strings.Split(bearerToken, " ")) == 2 {
-		token = strings.Split(bearerToken, " ")[1]
-	}
+func GetClientNameFromToken(context echo.Context, jwtService service.Jwt) (v1.AgentData, error) {
+	token := context.Request().Header.Get("token")
 	claims := jwt.MapClaims{}
 	jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
 		return []byte(""), nil
 	})
 	jsonBody, err := json.Marshal(claims["data"])
 	if err != nil {
-		log.Println(err)
+		log.Println(err.Error())
 	}
 	agent := v1.AgentData{}
 	if err := json.Unmarshal(jsonBody, &agent); err != nil {
