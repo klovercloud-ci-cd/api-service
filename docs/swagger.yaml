@@ -31,6 +31,55 @@ info:
   description: api-service  API
   title: api-service API
 paths:
+  /api/v1/agents:
+    post:
+      consumes:
+      - application/json
+      description: Save Agents terminal information
+      parameters:
+      - description: Agents Terminal Data
+        in: body
+        name: data
+        required: true
+        schema:
+          type: object
+      - description: agent name
+        in: query
+        name: name
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Save Agents terminal information
+      tags:
+      - Agent
+  /api/v1/agents/{name}:
+    get:
+      description: Get Agents terminal info by agent name
+      parameters:
+      - description: agent name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Get Agents terminal info by agent name
+      tags:
+      - Agent
   /api/v1/applications:
     get:
       description: Get all applications
@@ -498,6 +547,51 @@ paths:
       summary: Save k8s event
       tags:
       - KubeEvent
+  /api/v1/kube_objects:
+    get:
+      description: Api for getting all kube objects by object name, agent name, owner
+        reference and process id
+      parameters:
+      - description: Owner Reference
+        in: query
+        name: owner-reference
+        type: string
+      - description: Process Id
+        in: query
+        name: processId
+        required: true
+        type: string
+      - description: Agent Name
+        in: query
+        name: agent
+        required: true
+        type: string
+      - description: Page Number
+        in: query
+        name: page
+        type: integer
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Sort By Created Time
+        in: query
+        name: sort
+        type: boolean
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Get api
+      tags:
+      - KubeObject
   /api/v1/logs:
     post:
       consumes:
@@ -755,6 +849,25 @@ paths:
           schema:
             $ref: '#/definitions/common.ResponseDTO'
       summary: Get Process List or count process
+      tags:
+      - Process
+  /api/v1/processes/{processId}:
+    get:
+      description: Get Process by Id
+      parameters:
+      - description: ProcessId
+        in: path
+        name: processId
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/common.ResponseDTO'
+      summary: Get Process by Id
       tags:
       - Process
   /api/v1/processes/{processId}/steps/{step}/footmarks:

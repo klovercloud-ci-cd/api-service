@@ -94,7 +94,7 @@ func ProcessRouter(g *echo.Group) {
 // CompanyRouter api/v1/companies/* router
 func CompanyRouter(g *echo.Group) {
 	companyApi := NewCompanyApi(dependency.GetV1CompanyService(), dependency.GetV1JwtService())
-	g.POST("", companyApi.Save, AuthenticationHandler)
+	g.POST("", companyApi.Save)
 	g.GET("", companyApi.Get)
 	g.GET("/:id", companyApi.GetById)
 	g.GET("/:id/repositories", companyApi.GetRepositoriesById)
@@ -122,10 +122,9 @@ func KubeObjectRouter(g *echo.Group) {
 	g.GET("", kubeObjectApi.Get, AuthenticationHandlerForInternalCall)
 }
 
-
 // AgentRouter api/v1/agents/* router
 func AgentRouter(g *echo.Group) {
 	agentApi := NewAgentApi(dependency.GetV1Agent(), dependency.GetV1JwtService())
 	g.POST("", agentApi.Save, AuthenticationHandlerForInternalCall)
-	g.GET("/:name", agentApi.Get, AuthenticationHandlerForInternalCall)
+	g.GET("/:name", agentApi.Get)
 }

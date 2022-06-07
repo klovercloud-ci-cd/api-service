@@ -28,7 +28,7 @@ func (a agentService) Get(name string) (httpCode int, body interface{}) {
 	header := make(map[string]string)
 	header["token"] = config.Token
 
-	code, b, err := a.httpClient.Get(config.KlovercloudEventStoreUrl+"/agents/"+name, header)
+	code, b, err := a.httpClient.Get(config.KlovercloudIntegrationMangerUrl+"/agents/"+name, header)
 
 	if err != nil {
 		return code, err

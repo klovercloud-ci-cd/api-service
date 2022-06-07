@@ -5,51 +5,73 @@ import (
 	"github.com/klovercloud-ci-cd/api-service/config"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/api"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/service"
+	"github.com/klovercloud-ci-cd/api-service/enums"
 	"github.com/labstack/echo/v4"
 )
 
 type agentApi struct {
 	agentService service.Agent
-	jwtService       service.Jwt
+	jwtService   service.Jwt
 }
 
+// Save... Save Agents terminal information
+// @Summary  Save Agents terminal information
+// @Description Save Agents terminal information
+// @Tags Agent
+// @Accept json
+// @Produce json
+// @Param data body object true "Agents Terminal Data"
+// @Param name query string false "agent name"
+// @Success 200 {object} common.ResponseDTO
+// @Failure 404 {object} common.ResponseDTO
+// @Router /api/v1/agents [POST]
 func (a agentApi) Save(context echo.Context) error {
 	var formData interface{}
 	if err := context.Bind(&formData); err != nil {
 		return err
 	}
-	agentName:=context.QueryParam("name")
+	agentName := context.QueryParam("name")
 	if config.EnableAuthentication {
-		agentObjFromToken, err := GetClientNameFromToken(context,a.jwtService)
+		agentObjFromToken, err := GetClientNameFromToken(context, a.jwtService)
 		if err != nil {
 			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
-		agentName=agentObjFromToken.Name
+		agentName = agentObjFromToken.Name
 	}
-	code, err := a.agentService.Store(formData,agentName)
+	code, err := a.agentService.Store(formData, agentName)
 	if err != nil {
 		return common.GenerateErrorResponse(context, err, err.Error())
 	}
-	return context.JSON(code,err)
+	return context.JSON(code, err)
 }
 
+// Get.. Get Agents terminal info by agent name
+// @Summary Get Agents terminal info by agent name
+// @Description Get Agents terminal info by agent name
+// @Tags Agent
+// @Produce json
+// @Param name path string true "agent name"
+// @Success 200 {object} common.ResponseDTO
+// @Router /api/v1/agents/{name} [GET]
 func (a agentApi) Get(context echo.Context) error {
-	agentName:=context.Param("name")
+	agentName := context.Param("name")
 	if config.EnableAuthentication {
-		agentObjFromToken, err := GetClientNameFromToken(context,a.jwtService)
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, a.jwtService)
 		if err != nil {
 			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
-		agentName=agentObjFromToken.Name
+		if err := checkAuthority(userResourcePermission, string(enums.PROCESS), "", string(enums.READ)); err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
 	}
-	code,body:=a.agentService.Get(agentName)
-	return context.JSON(code,body)
+	code, body := a.agentService.Get(agentName)
+	return context.JSON(code, body)
 }
 
 // NewAgentApi returns Agent type api
 func NewAgentApi(agentService service.Agent, jwtService service.Jwt) api.Agent {
 	return &agentApi{
 		agentService: agentService,
-		jwtService:         jwtService,
+		jwtService:   jwtService,
 	}
 }

@@ -30,7 +30,7 @@ func (p ProcessEvent) Save(context echo.Context) error {
 	}
 
 	if config.EnableAuthentication {
-		_, err := GetClientNameFromToken(context,p.jwtService)
+		_, err := GetClientNameFromToken(context, p.jwtService)
 		if err != nil {
 			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}

@@ -6,6 +6,81 @@
         "contact": {}
     },
     "paths": {
+        "/api/v1/agents": {
+            "post": {
+                "description": "Save Agents terminal information",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Agent"
+                ],
+                "summary": "Save Agents terminal information",
+                "parameters": [
+                    {
+                        "description": "Agents Terminal Data",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "object"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "agent name",
+                        "name": "name",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/agents/{name}": {
+            "get": {
+                "description": "Get Agents terminal info by agent name",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Agent"
+                ],
+                "summary": "Get Agents terminal info by agent name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "agent name",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/applications": {
             "get": {
                 "description": "Get all applications",
@@ -708,6 +783,72 @@
                 }
             }
         },
+        "/api/v1/kube_objects": {
+            "get": {
+                "description": "Api for getting all kube objects by object name, agent name, owner reference and process id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "KubeObject"
+                ],
+                "summary": "Get api",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Owner Reference",
+                        "name": "owner-reference",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Process Id",
+                        "name": "processId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Agent Name",
+                        "name": "agent",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page Number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Sort By Created Time",
+                        "name": "sort",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/logs": {
             "post": {
                 "description": "Stores logs",
@@ -1088,6 +1229,35 @@
                         "description": "Operation[countTodaysProcessByCompanyId]",
                         "name": "operation",
                         "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/common.ResponseDTO"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/processes/{processId}": {
+            "get": {
+                "description": "Get Process by Id",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Process"
+                ],
+                "summary": "Get Process by Id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "ProcessId",
+                        "name": "processId",
+                        "in": "path",
+                        "required": true
                     }
                 ],
                 "responses": {

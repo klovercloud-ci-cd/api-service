@@ -27,7 +27,7 @@ func (p processLifeCycleEventService) Store(events interface{}) (httpCode int, e
 	return code, nil
 }
 
-func (p processLifeCycleEventService) PullNonInitializedAndAutoTriggerEnabledEventsByStepType(count , stepType string) (httpCode int, body interface{}) {
+func (p processLifeCycleEventService) PullNonInitializedAndAutoTriggerEnabledEventsByStepType(count, stepType string) (httpCode int, body interface{}) {
 	response := make(map[string]interface{})
 	header := make(map[string]string)
 	header["token"] = config.Token
@@ -44,7 +44,7 @@ func (p processLifeCycleEventService) PullNonInitializedAndAutoTriggerEnabledEve
 	return code, response
 }
 
-func (p processLifeCycleEventService) PullPausedAndAutoTriggerEnabledResourcesByAgentName(count , agent string) (httpCode int, body interface{}) {
+func (p processLifeCycleEventService) PullPausedAndAutoTriggerEnabledResourcesByAgentName(count, agent string) (httpCode int, body interface{}) {
 	response := make(map[string]interface{})
 	header := make(map[string]string)
 	header["token"] = config.Token

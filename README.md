@@ -13,15 +13,13 @@
 ```
 
 ## Responsibility
+
 - Gateway for external users.
 - Authenticates and authorizes users using security service
-
-
 
 | Version | Kubernetes api | Kubernetes client-go | kubernetes apimachinery |
 |---------|----------------|----------------------|-------------------------|
 | v1      | 1.12.9         | 1.12.9               | 1.12.9                  |
-
 
 ## Want to contribute
 
