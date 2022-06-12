@@ -202,6 +202,7 @@ func (c companyApi) GetById(context echo.Context) error {
 // @Param limit query int64 false "Record count"
 // @Param loadRepositories query bool false "Loads Repositories"
 // @Param loadApplications query bool false "Loads Applications"
+// @Param loadToken query bool false "Loads Token"
 // @Param status query string false "status"
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/companies [GET]

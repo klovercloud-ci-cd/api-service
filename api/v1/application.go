@@ -89,6 +89,12 @@ func (a applicationApi) UpdatePipeline(context echo.Context) error {
 // GetAll.. Get all applications
 // @Summary Get all applications
 // @Description Get all applications
+// @Param action query string false "webhook_count"
+// @Param page query int64 false "Page number"
+// @Param limit query int64 false "Record count"
+// @Param loadRepositories query bool false "Loads Repositories"
+// @Param loadApplications query bool false "Loads Applications"
+// @Param loadToken query bool false "Loads Token"
 // @Tags Application
 // @Produce json
 // @Success 200 {object} common.ResponseDTO
