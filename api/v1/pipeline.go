@@ -99,10 +99,12 @@ var (
 // @Tags Pipeline
 // @Accept json
 // @Produce json
-// @Param action query string true "action [GET_PIPELINE_FOR_VALIDATION]"
+// @Param action query string true "action [GET_PIPELINE_FOR_VALIDATION/dashboard_data"]"
 // @Param repositoryId query string true "repository id"
 // @Param url query string true "application url"
 // @Param revision query string true "commit id or branch name"
+// @Param from query string false "From Data"
+// @Param to query string false "To Data"
 // @Success 200 {object} common.ResponseDTO
 // @Failure 404 {object} common.ResponseDTO
 // @Router /api/v1/pipelines [GET]
@@ -122,9 +124,11 @@ func (p pipelineApi) Get(context echo.Context) error {
 	repoId := context.QueryParam("repositoryId")
 	url := context.QueryParam("url")
 	revision := context.QueryParam("revision")
-	code, data := p.pipelineService.Get(companyId, repoId, url, revision, action)
+	from := context.QueryParam("from")
+	to := context.QueryParam("to")
+	code, data := p.pipelineService.Get(companyId, repoId, url, revision, action, from, to)
 	if code == 200 {
-		return context.JSON(http.StatusOK, data)
+		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
 	}
 	return common.GenerateErrorResponse(context, "Pipeline Query Failed", "Operation Failed")
 }
