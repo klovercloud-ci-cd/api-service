@@ -105,8 +105,9 @@ func (a applicationApi) GetAll(context echo.Context) error {
 		}
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
+	action := context.QueryParam("action")
 	option := getQueryOption(context)
-	code, data := a.applicationService.GetAllApplications(companyId, option)
+	code, data := a.applicationService.GetAllApplications(companyId, action, option)
 	if code == 200 {
 		return context.JSON(code, data)
 	}

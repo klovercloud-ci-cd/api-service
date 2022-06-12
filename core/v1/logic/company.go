@@ -40,12 +40,12 @@ func (c companyService) UpdateApplicationPipeline(companyId, repositoryId, appId
 	return code, err
 }
 
-func (c companyService) GetAllApplications(companyId string, option v1.CompanyQueryOption) (httpCode int, data interface{}) {
+func (c companyService) GetAllApplications(companyId, action string, option v1.CompanyQueryOption) (httpCode int, data interface{}) {
 	var response interface{}
 	header := make(map[string]string)
 	header["token"] = config.Token
 
-	code, b, err := c.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/applications?page="+option.Pagination.Page+"&limit="+option.Pagination.Limit+"&companyId="+companyId, header)
+	code, b, err := c.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/applications?page="+option.Pagination.Page+"&limit="+option.Pagination.Limit+"&companyId="+companyId+"&action="+action, header)
 
 	if err != nil {
 		return code, err
