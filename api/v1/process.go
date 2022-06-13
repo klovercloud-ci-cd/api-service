@@ -140,7 +140,7 @@ func (p processApi) Get(context echo.Context) error {
 	}
 	code, data := p.processService.Get(companyId, repositoryId, appId, commitId, operation, from, to, option)
 	if code == 200 {
-		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+		return context.JSON(200, data)
 	}
 	return common.GenerateErrorResponse(context, "Processes Query Failed", "Operation Failed")
 }
