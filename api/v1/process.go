@@ -114,7 +114,9 @@ func (p processApi) GetFootmarksByProcessIdAndStep(context echo.Context) error {
 // @Param repositoryId query string false "Repository Id"
 // @Param appId query string false "App Id"
 // @Param commitId query string false "Commit Id"
-// @Param operation query string false "Operation[countTodaysProcessByCompanyId]"
+// @Param appId query string false "Commit Id"
+// @Param from query string false "From Date"
+// @Param operation query string false "Operation[countTodaysProcessByCompanyId/countProcessByCompanyIdAndDate]"
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/processes [GET]
 func (p processApi) Get(context echo.Context) error {
@@ -123,6 +125,9 @@ func (p processApi) Get(context echo.Context) error {
 	appId := context.QueryParam("appId")
 	commitId := context.QueryParam("commitId")
 	option := getProcessQueryOption(context)
+	from := context.QueryParam("from")
+	to := context.QueryParam("to")
+	operation := context.QueryParam("operation")
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, p.jwtService)
 		if err != nil {
@@ -133,9 +138,9 @@ func (p processApi) Get(context echo.Context) error {
 		}
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
-	code, data := p.processService.Get(companyId, repositoryId, appId, commitId, option)
+	code, data := p.processService.Get(companyId, repositoryId, appId, commitId, operation, from, to, option)
 	if code == 200 {
-		return context.JSON(code, data)
+		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
 	}
 	return common.GenerateErrorResponse(context, "Processes Query Failed", "Operation Failed")
 }
