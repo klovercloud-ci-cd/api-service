@@ -166,6 +166,7 @@ func (c companyApi) GetRepositoriesById(context echo.Context) error {
 // @Tags Company
 // @Produce json
 // @Param id path string true "Company id"
+// @Param action query string false "action [dashboard_data]"
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/companies/{id} [GET]
 func (c companyApi) GetById(context echo.Context) error {
@@ -186,7 +187,8 @@ func (c companyApi) GetById(context echo.Context) error {
 		}
 	}
 	option := getQueryOption(context)
-	code, data := c.companyService.GetById(nil, id, option)
+	action := context.QueryParam("action")
+	code, data := c.companyService.GetById(nil, id, action, option)
 	if code == 200 {
 		return context.JSON(code, data)
 	}

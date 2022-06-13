@@ -40,12 +40,12 @@ func (c companyService) UpdateApplicationPipeline(companyId, repositoryId, appId
 	return code, err
 }
 
-func (c companyService) GetAllApplications(companyId, action string, option v1.CompanyQueryOption) (httpCode int, data interface{}) {
+func (c companyService) GetAllApplications(companyId string, option v1.CompanyQueryOption) (httpCode int, data interface{}) {
 	var response interface{}
 	header := make(map[string]string)
 	header["token"] = config.Token
 
-	code, b, err := c.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/applications?page="+option.Pagination.Page+"&limit="+option.Pagination.Limit+"&companyId="+companyId+"&action="+action, header)
+	code, b, err := c.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/applications?page="+option.Pagination.Page+"&limit="+option.Pagination.Limit+"&companyId="+companyId, header)
 
 	if err != nil {
 		return code, err
@@ -196,11 +196,11 @@ func (c companyService) Get(option v1.CompanyQueryOption, status string) (httpCo
 	}
 	return code, response
 }
-func (c companyService) GetById(headers map[string]string, id string, option v1.CompanyQueryOption) (httpCode int, body interface{}) {
+func (c companyService) GetById(headers map[string]string, id, action string, option v1.CompanyQueryOption) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)
 	header["token"] = config.Token
-	code, b, err := c.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/companies/"+id+"?loadRepositories="+option.LoadRepositories+"&loadApplications="+option.LoadApplications, header)
+	code, b, err := c.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/companies/"+id+"?action="+action+"&loadRepositories="+option.LoadRepositories+"&loadApplications="+option.LoadApplications, header)
 	if err != nil {
 		return code, nil
 	}

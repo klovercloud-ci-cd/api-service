@@ -89,7 +89,6 @@ func (a applicationApi) UpdatePipeline(context echo.Context) error {
 // GetAll.. Get all applications
 // @Summary Get all applications
 // @Description Get all applications
-// @Param action query string false "webhook_count"
 // @Param page query int64 false "Page number"
 // @Param limit query int64 false "Record count"
 // @Param loadRepositories query bool false "Loads Repositories"
@@ -111,9 +110,8 @@ func (a applicationApi) GetAll(context echo.Context) error {
 		}
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
-	action := context.QueryParam("action")
 	option := getQueryOption(context)
-	code, data := a.applicationService.GetAllApplications(companyId, action, option)
+	code, data := a.applicationService.GetAllApplications(companyId, option)
 	if code == 200 {
 		return context.JSON(code, data)
 	}
