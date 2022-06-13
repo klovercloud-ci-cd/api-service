@@ -119,7 +119,7 @@ func KubeEventRouter(g *echo.Group) {
 // KubeObjectRouter api/v1/kube_objects/* router
 func KubeObjectRouter(g *echo.Group) {
 	kubeObjectApi := NewKubeObjectApi(dependency.GetKubeObjectService(), dependency.GetV1JwtService())
-	g.GET("", kubeObjectApi.Get, AuthenticationHandlerForInternalCall)
+	g.GET("", kubeObjectApi.Get)
 }
 
 // AgentRouter api/v1/agents/* router

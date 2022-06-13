@@ -12,11 +12,11 @@ type kubeObjectService struct {
 	httpPublisher service.HttpClient
 }
 
-func (k kubeObjectService) Get(object, agent, ownerReference, processId string, option v1.ResourceQueryOption) (httpCode int, body interface{}) {
+func (k kubeObjectService) Get(action, companyId, object, agent, ownerReference, processId string, option v1.ResourceQueryOption) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)
 	header["token"] = config.Token
-	code, b, err := k.httpPublisher.Get(config.LighthouseQueryServerUrl+"/"+object+"?agent="+agent+"&owner-reference="+ownerReference+"&processId="+processId+"&page="+option.Pagination.Page+"&limit="+option.Pagination.Limit+"&sort="+option.AscendingSort, header)
+	code, b, err := k.httpPublisher.Get(config.LighthouseQueryServerUrl+"/"+object+"?action="+action+"&companyId="+companyId+"&agent="+agent+"&owner-reference="+ownerReference+"&processId="+processId+"&page="+option.Pagination.Page+"&limit="+option.Pagination.Limit+"&sort="+option.AscendingSort, header)
 	if err != nil {
 		return code, err
 	}

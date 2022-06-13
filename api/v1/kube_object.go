@@ -21,6 +21,7 @@ type kubeObject struct {
 // @Tags KubeObject
 // @Produce json
 // @Param owner-reference query string false "Owner Reference"
+// @Param processId action string true "action [dashboard_data]"
 // @Param processId query string true "Process Id"
 // @Param agent query string true "Agent Name"
 // @Param page query int64 false "Page Number"
@@ -31,6 +32,7 @@ type kubeObject struct {
 // @Failure 400 {object} common.ResponseDTO
 // @Router /api/v1/kube_objects [GET]
 func (k kubeObject) Get(context echo.Context) error {
+	var companyId string
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, k.jwtService)
 		if err != nil {
@@ -39,6 +41,11 @@ func (k kubeObject) Get(context echo.Context) error {
 		if err := checkAuthority(userResourcePermission, string(enums.PROCESS), "", string(enums.READ)); err != nil {
 			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
+		companyId = userResourcePermission.Metadata.CompanyId
+	}
+	action := context.QueryParam("action")
+	if action != "" && companyId == "" {
+		return common.GenerateErrorResponse(context, "[ERROR]: Company is not found!", "Operation Failed")
 	}
 	object := context.QueryParam("object")
 	object = reformatObjectName(object)
@@ -46,11 +53,11 @@ func (k kubeObject) Get(context echo.Context) error {
 	ownerReference := context.QueryParam("owner-reference")
 	processId := context.QueryParam("processId")
 	option := getK8sObjectQueryOption(context)
-	code, data := k.kubeObjectService.Get(object, agent, ownerReference, processId, option)
+	code, data := k.kubeObjectService.Get(action, companyId, object, agent, ownerReference, processId, option)
 	if code == 200 {
 		return context.JSON(code, data)
 	}
-	return common.GenerateErrorResponse(context, "k8s Object Query Failed", "Operation Failed")
+	return common.GenerateErrorResponse(context, "[ERROR]: k8s Object Query Failed", "Operation Failed")
 }
 
 func reformatObjectName(object string) string {
