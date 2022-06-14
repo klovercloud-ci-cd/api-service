@@ -21,6 +21,7 @@ type companyApi struct {
 // @Tags Company
 // @Produce json
 // @Param id path string true "Company id"
+// @Param repository_type path string true "Repository Type"
 // @Param status query string false "status"
 // @Param page query int64 false "Page number"
 // @Param limit query int64 false "Record count"
@@ -133,6 +134,8 @@ func (c companyApi) Save(context echo.Context) error {
 // @Tags Company
 // @Produce json
 // @Param id path string true "Company id"
+// @Param page query int64 false "Page number"
+// @Param limit query int64 false "Record count"
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/companies/{id}/repositories [GET]
 func (c companyApi) GetRepositoriesById(context echo.Context) error {
@@ -166,6 +169,8 @@ func (c companyApi) GetRepositoriesById(context echo.Context) error {
 // @Tags Company
 // @Produce json
 // @Param id path string true "Company id"
+// @Param page query int64 false "Page number"
+// @Param limit query int64 false "Record count"
 // @Param action query string false "action [dashboard_data]"
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/companies/{id} [GET]

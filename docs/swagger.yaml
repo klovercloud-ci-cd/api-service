@@ -83,6 +83,27 @@ paths:
   /api/v1/applications:
     get:
       description: Get all applications
+      parameters:
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Record count
+        in: query
+        name: limit
+        type: integer
+      - description: Loads Repositories
+        in: query
+        name: loadRepositories
+        type: boolean
+      - description: Loads Applications
+        in: query
+        name: loadApplications
+        type: boolean
+      - description: Loads Token
+        in: query
+        name: loadToken
+        type: boolean
       produces:
       - application/json
       responses:
@@ -107,6 +128,11 @@ paths:
       - description: repository Id
         in: query
         name: repositoryId
+        required: true
+        type: string
+      - description: Company Update Option
+        in: query
+        name: companyUpdateOption
         required: true
         type: string
       produces:
@@ -157,14 +183,14 @@ paths:
         required: true
         schema:
           type: object
+      - description: repository id
+        in: query
+        name: repositoryId
+        type: string
       - description: application id
         in: path
         name: id
         required: true
-        type: string
-      - description: repository id
-        in: query
-        name: repositoryId
         type: string
       produces:
       - application/json
@@ -189,14 +215,14 @@ paths:
         required: true
         schema:
           type: object
+      - description: repository id
+        in: query
+        name: repositoryId
+        type: string
       - description: application id
         in: path
         name: id
         required: true
-        type: string
-      - description: repository id
-        in: query
-        name: repositoryId
         type: string
       produces:
       - application/json
@@ -216,19 +242,14 @@ paths:
     get:
       description: Gets Branches
       parameters:
-      - description: User Name
-        in: query
-        name: userName
-        required: true
-        type: string
       - description: Repository Id
         in: query
         name: repoId
         required: true
         type: string
-      - description: Repository Name
+      - description: Url
         in: query
-        name: repoName
+        name: url
         required: true
         type: string
       produces:
@@ -290,6 +311,10 @@ paths:
         in: query
         name: loadApplications
         type: boolean
+      - description: Loads Token
+        in: query
+        name: loadToken
+        type: boolean
       - description: status
         in: query
         name: status
@@ -332,6 +357,18 @@ paths:
         name: id
         required: true
         type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Record count
+        in: query
+        name: limit
+        type: integer
+      - description: action [dashboard_data]
+        in: query
+        name: action
+        type: string
       produces:
       - application/json
       responses:
@@ -349,6 +386,11 @@ paths:
       - description: Company id
         in: path
         name: id
+        required: true
+        type: string
+      - description: Repository Type
+        in: path
+        name: repository_type
         required: true
         type: string
       - description: status
@@ -382,6 +424,14 @@ paths:
         name: id
         required: true
         type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Record count
+        in: query
+        name: limit
+        type: integer
       produces:
       - application/json
       responses:
@@ -556,6 +606,16 @@ paths:
         in: query
         name: owner-reference
         type: string
+      - description: action [dashboard_data]
+        in: query
+        name: action
+        required: true
+        type: string
+      - description: object [certificate/cluster-role/cluster-role-binding/config-map/daemon-set/deployment/ingress/namespace/network-policy/node/pod/persistent-volume/persistent-volume-claim/replica-set/role/role-binding/secret/service/service-account/stateful-set]
+        in: query
+        name: object
+        required: true
+        type: string
       - description: Process Id
         in: query
         name: processId
@@ -625,7 +685,7 @@ paths:
       description: Get Pipeline for validation by repository id, application url and
         revision
       parameters:
-      - description: action [GET_PIPELINE_FOR_VALIDATION]
+      - description: action [GET_PIPELINE_FOR_VALIDATION/dashboard_data
         in: query
         name: action
         required: true
@@ -644,6 +704,14 @@ paths:
         in: query
         name: revision
         required: true
+        type: string
+      - description: From Data
+        in: query
+        name: from
+        type: string
+      - description: To Data
+        in: query
+        name: to
         type: string
       produces:
       - application/json
@@ -670,6 +738,16 @@ paths:
         required: true
         schema:
           type: object
+      - description: Repository id
+        in: query
+        name: repositoryId
+        required: true
+        type: string
+      - description: Url
+        in: query
+        name: url
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -695,6 +773,16 @@ paths:
         required: true
         schema:
           type: object
+      - description: Repository id
+        in: query
+        name: repositoryId
+        required: true
+        type: string
+      - description: Url
+        in: query
+        name: url
+        required: true
+        type: string
       produces:
       - application/json
       responses:
@@ -717,7 +805,7 @@ paths:
       parameters:
       - description: Pipeline ProcessId
         in: path
-        name: processId
+        name: id
         required: true
         type: string
       - description: action
@@ -773,17 +861,17 @@ paths:
       description: Pulls auto trigger enabled steps
       parameters:
       - description: Agen name
-        in: path
+        in: query
         name: agent
         required: true
         type: string
       - description: Pull size
-        in: path
+        in: query
         name: count
         required: true
         type: integer
       - description: Step type [BUILD, DEPLOY]
-        in: path
+        in: query
         name: step_type
         type: string
       produces:
@@ -837,7 +925,19 @@ paths:
         in: query
         name: commitId
         type: string
-      - description: Operation[countTodaysProcessByCompanyId]
+      - description: Commit Id
+        in: query
+        name: appId
+        type: string
+      - description: From Date
+        in: query
+        name: from
+        type: string
+      - description: To Date
+        in: query
+        name: to
+        type: string
+      - description: Operation[countTodaysProcessByCompanyId/countProcessByCompanyIdAndDate]
         in: query
         name: operation
         type: string
@@ -968,7 +1068,7 @@ paths:
       parameters:
       - description: repository id
         in: path
-        name: repositoryId
+        name: id
         required: true
         type: string
       - description: Load applications
@@ -991,7 +1091,7 @@ paths:
       parameters:
       - description: repository id
         in: path
-        name: repositoryId
+        name: id
         required: true
         type: string
       - description: status

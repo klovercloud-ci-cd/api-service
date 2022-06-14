@@ -21,7 +21,8 @@ type kubeObject struct {
 // @Tags KubeObject
 // @Produce json
 // @Param owner-reference query string false "Owner Reference"
-// @Param processId action string true "action [dashboard_data]"
+// @Param action query string true "action [dashboard_data]"
+// @Param object query string true "object [certificate/cluster-role/cluster-role-binding/config-map/daemon-set/deployment/ingress/namespace/network-policy/node/pod/persistent-volume/persistent-volume-claim/replica-set/role/role-binding/secret/service/service-account/stateful-set]"
 // @Param processId query string true "Process Id"
 // @Param agent query string true "Agent Name"
 // @Param page query int64 false "Page Number"

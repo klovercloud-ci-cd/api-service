@@ -26,6 +26,8 @@ type pipelineApi struct {
 // @Accept json
 // @Produce json
 // @Param pipeline body interface{} true "pipeline"
+// @Param repositoryId query string true "Repository id"
+// @Param url query string true "Url"
 // @Success 200 {object} common.ResponseDTO
 // @Failure 404 {object} common.ResponseDTO
 // @Router /api/v1/pipelines [POST]
@@ -61,6 +63,8 @@ func (p pipelineApi) Create(context echo.Context) error {
 // @Accept json
 // @Produce json
 // @Param pipeline body interface{} true "pipeline"
+// @Param repositoryId query string true "Repository id"
+// @Param url query string true "Url"
 // @Success 200 {object} common.ResponseDTO
 // @Failure 404 {object} common.ResponseDTO
 // @Router /api/v1/pipelines [PUT]
@@ -193,7 +197,7 @@ func (p pipelineApi) GetEvents(context echo.Context) error {
 // @Description Gets Pipeline or logs by pipeline processId [If action is "get_pipeline", then pipeline will be returned or logs will be returned. Available if local storage is enabled]
 // @Tags Pipeline
 // @Produce json
-// @Param processId path string true "Pipeline ProcessId"
+// @Param id path string true "Pipeline ProcessId"
 // @Param action query int64 false "action"
 // @Param page query int64 false "Page number"
 // @Param limit query int64 false "Record count"

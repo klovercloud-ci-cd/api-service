@@ -18,9 +18,9 @@ type processLifeCycleEventApi struct {
 // @Description Pulls auto trigger enabled steps
 // @Tags ProcessLifeCycle
 // @Produce json
-// @Param agent path string true "Agen name"
-// @Param count path int64 true "Pull size"
-// @Param step_type path string false "Step type [BUILD, DEPLOY]"
+// @Param agent query string true "Agen name"
+// @Param count query int64 true "Pull size"
+// @Param step_type query string false "Step type [BUILD, DEPLOY]"
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/process_life_cycle_events [GET]
 func (p processLifeCycleEventApi) Pull(context echo.Context) error {
@@ -71,7 +71,6 @@ func (p processLifeCycleEventApi) Pull(context echo.Context) error {
 // @Failure 404 {object} common.ResponseDTO
 // @Router /api/v1/process_life_cycle_events [POST]
 func (p processLifeCycleEventApi) Save(context echo.Context) error {
-
 	var formData interface{}
 	if err := context.Bind(&formData); err != nil {
 		return err

@@ -108,6 +108,38 @@ var doc = `{
                     "Application"
                 ],
                 "summary": "Get all applications",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Record count",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Loads Repositories",
+                        "name": "loadRepositories",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Loads Applications",
+                        "name": "loadApplications",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Loads Token",
+                        "name": "loadToken",
+                        "in": "query"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -143,6 +175,13 @@ var doc = `{
                         "type": "string",
                         "description": "repository Id",
                         "name": "repositoryId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Company Update Option",
+                        "name": "companyUpdateOption",
                         "in": "query",
                         "required": true
                     }
@@ -221,16 +260,16 @@ var doc = `{
                     },
                     {
                         "type": "string",
+                        "description": "repository id",
+                        "name": "repositoryId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "application id",
                         "name": "id",
                         "in": "path",
                         "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "repository id",
-                        "name": "repositoryId",
-                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -269,16 +308,16 @@ var doc = `{
                     },
                     {
                         "type": "string",
+                        "description": "repository id",
+                        "name": "repositoryId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
                         "description": "application id",
                         "name": "id",
                         "in": "path",
                         "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "repository id",
-                        "name": "repositoryId",
-                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -310,13 +349,6 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "User Name",
-                        "name": "userName",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
                         "description": "Repository Id",
                         "name": "repoId",
                         "in": "query",
@@ -324,8 +356,8 @@ var doc = `{
                     },
                     {
                         "type": "string",
-                        "description": "Repository Name",
-                        "name": "repoName",
+                        "description": "Url",
+                        "name": "url",
                         "in": "query",
                         "required": true
                     }
@@ -419,6 +451,12 @@ var doc = `{
                         "in": "query"
                     },
                     {
+                        "type": "boolean",
+                        "description": "Loads Token",
+                        "name": "loadToken",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "status",
                         "name": "status",
@@ -481,6 +519,24 @@ var doc = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Record count",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "action [dashboard_data]",
+                        "name": "action",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -508,6 +564,13 @@ var doc = `{
                         "type": "string",
                         "description": "Company id",
                         "name": "id",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Repository Type",
+                        "name": "repository_type",
                         "in": "path",
                         "required": true
                     },
@@ -557,6 +620,18 @@ var doc = `{
                         "name": "id",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Record count",
+                        "name": "limit",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -819,6 +894,20 @@ var doc = `{
                     },
                     {
                         "type": "string",
+                        "description": "action [dashboard_data]",
+                        "name": "action",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "object [certificate/cluster-role/cluster-role-binding/config-map/daemon-set/deployment/ingress/namespace/network-policy/node/pod/persistent-volume/persistent-volume-claim/replica-set/role/role-binding/secret/service/service-account/stateful-set]",
+                        "name": "object",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
                         "description": "Process Id",
                         "name": "processId",
                         "in": "query",
@@ -922,7 +1011,7 @@ var doc = `{
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "action [GET_PIPELINE_FOR_VALIDATION]",
+                        "description": "action [GET_PIPELINE_FOR_VALIDATION/dashboard_data",
                         "name": "action",
                         "in": "query",
                         "required": true
@@ -947,6 +1036,18 @@ var doc = `{
                         "name": "revision",
                         "in": "query",
                         "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "From Data",
+                        "name": "from",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "To Data",
+                        "name": "to",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -985,6 +1086,20 @@ var doc = `{
                         "schema": {
                             "type": "object"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Repository id",
+                        "name": "repositoryId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Url",
+                        "name": "url",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1023,6 +1138,20 @@ var doc = `{
                         "schema": {
                             "type": "object"
                         }
+                    },
+                    {
+                        "type": "string",
+                        "description": "Repository id",
+                        "name": "repositoryId",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "Url",
+                        "name": "url",
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -1084,7 +1213,7 @@ var doc = `{
                     {
                         "type": "string",
                         "description": "Pipeline ProcessId",
-                        "name": "processId",
+                        "name": "id",
                         "in": "path",
                         "required": true
                     },
@@ -1147,21 +1276,21 @@ var doc = `{
                         "type": "string",
                         "description": "Agen name",
                         "name": "agent",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     },
                     {
                         "type": "integer",
                         "description": "Pull size",
                         "name": "count",
-                        "in": "path",
+                        "in": "query",
                         "required": true
                     },
                     {
                         "type": "string",
                         "description": "Step type [BUILD, DEPLOY]",
                         "name": "step_type",
-                        "in": "path"
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -1243,7 +1372,25 @@ var doc = `{
                     },
                     {
                         "type": "string",
-                        "description": "Operation[countTodaysProcessByCompanyId]",
+                        "description": "Commit Id",
+                        "name": "appId",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "From Date",
+                        "name": "from",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "To Date",
+                        "name": "to",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Operation[countTodaysProcessByCompanyId/countProcessByCompanyIdAndDate]",
                         "name": "operation",
                         "in": "query"
                     }
@@ -1439,7 +1586,7 @@ var doc = `{
                     {
                         "type": "string",
                         "description": "repository id",
-                        "name": "repositoryId",
+                        "name": "id",
                         "in": "path",
                         "required": true
                     },
@@ -1474,7 +1621,7 @@ var doc = `{
                     {
                         "type": "string",
                         "description": "repository id",
-                        "name": "repositoryId",
+                        "name": "id",
                         "in": "path",
                         "required": true
                     },

@@ -20,7 +20,7 @@ type repositoryApi struct {
 // @Description Get applications by repository id
 // @Tags Repository
 // @Produce json
-// @Param repositoryId path string true "repository id"
+// @Param id path string true "repository id"
 // @Param status query string false "status"
 // @Param page query int64 false "Page number"
 // @Param limit query int64 false "Record count"
@@ -63,7 +63,7 @@ func getRepositoryQueryOption(context echo.Context) v1.RepositoryQueryOption {
 // @Description Get repository by repository id
 // @Tags Repository
 // @Produce json
-// @Param repositoryId path string true "repository id"
+// @Param id path string true "repository id"
 // @Param loadApplications query bool false "Load applications"
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/repositories/{id} [GET]

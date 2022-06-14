@@ -116,6 +116,7 @@ func (p processApi) GetFootmarksByProcessIdAndStep(context echo.Context) error {
 // @Param commitId query string false "Commit Id"
 // @Param appId query string false "Commit Id"
 // @Param from query string false "From Date"
+// @Param to query string false "To Date"
 // @Param operation query string false "Operation[countTodaysProcessByCompanyId/countProcessByCompanyIdAndDate]"
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/processes [GET]

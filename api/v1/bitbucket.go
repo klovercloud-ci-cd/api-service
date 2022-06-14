@@ -51,9 +51,8 @@ func (v v1BitbucketApi) GetCommitByBranch(context echo.Context) error {
 // @Description Gets Branches
 // @Tags Bitbucket
 // @Produce json
-// @Param userName query string true "User Name"
 // @Param repoId query string true "Repository Id"
-// @Param repoName query string true "Repository Name"
+// @Param url query string true "Url"
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/bitbuckets/branches [GET]
 func (v v1BitbucketApi) GetBranches(context echo.Context) error {

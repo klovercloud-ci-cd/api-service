@@ -20,8 +20,8 @@ type applicationApi struct {
 // @Tags Application
 // @Produce json
 // @Param pipeline body interface{} true "pipeline"
-// @Param id path string true "application id"
 // @Param repositoryId query string false "repository id"
+// @Param id path string true "application id"
 // @Success 200 {object} common.ResponseDTO
 // @Failure 400 {object} common.ResponseDTO
 // @Router /api/v1/applications/{id}/pipeline [POST]
@@ -56,8 +56,8 @@ func (a applicationApi) CreatePipeline(context echo.Context) error {
 // @Tags Application
 // @Produce json
 // @Param pipeline body interface{} true "pipeline"
-// @Param id path string true "application id"
 // @Param repositoryId query string false "repository id"
+// @Param id path string true "application id"
 // @Success 200 {object} common.ResponseDTO
 // @Failure 400 {object} common.ResponseDTO
 // @Router /api/v1/applications/{id}/pipeline [PUT]
@@ -164,6 +164,7 @@ func (a applicationApi) GetById(context echo.Context) error {
 // @Produce json
 // @Param data body object true "ApplicationWithUpdateOption Data"
 // @Param repositoryId query string true "repository Id"
+// @Param companyUpdateOption query string true "Company Update Option"
 // @Success 200 {object} common.ResponseDTO
 // @Failure 404 {object} common.ResponseDTO
 // @Router /api/v1/applications [POST]
