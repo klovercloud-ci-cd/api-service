@@ -125,6 +125,7 @@ func KubeObjectRouter(g *echo.Group) {
 // AgentRouter api/v1/agents/* router
 func AgentRouter(g *echo.Group) {
 	agentApi := NewAgentApi(dependency.GetV1Agent(), dependency.GetV1JwtService())
+	g.GET("", agentApi.Get)
+	g.GET("/:name", agentApi.GetTerminalByName)
 	g.POST("", agentApi.Save, AuthenticationHandlerForInternalCall)
-	g.GET("/:name", agentApi.Get)
 }

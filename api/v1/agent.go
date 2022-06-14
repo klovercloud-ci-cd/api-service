@@ -14,6 +14,35 @@ type agentApi struct {
 	jwtService   service.Jwt
 }
 
+// Get.. Get Agents
+// @Summary Get Agents by company id
+// @Description Get Agents by company id
+// @Tags Agent
+// @Produce json
+// @Success 200 {object} common.ResponseDTO
+// @Router /api/v1/agents [GET]
+func (a agentApi) Get(context echo.Context) error {
+	var companyId string
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, a.jwtService)
+		if err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.PROCESS), "", string(enums.READ)); err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		companyId = userResourcePermission.Metadata.CompanyId
+	}
+	if companyId == "" {
+		return common.GenerateErrorResponse(context, "[ERROR]: Company Id is not found.", "Operation failed.")
+	}
+	code, data := a.agentService.Get(companyId)
+	if code == 200 {
+		return context.JSON(200, data)
+	}
+	return common.GenerateErrorResponse(context, "Agents Query Failed", "Operation Failed")
+}
+
 // Save... Save Agents terminal information
 // @Summary  Save Agents terminal information
 // @Description Save Agents terminal information
@@ -53,7 +82,7 @@ func (a agentApi) Save(context echo.Context) error {
 // @Param name path string true "agent name"
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/agents/{name} [GET]
-func (a agentApi) Get(context echo.Context) error {
+func (a agentApi) GetTerminalByName(context echo.Context) error {
 	agentName := context.Param("name")
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, a.jwtService)
@@ -64,7 +93,7 @@ func (a agentApi) Get(context echo.Context) error {
 			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 	}
-	code, body := a.agentService.Get(agentName)
+	code, body := a.agentService.GetTerminalByName(agentName)
 	return context.JSON(code, body)
 }
 

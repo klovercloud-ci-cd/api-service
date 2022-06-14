@@ -11,6 +11,23 @@ type agentService struct {
 	httpClient service.HttpClient
 }
 
+func (a agentService) Get(companyId string) (httpCode int, body interface{}) {
+	var response interface{}
+	header := make(map[string]string)
+	header["token"] = config.Token
+
+	code, b, err := a.httpClient.Get(config.LighthouseQueryServerUrl+"/agents?companyId="+companyId, header)
+
+	if err != nil {
+		return code, err
+	}
+	err = json.Unmarshal(b, &response)
+	if err != nil {
+		return http.StatusBadRequest, err
+	}
+	return code, response
+}
+
 func (a agentService) Store(agent interface{}, name string) (httpCode int, error error) {
 	marshal, err := json.Marshal(agent)
 	if err != nil {
@@ -23,7 +40,7 @@ func (a agentService) Store(agent interface{}, name string) (httpCode int, error
 	return code, err
 }
 
-func (a agentService) Get(name string) (httpCode int, body interface{}) {
+func (a agentService) GetTerminalByName(name string) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)
 	header["token"] = config.Token
