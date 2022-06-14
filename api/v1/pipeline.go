@@ -132,7 +132,7 @@ func (p pipelineApi) Get(context echo.Context) error {
 	to := context.QueryParam("to")
 	code, data := p.pipelineService.Get(companyId, repoId, url, revision, action, from, to)
 	if code == 200 {
-		return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+		return context.JSON(code, data)
 	}
 	return common.GenerateErrorResponse(context, "Pipeline Query Failed", "Operation Failed")
 }
