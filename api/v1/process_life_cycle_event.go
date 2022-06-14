@@ -35,20 +35,20 @@ func (p processLifeCycleEventApi) Pull(context echo.Context) error {
 		if steptype != "" {
 			code, data := p.processLifeCycleEventService.PullNonInitializedAndAutoTriggerEnabledEventsByStepType(count, steptype)
 			if code == 200 {
-				return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+				return context.JSON(200, data)
 			}
 			return common.GenerateErrorResponse(context, "Steps Query Failed", "Operation Failed")
 		}
 		code, data := p.processLifeCycleEventService.PullPausedAndAutoTriggerEnabledResourcesByAgentName(count, client.Name)
 		if code == 200 {
-			return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+			return context.JSON(200, data)
 		}
 		return common.GenerateErrorResponse(context, "Steps Query Failed", "Operation Failed")
 	} else {
 		if steptype != "" {
 			code, data := p.processLifeCycleEventService.PullNonInitializedAndAutoTriggerEnabledEventsByStepType(count, steptype)
 			if code == 200 {
-				return common.GenerateSuccessResponse(context, data, nil, "Operation Successful")
+				return context.JSON(200, data)
 			}
 			return common.GenerateErrorResponse(context, "Steps Query Failed", "Operation Failed")
 		}
