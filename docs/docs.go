@@ -533,6 +533,18 @@ var doc = `{
                         "in": "query"
                     },
                     {
+                        "type": "boolean",
+                        "description": "Loads Repositories",
+                        "name": "loadRepositories",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Loads Applications",
+                        "name": "loadApplications",
+                        "in": "query"
+                    },
+                    {
                         "type": "string",
                         "description": "action [dashboard_data]",
                         "name": "action",
@@ -591,6 +603,18 @@ var doc = `{
                         "description": "Record count",
                         "name": "limit",
                         "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Loads Repositories",
+                        "name": "loadRepositories",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Loads Applications",
+                        "name": "loadApplications",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -631,6 +655,18 @@ var doc = `{
                         "type": "integer",
                         "description": "Record count",
                         "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Loads Repositories",
+                        "name": "loadRepositories",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Loads Applications",
+                        "name": "loadApplications",
                         "in": "query"
                     }
                 ],
@@ -1500,6 +1536,30 @@ var doc = `{
                         "name": "step",
                         "in": "path",
                         "required": true
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Record count",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Loads Repositories",
+                        "name": "loadRepositories",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "Loads Applications",
+                        "name": "loadApplications",
+                        "in": "query"
                     },
                     {
                         "type": "string",

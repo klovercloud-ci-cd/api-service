@@ -25,6 +25,8 @@ type companyApi struct {
 // @Param status query string false "status"
 // @Param page query int64 false "Page number"
 // @Param limit query int64 false "Record count"
+// @Param loadRepositories query bool false "Loads Repositories"
+// @Param loadApplications query bool false "Loads Applications"
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/companies/{id}/applications [GET]
 func (c companyApi) GetApplicationsByCompanyIdAndRepositoryType(context echo.Context) error {
@@ -136,6 +138,8 @@ func (c companyApi) Save(context echo.Context) error {
 // @Param id path string true "Company id"
 // @Param page query int64 false "Page number"
 // @Param limit query int64 false "Record count"
+// @Param loadRepositories query bool false "Loads Repositories"
+// @Param loadApplications query bool false "Loads Applications"
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/companies/{id}/repositories [GET]
 func (c companyApi) GetRepositoriesById(context echo.Context) error {
@@ -171,6 +175,8 @@ func (c companyApi) GetRepositoriesById(context echo.Context) error {
 // @Param id path string true "Company id"
 // @Param page query int64 false "Page number"
 // @Param limit query int64 false "Record count"
+// @Param loadRepositories query bool false "Loads Repositories"
+// @Param loadApplications query bool false "Loads Applications"
 // @Param action query string false "action [dashboard_data]"
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/companies/{id} [GET]

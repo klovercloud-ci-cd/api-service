@@ -50,6 +50,10 @@ func (p processApi) GetById(context echo.Context) error {
 // @Produce json
 // @Param processId path string true "Process Id"
 // @Param step path string true "Step"
+// @Param page query int64 false "Page number"
+// @Param limit query int64 false "Record count"
+// @Param loadRepositories query bool false "Loads Repositories"
+// @Param loadApplications query bool false "Loads Applications"
 // @Param footmark path string true "Footmark"
 // @Param claims query string true "Claims"
 // @Success 200 {object} common.ResponseDTO

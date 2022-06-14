@@ -365,6 +365,14 @@ paths:
         in: query
         name: limit
         type: integer
+      - description: Loads Repositories
+        in: query
+        name: loadRepositories
+        type: boolean
+      - description: Loads Applications
+        in: query
+        name: loadApplications
+        type: boolean
       - description: action [dashboard_data]
         in: query
         name: action
@@ -405,6 +413,14 @@ paths:
         in: query
         name: limit
         type: integer
+      - description: Loads Repositories
+        in: query
+        name: loadRepositories
+        type: boolean
+      - description: Loads Applications
+        in: query
+        name: loadApplications
+        type: boolean
       produces:
       - application/json
       responses:
@@ -432,6 +448,14 @@ paths:
         in: query
         name: limit
         type: integer
+      - description: Loads Repositories
+        in: query
+        name: loadRepositories
+        type: boolean
+      - description: Loads Applications
+        in: query
+        name: loadApplications
+        type: boolean
       produces:
       - application/json
       responses:
@@ -1012,6 +1036,22 @@ paths:
         name: step
         required: true
         type: string
+      - description: Page number
+        in: query
+        name: page
+        type: integer
+      - description: Record count
+        in: query
+        name: limit
+        type: integer
+      - description: Loads Repositories
+        in: query
+        name: loadRepositories
+        type: boolean
+      - description: Loads Applications
+        in: query
+        name: loadApplications
+        type: boolean
       - description: Footmark
         in: path
         name: footmark
