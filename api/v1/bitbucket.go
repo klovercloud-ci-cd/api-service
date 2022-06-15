@@ -39,7 +39,8 @@ func (v v1BitbucketApi) GetCommitByBranch(context echo.Context) error {
 	repoId := context.QueryParam("repoId")
 	url := context.QueryParam("url")
 	branch := context.QueryParam("branch")
-	code, data := v.bitbucket.GetCommitByBranch(url, repoId, branch, companyId)
+	option := getCommitsPaginationOption(context)
+	code, data := v.bitbucket.GetCommitByBranch(url, repoId, branch, companyId, option)
 	if code == 200 {
 		return context.JSON(code, data)
 	}

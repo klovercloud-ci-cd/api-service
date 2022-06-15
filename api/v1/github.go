@@ -3,6 +3,7 @@ package v1
 import (
 	"github.com/klovercloud-ci-cd/api-service/api/common"
 	"github.com/klovercloud-ci-cd/api-service/config"
+	v1 "github.com/klovercloud-ci-cd/api-service/core/v1"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/api"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/service"
 	"github.com/klovercloud-ci-cd/api-service/enums"
@@ -22,6 +23,8 @@ type v1GithubApi struct {
 // @Param url query string true "Url"
 // @Param branch query string true "branch"
 // @Param repoId query string true "Repository Id"
+// @Param page query int64 false "Page number"
+// @Param limit query int64 false "Record count"
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/githubs/commits [GET]
 func (v v1GithubApi) GetCommitByBranch(context echo.Context) error {
@@ -39,11 +42,19 @@ func (v v1GithubApi) GetCommitByBranch(context echo.Context) error {
 	repoId := context.QueryParam("repoId")
 	url := context.QueryParam("url")
 	branch := context.QueryParam("branch")
-	code, data := v.github.GetCommitByBranch(url, repoId, branch, companyId)
+	option := getCommitsPaginationOption(context)
+	code, data := v.github.GetCommitByBranch(url, repoId, branch, companyId, option)
 	if code == 200 {
 		return context.JSON(code, data)
 	}
 	return common.GenerateErrorResponse(context, "Commit Query by Branch Failed", "Operation Failed")
+}
+
+func getCommitsPaginationOption(context echo.Context) v1.Pagination {
+	var option v1.Pagination
+	option.Page = context.QueryParam("page")
+	option.Limit = context.QueryParam("limit")
+	return option
 }
 
 // GetBranches... Get Branches

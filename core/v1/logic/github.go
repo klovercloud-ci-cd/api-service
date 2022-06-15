@@ -3,6 +3,7 @@ package logic
 import (
 	"encoding/json"
 	"github.com/klovercloud-ci-cd/api-service/config"
+	v1 "github.com/klovercloud-ci-cd/api-service/core/v1"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/service"
 	"net/http"
 )
@@ -31,11 +32,11 @@ func (g githubService) DisableWebhook(companyId, repoId, url, webhookId string) 
 	return code, nil
 }
 
-func (g githubService) GetCommitByBranch(url, repoId, branch, companyId string) (httpCode int, body interface{}) {
+func (g githubService) GetCommitByBranch(url, repoId, branch, companyId string, option v1.Pagination) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)
 	header["token"] = config.Token
-	code, res, err := g.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/githubs/commits?url="+url+"&repoId="+repoId+"&companyId="+companyId+"&branch="+branch, header)
+	code, res, err := g.httpPublisher.Get(config.KlovercloudIntegrationMangerUrl+"/githubs/commits?url="+url+"&repoId="+repoId+"&companyId="+companyId+"&branch="+branch+"&page="+option.Page+"&limit="+option.Limit, header)
 	if err != nil {
 		return code, err
 	}
