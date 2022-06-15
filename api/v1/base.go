@@ -27,6 +27,7 @@ func Router(g *echo.Group) {
 func ProcessEventRouter(g *echo.Group) {
 	var processEvent api.ProcessEvent
 	processEvent = NewProcessEvent(dependency.GetProcessEvent(), dependency.GetV1JwtService())
+	g.GET("", processEvent.Get)
 	g.POST("", processEvent.Save, AuthenticationHandlerForInternalCall)
 }
 
