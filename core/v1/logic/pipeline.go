@@ -66,12 +66,12 @@ func (p pipelineService) Get(companyId, repositoryId, url, revision, action, fro
 	return code, response
 }
 
-func (p pipelineService) GetByProcessId(processId, action string, option v1.Pagination) (httpCode int, body interface{}) {
+func (p pipelineService) GetByProcessId(companyId,processId, action string, option v1.Pagination) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)
 	header["token"] = config.Token
 
-	code, b, err := p.httpClient.Get(config.KlovercloudEventStoreUrl+"/pipelines/"+processId+"?action="+action+"&order=&page="+option.Page+"&limit="+option.Limit, header)
+	code, b, err := p.httpClient.Get(config.KlovercloudEventStoreUrl+"/pipelines/"+processId+"?action="+action+"&companyId="+companyId+"&order=&page="+option.Page+"&limit="+option.Limit, header)
 
 	if err != nil {
 		return code, err

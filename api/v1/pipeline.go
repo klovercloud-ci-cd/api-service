@@ -209,6 +209,7 @@ func (p pipelineApi) GetByProcessId(context echo.Context) error {
 		return common.GenerateErrorResponse(context, "[ERROR] no processId is provided", "Please provide processId")
 	}
 	action := context.QueryParam("action")
+	companyId := context.QueryParam("companyId")
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, p.jwtService)
 		if err != nil {
@@ -217,9 +218,10 @@ func (p pipelineApi) GetByProcessId(context echo.Context) error {
 		if err := checkAuthority(userResourcePermission, string(enums.PIPELINE), "", string(enums.READ)); err != nil {
 			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
+		companyId=userResourcePermission.Metadata.CompanyId
 	}
 	option := getPipelineQueryOption(context)
-	code, data := p.pipelineService.GetByProcessId(id, action, option)
+	code, data := p.pipelineService.GetByProcessId(companyId,id, action, option)
 	if code == 200 {
 		return context.JSON(http.StatusOK, data)
 	}

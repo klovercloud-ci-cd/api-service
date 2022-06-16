@@ -45,6 +45,7 @@ func GetUserResourcePermissionFromBearerToken(context echo.Context, jwtService s
 		if bearerToken == "" {
 			return v1.UserResourcePermission{}, errors.New("[ERROR]: No token found")
 		}
+		bearerToken="Bearer "+bearerToken
 	}
 	var token string
 	if len(strings.Split(bearerToken, " ")) == 2 {

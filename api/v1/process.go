@@ -15,6 +15,16 @@ type processApi struct {
 	jwtService     service.Jwt
 }
 
+// Get... Get ProcessLifeCycleEvent by id and step
+// @Summary Get Process by Id
+// @Description Get Process by Id
+// @Tags Process
+// @Produce json
+// @Param processId path string true "processId"
+// @Param step path string true "step"
+// @Param step path string false "companyId"
+// @Success 200 {object} common.ResponseDTO{}
+// @Router /api/v1/processes/{processId}/process_life_cycle_events [GET]
 func (p processApi) GetProcessLifeCycleEventByProcessIdAndStepName(context echo.Context) error {
 	processId := context.Param("processId")
 	if processId == "" {
@@ -24,6 +34,7 @@ func (p processApi) GetProcessLifeCycleEventByProcessIdAndStepName(context echo.
 	if step == "" {
 		return common.GenerateErrorResponse(context, "[ERROR]: Step name is not given.", "Operation failed")
 	}
+	companyId := context.QueryParam("companyId")
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, p.jwtService)
 		if err != nil {
@@ -32,8 +43,10 @@ func (p processApi) GetProcessLifeCycleEventByProcessIdAndStepName(context echo.
 		if err := checkAuthority(userResourcePermission, string(enums.PROCESS), "", string(enums.READ)); err != nil {
 			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
+
+		companyId=userResourcePermission.Metadata.CompanyId
 	}
-	code, data := p.processService.GetProcessLifeCycleEventByProcessIdAndStepName(processId, step)
+	code, data := p.processService.GetProcessLifeCycleEventByProcessIdAndStepName(companyId,processId, step)
 	if code != 200 {
 		return common.GenerateErrorResponse(context, "[ERROR]: Step query failed", "Operation failed")
 	}
@@ -46,7 +59,7 @@ func (p processApi) GetProcessLifeCycleEventByProcessIdAndStepName(context echo.
 // @Tags Process
 // @Produce json
 // @Param processId path string true "ProcessId"
-// @Success 200 {object} common.ResponseDTO{v1.Process}
+// @Success 200 {object} common.ResponseDTO{}
 // @Router /api/v1/processes/{processId} [GET]
 func (p processApi) GetById(context echo.Context) error {
 	processId := context.Param("processId")
