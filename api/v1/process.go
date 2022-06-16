@@ -15,6 +15,31 @@ type processApi struct {
 	jwtService     service.Jwt
 }
 
+func (p processApi) GetProcessLifeCycleEventByProcessIdAndStepName(context echo.Context) error {
+	processId := context.Param("processId")
+	if processId == "" {
+		return common.GenerateErrorResponse(context, "[ERROR]: Process Id is not given.", "Operation failed")
+	}
+	step := context.QueryParam("step")
+	if step == "" {
+		return common.GenerateErrorResponse(context, "[ERROR]: Step name is not given.", "Operation failed")
+	}
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, p.jwtService)
+		if err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.PROCESS), "", string(enums.READ)); err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+	}
+	code, data := p.processService.GetProcessLifeCycleEventByProcessIdAndStepName(processId, step)
+	if code != 200 {
+		return common.GenerateErrorResponse(context, "[ERROR]: Step query failed", "Operation failed")
+	}
+	return context.JSON(code, data)
+}
+
 // Get... Get Process by Id
 // @Summary Get Process by Id
 // @Description Get Process by Id

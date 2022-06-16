@@ -12,6 +12,21 @@ type processService struct {
 	httpPublisher service.HttpClient
 }
 
+func (p processService) GetProcessLifeCycleEventByProcessIdAndStepName(processId, step string) (httpCode int, body interface{}) {
+	var response interface{}
+	header := make(map[string]string)
+	header["token"] = config.Token
+	code, b, err := p.httpPublisher.Get(config.KlovercloudEventStoreUrl+"/processes/"+processId+"/process_life_cycle_event?step="+step, header)
+	if err != nil {
+		return code, err
+	}
+	err = json.Unmarshal(b, &response)
+	if err != nil {
+		return http.StatusBadRequest, err
+	}
+	return code, response
+}
+
 func (p processService) GetById(companyId, processId string) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)
