@@ -110,6 +110,7 @@ func ProcessLifeCycleEventRouter(g *echo.Group) {
 	processLifeCycleEventApi := NewProcessLifeCycleEventApi(dependency.GetV1ProcessLifeCycleEventService(), dependency.GetV1JwtService())
 	g.POST("", processLifeCycleEventApi.Save, AuthenticationHandlerForInternalCall)
 	g.GET("", processLifeCycleEventApi.Pull, AuthenticationHandlerForInternalCall)
+	g.PUT("", processLifeCycleEventApi.Update)
 }
 
 // KubeEventRouter api/v1/kube_events/* router

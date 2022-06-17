@@ -5,4 +5,5 @@ type ProcessLifeCycleEvent interface {
 	Store(events interface{}) (httpCode int, error error)
 	PullNonInitializedAndAutoTriggerEnabledEventsByStepType(count, stepType string) (httpCode int, body interface{})
 	PullPausedAndAutoTriggerEnabledResourcesByAgentName(count, agent string) (httpCode int, body interface{})
+	UpdateClaim(companyId,processId, step, status string)(httpCode int, body interface{})
 }

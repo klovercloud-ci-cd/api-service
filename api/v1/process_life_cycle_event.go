@@ -5,12 +5,50 @@ import (
 	"github.com/klovercloud-ci-cd/api-service/config"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/api"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/service"
+	"github.com/klovercloud-ci-cd/api-service/enums"
 	"github.com/labstack/echo/v4"
 )
 
 type processLifeCycleEventApi struct {
 	processLifeCycleEventService service.ProcessLifeCycleEvent
 	jwtService                   service.Jwt
+}
+
+
+// Update... Update Steps
+// @Summary Update Steps
+// @Description Update reclaim step
+// @Tags ProcessLifeCycle
+// @Produce json
+// @Param step path string true "Step name"
+// @Param processId path string true "Process id"
+// @Param status path string true "Process life cycle step status"
+// @Success 200 {object} common.ResponseDTO{}
+// @Router /api/v1/process_life_cycle_events [PUT]
+func (p processLifeCycleEventApi) Update(context echo.Context) error {
+	action := context.QueryParam("action")
+	step := context.QueryParam("step")
+	processId := context.QueryParam("processId")
+	companyId := context.QueryParam("companyId")
+	status := context.QueryParam("status")
+	if step == "" || processId == "" || status == "" {
+		return common.GenerateErrorResponse(context, "Make sure step, processId, status are not empty", "Operation Failed!")
+	}
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, p.jwtService)
+		if err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.PROCESS), "", string(enums.UPDATE)); err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		companyId=userResourcePermission.Metadata.CompanyId
+	}
+	if action == "reclaim" {
+		code, data := p.processLifeCycleEventService.UpdateClaim(companyId, processId, step, status)
+		return context.JSON(code, data)
+	}
+	return common.GenerateSuccessResponse(context, "Please provide a valid action!", nil, "Operation Failed!")
 }
 
 // Pull... Pull Steps

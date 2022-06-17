@@ -12,6 +12,17 @@ type processLifeCycleEventService struct {
 	httpPublisher service.HttpClient
 }
 
+func (p processLifeCycleEventService) UpdateClaim(companyId,processId, step, status string) (httpCode int, body interface{}) {
+	header := make(map[string]string)
+	header["token"] = config.Token
+	header["Content-Type"] = "application/json"
+	code, err := p.httpPublisher.Put(config.KlovercloudEventStoreUrl+"/process_life_cycle_events?companyId="+companyId+"&step="+step+"&processId="+processId+"&status="+status+"&action=reclaim", header, nil)
+	if err != nil {
+		return code, err
+	}
+	return code, nil
+}
+
 func (p processLifeCycleEventService) Store(events interface{}) (httpCode int, error error) {
 	marshal, marshalErr := json.Marshal(events)
 	if marshalErr != nil {
