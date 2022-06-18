@@ -39,8 +39,8 @@ func (p pipelineService) Update(companyId, repositoryId, url string, payload int
 	return code, err
 }
 
-func (p pipelineService) ReadEventsByCompanyId(c chan map[string]interface{}, companyId string) {
-	p.websocketClient.Get(c, config.KlovercloudEventStoreWebSocketUrl+"/pipelines/ws?company_id="+companyId, http.Header{"token": {config.Token}})
+func (p pipelineService) ReadEventsByCompanyId(c chan map[string]interface{}, companyId, userId string) {
+	p.websocketClient.Get(c, config.KlovercloudEventStoreWebSocketUrl+"/pipelines/ws?companyId="+companyId+"&userId="+userId, http.Header{"token": {config.Token}})
 }
 func (p pipelineService) Get(companyId, repositoryId, url, revision, action, from, to string) (httpCode int, body interface{}) {
 	var response interface{}
@@ -66,7 +66,7 @@ func (p pipelineService) Get(companyId, repositoryId, url, revision, action, fro
 	return code, response
 }
 
-func (p pipelineService) GetByProcessId(companyId,processId, action string, option v1.Pagination) (httpCode int, body interface{}) {
+func (p pipelineService) GetByProcessId(companyId, processId, action string, option v1.Pagination) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)
 	header["token"] = config.Token

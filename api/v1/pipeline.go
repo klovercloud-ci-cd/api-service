@@ -146,7 +146,8 @@ func (p pipelineApi) Get(context echo.Context) error {
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/pipelines/ws [GET]
 func (p pipelineApi) GetEvents(context echo.Context) error {
-	companyId := context.QueryParam("company_id")
+	companyId := context.QueryParam("companyId")
+	userId := context.QueryParam("userId")
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 	ws, err := upgrader.Upgrade(context.Response(), context.Request(), nil)
 	if err != nil {
@@ -162,11 +163,12 @@ func (p pipelineApi) GetEvents(context echo.Context) error {
 			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		companyId = userResourcePermission.Metadata.CompanyId
+		userId = userResourcePermission.UserId
 	}
 
 	status := make(chan map[string]interface{})
 	for {
-		go p.pipelineService.ReadEventsByCompanyId(status, companyId)
+		go p.pipelineService.ReadEventsByCompanyId(status, companyId, userId)
 		jsonStr, err := json.Marshal(<-status)
 		if err != nil {
 			log.Println(err.Error())
@@ -218,10 +220,10 @@ func (p pipelineApi) GetByProcessId(context echo.Context) error {
 		if err := checkAuthority(userResourcePermission, string(enums.PIPELINE), "", string(enums.READ)); err != nil {
 			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
-		companyId=userResourcePermission.Metadata.CompanyId
+		companyId = userResourcePermission.Metadata.CompanyId
 	}
 	option := getPipelineQueryOption(context)
-	code, data := p.pipelineService.GetByProcessId(companyId,id, action, option)
+	code, data := p.pipelineService.GetByProcessId(companyId, id, action, option)
 	if code == 200 {
 		return context.JSON(http.StatusOK, data)
 	}

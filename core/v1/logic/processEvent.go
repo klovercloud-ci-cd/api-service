@@ -12,11 +12,11 @@ type ProcessEvent struct {
 	httpPublisher service.HttpClient
 }
 
-func (p ProcessEvent) Get(companyId, processId, scope string, option v1.ProcessQueryOption) (httpCode int, data interface{}) {
+func (p ProcessEvent) Get(companyId, userId, processId, scope string, option v1.ProcessQueryOption) (httpCode int, data interface{}) {
 	var response interface{}
 	header := make(map[string]string)
 	header["token"] = config.Token
-	code, b, err := p.httpPublisher.Get(config.KlovercloudEventStoreUrl+"/processes_events?companyId="+companyId+"&processId="+processId+"&scope="+scope+"&page="+option.Pagination.Page+"&limit="+option.Pagination.Limit, header)
+	code, b, err := p.httpPublisher.Get(config.KlovercloudEventStoreUrl+"/processes_events?companyId="+companyId+"&processId="+processId+"&scope="+scope+"&page="+option.Pagination.Page+"&limit="+option.Pagination.Limit+"&userId="+userId, header)
 	if err != nil {
 		return code, err
 	}

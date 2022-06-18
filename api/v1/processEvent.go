@@ -29,7 +29,10 @@ type ProcessEvent struct {
 // @Failure 404 {object} common.ResponseDTO
 // @Router /api/v1/processes_events [GET]
 func (p ProcessEvent) Get(context echo.Context) error {
-	var companyId string
+	companyId := context.QueryParam("companyId")
+	userId := context.QueryParam("userId")
+	processId := context.QueryParam("processId")
+	scope := context.QueryParam("scope")
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, p.jwtService)
 		if err != nil {
@@ -39,14 +42,13 @@ func (p ProcessEvent) Get(context echo.Context) error {
 			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		companyId = userResourcePermission.Metadata.CompanyId
+		userId = userResourcePermission.UserId
 	}
 	if companyId == "" {
 		return common.GenerateErrorResponse(context, "[ERROR] No companyId is provided", "Operation failed")
 	}
-	processId := context.QueryParam("processId")
-	scope := context.QueryParam("scope")
 	option := getProcessQueryOption(context)
-	code, data := p.processEvent.Get(companyId, processId, scope, option)
+	code, data := p.processEvent.Get(companyId, userId, processId, scope, option)
 	if code == 200 {
 		return context.JSON(code, data)
 	}
