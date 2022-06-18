@@ -225,7 +225,7 @@ func (p pipelineApi) GetByProcessId(context echo.Context) error {
 	if code == 200 {
 		return context.JSON(http.StatusOK, data)
 	}
-	return common.GenerateErrorResponse(context, "Pipeline/Logs Query Failed", "Operation Failed")
+	return common.GenerateErrorResponse(context, data, "Operation Failed")
 }
 
 func getPipelineQueryOption(context echo.Context) v1.Pagination {
