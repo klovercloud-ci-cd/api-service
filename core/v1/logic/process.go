@@ -42,11 +42,11 @@ func (p processService) GetById(companyId, processId string) (httpCode int, body
 	return code, response
 }
 
-func (p processService) GetLogsByProcessIdAndStepAndFootmark(processId, step, footmark string, claims string, option v1.CompanyQueryOption) (httpCode int, body interface{}) {
+func (p processService) GetLogsByProcessIdAndStepAndFootmark(companyId, processId, step, footmark string, claims string, option v1.CompanyQueryOption) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)
 	header["token"] = config.Token
-	code, b, err := p.httpPublisher.Get(config.KlovercloudEventStoreUrl+"/processes/"+processId+"/steps/"+step+"/footmarks/"+footmark+"/logs?claims="+claims+"&page="+option.Pagination.Page+"&limit="+option.Pagination.Limit, header)
+	code, b, err := p.httpPublisher.Get(config.KlovercloudEventStoreUrl+"/processes/"+processId+"/steps/"+step+"/footmarks/"+footmark+"/logs?claims="+claims+"&page="+option.Pagination.Page+"&limit="+option.Pagination.Limit+"&companyId="+companyId, header)
 	if err != nil {
 		return code, err
 	}

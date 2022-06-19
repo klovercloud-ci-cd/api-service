@@ -8,5 +8,5 @@ type Process interface {
 	GetById(companyId, processId string) (httpCode int, body interface{})
 	GetProcessLifeCycleEventByProcessIdAndStepName(companyId,processId, step string) (httpCode int, body interface{})
 	GetFootmarksByProcessIdAndStep(processId, step string) (httpCode int, body interface{})
-	GetLogsByProcessIdAndStepAndFootmark(processId, step, footmark string, claims string, option v1.CompanyQueryOption) (httpCode int, body interface{})
+	GetLogsByProcessIdAndStepAndFootmark(companyId,processId, step, footmark string, claims string, option v1.CompanyQueryOption) (httpCode int, body interface{})
 }
