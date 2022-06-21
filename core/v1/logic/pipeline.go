@@ -42,6 +42,11 @@ func (p pipelineService) Update(companyId, repositoryId, url string, payload int
 func (p pipelineService) ReadEventsByCompanyId(c chan map[string]interface{}, companyId, userId string) {
 	p.websocketClient.Get(c, config.KlovercloudEventStoreWebSocketUrl+"/pipelines/ws?companyId="+companyId+"&userId="+userId, http.Header{"token": {config.Token}})
 }
+
+func (p pipelineService) ReadEventsByCompanyIdAndUserIdAndTime(c chan map[string]interface{}, companyId, userId, from string) {
+	p.websocketClient.Get(c, config.KlovercloudEventStoreWebSocketUrl+"/pipelines/ws?companyId="+companyId+"&userId="+userId+"&from="+from, http.Header{"token": {config.Token}})
+}
+
 func (p pipelineService) Get(companyId, repositoryId, url, revision, action, from, to string) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)

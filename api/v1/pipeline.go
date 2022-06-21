@@ -134,17 +134,20 @@ func (p pipelineApi) Get(context echo.Context) error {
 	return context.JSON(code, data)
 }
 
-// Get.. Get events by process id
-// @Summary Get events by process id
-// @Description Get events by process id
+// Get.. Get events by company id, user id and time
+// @Summary Get events by company id, user id and time
+// @Description Get events by company id, user id and time
 // @Tags Pipeline
 // @Produce json
-// @Param processId query string true "company_id"
+// @Param companyId query string false "company_id"
+// @Param userId query string false "userId"
+// @Param from query string false "Time from which data will be retrieved"
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/pipelines/ws [GET]
 func (p pipelineApi) GetEvents(context echo.Context) error {
 	companyId := context.QueryParam("companyId")
 	userId := context.QueryParam("userId")
+	from := context.QueryParam("from")
 	upgrader.CheckOrigin = func(r *http.Request) bool { return true }
 	ws, err := upgrader.Upgrade(context.Response(), context.Request(), nil)
 	if err != nil {
@@ -165,7 +168,7 @@ func (p pipelineApi) GetEvents(context echo.Context) error {
 
 	status := make(chan map[string]interface{})
 	for {
-		go p.pipelineService.ReadEventsByCompanyId(status, companyId, userId)
+		go p.pipelineService.ReadEventsByCompanyIdAndUserIdAndTime(status, companyId, userId, from)
 		jsonStr, err := json.Marshal(<-status)
 		if err != nil {
 			log.Println(err.Error())
