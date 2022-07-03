@@ -6,7 +6,6 @@ import (
 
 // Application application api operations
 type Application interface {
-	Update(context echo.Context) error
 	GetById(context echo.Context) error
 	GetAll(context echo.Context) error
 	CreatePipeline(context echo.Context) error

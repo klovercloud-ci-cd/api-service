@@ -84,7 +84,7 @@ func (c companyApi) UpdateRepositories(context echo.Context) error {
 			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 		if id != userResourcePermission.Metadata.CompanyId {
-			return context.JSON(404, "Repository not found!")
+			return context.JSON(404, "Company not found!")
 		}
 	}
 	companyUpdateOption := context.QueryParam("companyUpdateOption")
@@ -94,6 +94,53 @@ func (c companyApi) UpdateRepositories(context echo.Context) error {
 	}
 	if code == 200 {
 		return context.JSON(code, "Repositories Updated Successfully")
+	}
+	return common.GenerateErrorResponse(context, nil, err.Error())
+}
+
+// Update... Update repositories
+// @Summary Update repositories by company id
+// @Description updates repositories
+// @Tags Company
+// @Produce json
+// @Param data body v1.RepositoriesDto true "RepositoriesDto data"
+// @Param id path string true "Company id"
+// @Param repoId path string true "Repository id"
+// @Param companyUpdateOption query string true "Company Update Option"
+// @Success 200 {object} common.ResponseDTO
+// @Router /api/v1/companies/{id}/repositories/{repoId}/applications [PUT]
+func (c companyApi) UpdateApplications(context echo.Context) error {
+	var formData interface{}
+	if err := context.Bind(&formData); err != nil {
+		return err
+	}
+	id := context.Param("id")
+	if id == "" {
+		return common.GenerateErrorResponse(context, "[ERROR]: Company Id is not provided", "Please provide Company Id")
+	}
+	repoId := context.Param("repoId")
+	if repoId == "" {
+		return common.GenerateErrorResponse(context, "[ERROR]: Repository Id is not provided", "Please provide repository id")
+	}
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, c.jwtService)
+		if err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.REPOSITORY), "", string(enums.UPDATE)); err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		if id != userResourcePermission.Metadata.CompanyId {
+			return context.JSON(404, "Company not found!")
+		}
+	}
+	companyUpdateOption := context.QueryParam("companyUpdateOption")
+	code, err := c.companyService.UpdateApplications(id, repoId, formData, companyUpdateOption)
+	if err != nil {
+		return common.GenerateErrorResponse(context, nil, err.Error())
+	}
+	if code == 200 {
+		return context.JSON(code, "Applications Updated Successfully")
 	}
 	return common.GenerateErrorResponse(context, nil, err.Error())
 }
