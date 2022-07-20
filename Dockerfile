@@ -17,7 +17,7 @@ RUN apt-get update \
 
 COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
 WORKDIR /app
-RUN git clone https://github.com/klovercloud-ci-cd/klovercloud-ci-jwt-token-generator.git /app/klovercloud-ci-jwt-token-generator
+RUN git clone https://github.com/klovercloud-ci-cd/klovercloud-ci-jwt-token-generator -b v0.0.1-beta
 WORKDIR /app/klovercloud-ci-jwt-token-generator
 RUN make build
 ENV PATH="$PATH:/app/klovercloud-ci-jwt-token-generator"
