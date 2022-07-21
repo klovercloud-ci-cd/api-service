@@ -134,7 +134,6 @@ func AgentRouter(g *echo.Group) {
 	g.GET("/:agent/deployments/:deploymentId/pods", agentApi.GetPodsByDeployment)
 	g.GET("/:agent/replicaSets/:replicaSetId/pods", agentApi.GetPodsByReplicaSet)
 	g.GET("/:agent/statefulSets/:statefulSetId/pods", agentApi.GetPodsByStatefulSet)
-
 	g.GET("/:name", agentApi.GetTerminalByName)
 	g.POST("", agentApi.Save, AuthenticationHandlerForInternalCall)
 }
