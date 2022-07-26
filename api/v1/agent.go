@@ -20,7 +20,7 @@ type agentApi struct {
 // @Tags Agent
 // @Produce json
 // @Success 200 {object} common.ResponseDTO
-// @Router /api/v1/agents [GET]
+// @Router /api/v1/agents/{agent} [GET]
 func (a agentApi) Get(context echo.Context) error {
 	var companyId string
 	if config.EnableAuthentication {
@@ -37,6 +37,29 @@ func (a agentApi) Get(context echo.Context) error {
 		return common.GenerateErrorResponse(context, "[ERROR]: Company Id is not found.", "Operation failed.")
 	}
 	code, data := a.agentService.Get(companyId)
+	if code == 200 {
+		return context.JSON(200, data)
+	}
+	return common.GenerateErrorResponse(context, "Agents Query Failed", "Operation Failed")
+}
+
+func (a agentApi) GetByName(context echo.Context) error {
+	var companyId string
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, a.jwtService)
+		if err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.PROCESS), "", string(enums.READ)); err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		companyId = userResourcePermission.Metadata.CompanyId
+	}
+	if companyId == "" {
+		return common.GenerateErrorResponse(context, "[ERROR]: Company Id is not found.", "Operation failed.")
+	}
+	agent := context.Param("agent")
+	code, data := a.agentService.GetByName(agent, companyId)
 	if code == 200 {
 		return context.JSON(200, data)
 	}

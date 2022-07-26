@@ -27,6 +27,21 @@ func (k kubeObjectService) Get(action, companyId, object, agent, ownerReference,
 	return code, response
 }
 
+func (k kubeObjectService) GetByID(object, id, agent, processId string) (httpCode int, body interface{}) {
+	var response interface{}
+	header := make(map[string]string)
+	header["token"] = config.Token
+	code, b, err := k.httpPublisher.Get(config.LighthouseQueryServerUrl+"/"+object+"/"+id+"?agent="+agent+"&processId="+processId, header)
+	if err != nil {
+		return code, err
+	}
+	err = json.Unmarshal(b, &response)
+	if err != nil {
+		return http.StatusBadRequest, err
+	}
+	return code, response
+}
+
 // NewKubeObjectService returns KubeObject type service
 func NewKubeObjectService(publisher service.HttpClient) service.KubeObject {
 	return kubeObjectService{

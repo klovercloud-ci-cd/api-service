@@ -129,6 +129,7 @@ func KubeObjectRouter(g *echo.Group) {
 func AgentRouter(g *echo.Group) {
 	agentApi := NewAgentApi(dependency.GetV1Agent(), dependency.GetV1JwtService())
 	g.GET("", agentApi.Get)
+	g.GET("/:agent", agentApi.GetByName)
 	g.GET("/:agent/k8sobjs", agentApi.GetK8sObjs)
 	g.GET("/:agent/daemonSets/:daemonSetId/pods", agentApi.GetPodsByDaemonSet)
 	g.GET("/:agent/deployments/:deploymentId/pods", agentApi.GetPodsByDeployment)

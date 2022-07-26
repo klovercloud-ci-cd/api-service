@@ -26,6 +26,21 @@ func (a agentService) Get(companyId string) (httpCode int, body interface{}) {
 	return code, response
 }
 
+func (a agentService) GetByName(agent, companyId string) (httpCode int, body interface{}) {
+	var response interface{}
+	header := make(map[string]string)
+	header["token"] = config.Token
+	code, b, err := a.httpClient.Get(config.LighthouseQueryServerUrl+"/agents/"+agent+"?companyId="+companyId, header)
+	if err != nil {
+		return code, err
+	}
+	err = json.Unmarshal(b, &response)
+	if err != nil {
+		return http.StatusBadRequest, err
+	}
+	return code, response
+}
+
 func (a agentService) GetK8sObjs(agent, processId string) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)
