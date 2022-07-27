@@ -113,7 +113,7 @@ var (
 // @Failure 404 {object} common.ResponseDTO
 // @Router /api/v1/pipelines [GET]
 func (p pipelineApi) Get(context echo.Context) error {
-	var companyId string
+	companyId := context.QueryParam("companyId")
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, p.jwtService)
 		if err != nil {

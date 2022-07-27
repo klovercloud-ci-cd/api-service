@@ -14,17 +14,18 @@
 
 ## Responsibility
 
-- Gateway for external users.
-- Authenticates and authorizes users using security service
+- Gateway for external users/services.
+- Authenticates and authorizes users.
 
-| Version | Kubernetes api | Kubernetes client-go | kubernetes apimachinery |
-|---------|----------------|----------------------|-------------------------|
-| v1      | 1.12.9         | 1.12.9               | 1.12.9                  |
+| Versions | Descriptors  |
+|----------|-------------|
+| [v0.0.1-beta](https://github.com/klovercloud-ci-cd/api-service/releases/tag/v0.0.1-beta) | [k8s](k8s/v0.0.1-beta) |
+
 
 ## Want to contribute
 
 - See [CONTRIBUTING.md](markdownfiles/CONTRIBUTING.md)
 - See [DEVELOPMENT.md](markdownfiles/DEVELOPMENT.md) to get start
-- See [architecture](https://github.com/klovercloud-ci-cd/architecture)
+- See [architecture](https://github.com/klovercloud-ci-cd/architecture/blob/master/README.md)
 - Look at our
   [our issues](https://github.com/klovercloud-ci-cd/api-service/issues)
