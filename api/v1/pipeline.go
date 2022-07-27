@@ -127,10 +127,11 @@ func (p pipelineApi) Get(context echo.Context) error {
 	action := context.QueryParam("action")
 	repoId := context.QueryParam("repositoryId")
 	url := context.QueryParam("url")
+	applicationId := context.QueryParam("applicationId")
 	revision := context.QueryParam("revision")
 	from := context.QueryParam("from")
 	to := context.QueryParam("to")
-	code, data := p.pipelineService.Get(companyId, repoId, url, revision, action, from, to)
+	code, data := p.pipelineService.Get(companyId, repoId, applicationId, url, revision, action, from, to)
 	return context.JSON(code, data)
 }
 

@@ -59,7 +59,6 @@ func GithubEventRouter(g *echo.Group) {
 // ApplicationRouter api/v1/applications/* router
 func ApplicationRouter(g *echo.Group) {
 	applicationApi := NewApplicationApi(dependency.GetV1CompanyService(), dependency.GetV1JwtService())
-	g.POST("", applicationApi.Update)
 	g.GET("/:id", applicationApi.GetById)
 	g.GET("", applicationApi.GetAll)
 	g.POST("/:id/pipelines", applicationApi.CreatePipeline)
@@ -101,6 +100,7 @@ func CompanyRouter(g *echo.Group) {
 	g.GET("/:id", companyApi.GetById)
 	g.GET("/:id/repositories", companyApi.GetRepositoriesById)
 	g.PUT("/:id/repositories", companyApi.UpdateRepositories)
+	g.PUT("/:id/repositories/:repoId/applications", companyApi.UpdateApplications)
 	g.GET("/:id/applications", companyApi.GetApplicationsByCompanyIdAndRepositoryType)
 	g.PATCH("/:id/repositories/:repoId/webhooks", companyApi.UpdateWebhook)
 }
@@ -129,6 +129,12 @@ func KubeObjectRouter(g *echo.Group) {
 func AgentRouter(g *echo.Group) {
 	agentApi := NewAgentApi(dependency.GetV1Agent(), dependency.GetV1JwtService())
 	g.GET("", agentApi.Get)
+	g.GET("/:agent", agentApi.GetByName)
+	g.GET("/:agent/k8sobjs", agentApi.GetK8sObjs)
+	g.GET("/:agent/daemonSets/:daemonSetId/pods", agentApi.GetPodsByDaemonSet)
+	g.GET("/:agent/deployments/:deploymentId/pods", agentApi.GetPodsByDeployment)
+	g.GET("/:agent/replicaSets/:replicaSetId/pods", agentApi.GetPodsByReplicaSet)
+	g.GET("/:agent/statefulSets/:statefulSetId/pods", agentApi.GetPodsByStatefulSet)
 	g.GET("/:name", agentApi.GetTerminalByName)
 	g.POST("", agentApi.Save, AuthenticationHandlerForInternalCall)
 }

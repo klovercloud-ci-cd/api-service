@@ -21,8 +21,9 @@ type kubeObject struct {
 // @Tags KubeObject
 // @Produce json
 // @Param owner-reference query string false "Owner Reference"
-// @Param action query string true "action [dashboard_data]"
+// @Param action query string true "action [dashboard_data/get_by_id]"
 // @Param object query string true "object [certificate/cluster-role/cluster-role-binding/config-map/daemon-set/deployment/ingress/namespace/network-policy/node/pod/persistent-volume/persistent-volume-claim/replica-set/role/role-binding/secret/service/service-account/stateful-set]"
+// @Param id query string false "Kube Object ID to get by id"
 // @Param processId query string true "Process Id"
 // @Param agent query string true "Agent Name"
 // @Param page query int64 false "Page Number"
@@ -50,10 +51,30 @@ func (k kubeObject) Get(context echo.Context) error {
 	}
 	object := context.QueryParam("object")
 	object = reformatObjectName(object)
+	if object == "" {
+		return common.GenerateErrorResponse(context, "[ERROR]: K8S Object name is not given", "Operation Failed")
+	}
 	agent := context.QueryParam("agent")
-	ownerReference := context.QueryParam("owner-reference")
+	if agent == "" {
+		return common.GenerateErrorResponse(context, "[ERROR]: Agent name is not given", "Operation Failed")
+	}
 	processId := context.QueryParam("processId")
+	if processId == "" {
+		return common.GenerateErrorResponse(context, "[ERROR]: Process ID is not given", "Operation Failed")
+	}
+	ownerReference := context.QueryParam("owner-reference")
 	option := getK8sObjectQueryOption(context)
+	if action == "get_by_id" {
+		id := context.QueryParam("id")
+		if id == "" {
+			return common.GenerateErrorResponse(context, "[ERROR]: K8S Object ID is not given", "Operation Failed")
+		}
+		code, data := k.kubeObjectService.GetByID(object, id, agent, processId)
+		if code == 200 {
+			return context.JSON(code, data)
+		}
+		return common.GenerateErrorResponse(context, "[ERROR]: k8s Object Query Failed", "Operation Failed")
+	}
 	code, data := k.kubeObjectService.Get(action, companyId, object, agent, ownerReference, processId, option)
 	if code == 200 {
 		return context.JSON(code, data)

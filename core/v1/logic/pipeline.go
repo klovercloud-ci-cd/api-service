@@ -47,7 +47,7 @@ func (p pipelineService) ReadEventsByCompanyIdAndUserIdAndTime(c chan map[string
 	p.websocketClient.Get(c, config.KlovercloudEventStoreWebSocketUrl+"/pipelines/ws?companyId="+companyId+"&userId="+userId+"&from="+from, http.Header{"token": {config.Token}})
 }
 
-func (p pipelineService) Get(companyId, repositoryId, url, revision, action, from, to string) (httpCode int, body interface{}) {
+func (p pipelineService) Get(companyId, repositoryId, applicationId, url, revision, action, from, to string) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)
 	header["token"] = config.Token
@@ -58,7 +58,7 @@ func (p pipelineService) Get(companyId, repositoryId, url, revision, action, fro
 	if action == "dashboard_data" {
 		code, b, err = p.httpClient.Get(config.KlovercloudEventStoreUrl+"/pipelines?action="+action+"&companyId="+companyId+"&from="+from+"&to="+to, header)
 	} else {
-		code, b, err = p.httpClient.Get(config.KlovercloudIntegrationMangerUrl+"/pipelines?action="+action+"&companyId="+companyId+"&repositoryId="+repositoryId+"&url="+url+"&revision="+revision, header)
+		code, b, err = p.httpClient.Get(config.KlovercloudIntegrationMangerUrl+"/pipelines?action="+action+"&companyId="+companyId+"&repositoryId="+repositoryId+"&applicationId="+applicationId+"&url="+url+"&revision="+revision, header)
 	}
 
 	if err != nil {

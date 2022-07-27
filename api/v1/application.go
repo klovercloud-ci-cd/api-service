@@ -156,46 +156,6 @@ func (a applicationApi) GetById(context echo.Context) error {
 	return common.GenerateErrorResponse(context, "Application Query by ID Failed", "Operation Failed")
 }
 
-// Update... Update Application
-// @Summary  Update Application
-// @Description Update Application by company id and  repository id
-// @Tags Application
-// @Accept json
-// @Produce json
-// @Param data body object true "ApplicationWithUpdateOption Data"
-// @Param repositoryId query string true "repository Id"
-// @Param companyUpdateOption query string true "Company Update Option"
-// @Success 200 {object} common.ResponseDTO
-// @Failure 404 {object} common.ResponseDTO
-// @Router /api/v1/applications [POST]
-func (a applicationApi) Update(context echo.Context) error {
-	var formData interface{}
-	if err := context.Bind(&formData); err != nil {
-		return err
-	}
-	repoId := context.QueryParam("repositoryId")
-	var companyId string
-	companyUpdateOption := context.QueryParam("companyUpdateOption")
-	if config.EnableAuthentication {
-		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, a.jwtService)
-		if err != nil {
-			return common.GenerateUnauthorizedResponse(context, err, err.Error())
-		}
-		if err := checkAuthority(userResourcePermission, string(enums.APPLICATION), "", string(enums.UPDATE)); err != nil {
-			return common.GenerateUnauthorizedResponse(context, err, err.Error())
-		}
-		companyId = userResourcePermission.Metadata.CompanyId
-	}
-	code, err := a.applicationService.UpdateApplication(companyId, repoId, formData, companyUpdateOption)
-	if err != nil {
-		return common.GenerateErrorResponse(context, nil, err.Error())
-	}
-	if code == 200 {
-		return context.JSON(code, "Successfully updated")
-	}
-	return common.GenerateErrorResponse(context, nil, err.Error())
-}
-
 // NewApplicationApi returns Application type api
 func NewApplicationApi(applicationService service.Company, jwtService service.Jwt) api.Application {
 	return &applicationApi{

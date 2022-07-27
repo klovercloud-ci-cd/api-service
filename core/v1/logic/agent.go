@@ -15,9 +15,97 @@ func (a agentService) Get(companyId string) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)
 	header["token"] = config.Token
-
 	code, b, err := a.httpClient.Get(config.LighthouseQueryServerUrl+"/agents?companyId="+companyId, header)
+	if err != nil {
+		return code, err
+	}
+	err = json.Unmarshal(b, &response)
+	if err != nil {
+		return http.StatusBadRequest, err
+	}
+	return code, response
+}
 
+func (a agentService) GetByName(agent, companyId string) (httpCode int, body interface{}) {
+	var response interface{}
+	header := make(map[string]string)
+	header["token"] = config.Token
+	code, b, err := a.httpClient.Get(config.LighthouseQueryServerUrl+"/agents/"+agent+"?companyId="+companyId, header)
+	if err != nil {
+		return code, err
+	}
+	err = json.Unmarshal(b, &response)
+	if err != nil {
+		return http.StatusBadRequest, err
+	}
+	return code, response
+}
+
+func (a agentService) GetK8sObjs(agent, processId string) (httpCode int, body interface{}) {
+	var response interface{}
+	header := make(map[string]string)
+	header["token"] = config.Token
+	code, b, err := a.httpClient.Get(config.LighthouseQueryServerUrl+"/agents/"+agent+"/k8sobjs?processId="+processId, header)
+	if err != nil {
+		return code, err
+	}
+	err = json.Unmarshal(b, &response)
+	if err != nil {
+		return http.StatusBadRequest, err
+	}
+	return code, response
+}
+
+func (a agentService) GetPodsByDaemonSet(agent, processId, daemonSetId string) (httpCode int, body interface{}) {
+	var response interface{}
+	header := make(map[string]string)
+	header["token"] = config.Token
+	code, b, err := a.httpClient.Get(config.LighthouseQueryServerUrl+"/agents/"+agent+"/daemonSets/"+daemonSetId+"/pods?processId="+processId, header)
+	if err != nil {
+		return code, err
+	}
+	err = json.Unmarshal(b, &response)
+	if err != nil {
+		return http.StatusBadRequest, err
+	}
+	return code, response
+}
+
+func (a agentService) GetPodsByDeployment(agent, processId, deploymentId string) (httpCode int, body interface{}) {
+	var response interface{}
+	header := make(map[string]string)
+	header["token"] = config.Token
+	code, b, err := a.httpClient.Get(config.LighthouseQueryServerUrl+"/agents/"+agent+"/deployments/"+deploymentId+"/pods?processId="+processId, header)
+	if err != nil {
+		return code, err
+	}
+	err = json.Unmarshal(b, &response)
+	if err != nil {
+		return http.StatusBadRequest, err
+	}
+	return code, response
+}
+
+func (a agentService) GetPodsByReplicaSet(agent, processId, replicaSetId string) (httpCode int, body interface{}) {
+	var response interface{}
+	header := make(map[string]string)
+	header["token"] = config.Token
+	code, b, err := a.httpClient.Get(config.LighthouseQueryServerUrl+"/agents/"+agent+"/replicaSets/"+replicaSetId+"/pods?processId="+processId, header)
+	if err != nil {
+		return code, err
+	}
+	err = json.Unmarshal(b, &response)
+	if err != nil {
+		return http.StatusBadRequest, err
+	}
+	return code, response
+}
+
+func (a agentService) GetPodsByStatefulSet(agent, processId, statefulSetId string) (httpCode int, body interface{}) {
+	var response interface{}
+	header := make(map[string]string)
+	header["token"] = config.Token
+	code, b, err := a.httpClient.Get(config.LighthouseQueryServerUrl+"/agents/"+agent+"/statefulSets/"+statefulSetId+"/pods?processId="+processId, header)
 	if err != nil {
 		return code, err
 	}
