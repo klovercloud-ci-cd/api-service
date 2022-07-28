@@ -3,7 +3,6 @@ package v1
 import (
 	"github.com/klovercloud-ci-cd/api-service/api/common"
 	"github.com/klovercloud-ci-cd/api-service/config"
-	v1 "github.com/klovercloud-ci-cd/api-service/core/v1"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/api"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/service"
 	"github.com/klovercloud-ci-cd/api-service/enums"
@@ -59,9 +58,6 @@ func (k kubeObject) Get(context echo.Context) error {
 		return common.GenerateErrorResponse(context, "[ERROR]: Agent name is not given", "Operation Failed")
 	}
 	processId := context.QueryParam("processId")
-	if processId == "" {
-		return common.GenerateErrorResponse(context, "[ERROR]: Process ID is not given", "Operation Failed")
-	}
 	ownerReference := context.QueryParam("owner-reference")
 	option := getK8sObjectQueryOption(context)
 	if action == "get_by_id" {
@@ -126,15 +122,6 @@ func reformatObjectName(object string) string {
 		return "stateful-sets"
 	}
 	return ""
-}
-
-//this function is for set all query param
-func getK8sObjectQueryOption(context echo.Context) v1.ResourceQueryOption {
-	option := v1.ResourceQueryOption{}
-	option.Pagination.Page = context.QueryParam("page")
-	option.Pagination.Limit = context.QueryParam("limit")
-	option.AscendingSort = context.QueryParam("sort")
-	return option
 }
 
 // NewKubeObjectApi returns KubeObject type api

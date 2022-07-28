@@ -60,7 +60,112 @@ func GetKubeEvent() service.KubeEvent {
 	return logic.NewKubeEventEventService(logic.NewHttpClientService())
 }
 
-// GetAgent returns Agent service
+// GetV1Agent returns Agent service
 func GetV1Agent() service.Agent {
 	return logic.NewAgentService(logic.NewHttpClientService())
+}
+
+// GetV1ConfigMap ConfigMap Agent service
+func GetV1ConfigMap() service.ConfigMap {
+	return logic.NewConfigMapService(logic.NewHttpClientService())
+}
+
+// GetV1CertificateService returns service.Certificate
+func GetV1CertificateService() service.Certificate {
+	return logic.NewCertificateService(logic.NewHttpClientService())
+}
+
+// GetV1ClusterRoleService returns service.ClusterRole
+func GetV1ClusterRoleService() service.ClusterRole {
+	return logic.NewClusterRoleService(logic.NewHttpClientService())
+}
+
+// GetV1ClusterRoleBindingService returns service.ClusterRoleBinding
+func GetV1ClusterRoleBindingService() service.ClusterRoleBinding {
+	return logic.NewClusterRoleBindingService(logic.NewHttpClientService())
+}
+
+// GetV1DaemonSetService returns service.DaemonSet
+func GetV1DaemonSetService() service.DaemonSet {
+	return logic.NewDaemonSetService(logic.NewHttpClientService())
+}
+
+// GetV1DeploymentService returns service.Deployment
+func GetV1DeploymentService() service.Deployment {
+	return logic.NewDeploymentService(logic.NewHttpClientService())
+}
+
+// GetV1IngressService returns service.Ingress
+func GetV1IngressService() service.Ingress {
+	return logic.NewIngressService(logic.NewHttpClientService())
+}
+
+// GetV1NamespaceService returns service.Namespace
+func GetV1NamespaceService() service.Namespace {
+	return logic.NewNamespaceService(logic.NewHttpClientService())
+}
+
+// GetV1NetworkPolicyService returns service.NetworkPolicy
+func GetV1NetworkPolicyService() service.NetworkPolicy {
+	return logic.NewNetworkPolicyService(logic.NewHttpClientService())
+}
+
+// GetV1NodeService returns service.Node
+func GetV1NodeService() service.Node {
+	return logic.NewNodeService(logic.NewHttpClientService())
+}
+
+// GetV1PodService returns service.Pod
+func GetV1PodService() service.Pod {
+	return logic.NewPodService(logic.NewHttpClientService())
+}
+
+// GetV1ConfigMapService returns service.ConfigMap
+func GetV1ConfigMapService() service.ConfigMap {
+	return logic.NewConfigMapService(logic.NewHttpClientService())
+}
+
+// GetV1PersistentVolumeService returns service.PersistentVolume
+func GetV1PersistentVolumeService() service.PersistentVolume {
+	return logic.NewPersistentVolumeService(logic.NewHttpClientService())
+}
+
+// GetV1PersistentVolumeClaimService returns service.PersistentVolumeClaim
+func GetV1PersistentVolumeClaimService() service.PersistentVolumeClaim {
+	return logic.NewPersistentVolumeClaimService(logic.NewHttpClientService())
+}
+
+// GetV1ReplicaSetService returns service.ReplicaSet
+func GetV1ReplicaSetService() service.ReplicaSet {
+	return logic.NewReplicaSetService(logic.NewHttpClientService())
+}
+
+// GetV1RoleService returns service.Role
+func GetV1RoleService() service.Role {
+	return logic.NewRoleService(logic.NewHttpClientService())
+}
+
+// GetV1RoleBindingService returns service.RoleBinding
+func GetV1RoleBindingService() service.RoleBinding {
+	return logic.NewRoleBindingService(logic.NewHttpClientService())
+}
+
+// GetV1SecretService returns service.Secret
+func GetV1SecretService() service.Secret {
+	return logic.NewSecretService(logic.NewHttpClientService())
+}
+
+// GetV1ServiceService returns service.Service
+func GetV1ServiceService() service.Service {
+	return logic.NewServiceService(logic.NewHttpClientService())
+}
+
+// GetV1ServiceAccountService returns service.ServiceAccount
+func GetV1ServiceAccountService() service.ServiceAccount {
+	return logic.NewServiceAccountService(logic.NewHttpClientService())
+}
+
+// GetV1StatefulSetService returns service.StatefulSet
+func GetV1StatefulSetService() service.StatefulSet {
+	return logic.NewStatefulSetService(logic.NewHttpClientService())
 }
