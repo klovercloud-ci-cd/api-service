@@ -59,9 +59,6 @@ func (k kubeObject) Get(context echo.Context) error {
 		return common.GenerateErrorResponse(context, "[ERROR]: Agent name is not given", "Operation Failed")
 	}
 	processId := context.QueryParam("processId")
-	if processId == "" {
-		return common.GenerateErrorResponse(context, "[ERROR]: Process ID is not given", "Operation Failed")
-	}
 	ownerReference := context.QueryParam("owner-reference")
 	option := getK8sObjectQueryOption(context)
 	if action == "get_by_id" {
@@ -128,7 +125,7 @@ func reformatObjectName(object string) string {
 	return ""
 }
 
-//this function is for set all query param
+// this function is for set all query param
 func getK8sObjectQueryOption(context echo.Context) v1.ResourceQueryOption {
 	option := v1.ResourceQueryOption{}
 	option.Pagination.Page = context.QueryParam("page")
