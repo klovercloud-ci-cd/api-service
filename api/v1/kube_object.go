@@ -3,7 +3,6 @@ package v1
 import (
 	"github.com/klovercloud-ci-cd/api-service/api/common"
 	"github.com/klovercloud-ci-cd/api-service/config"
-	v1 "github.com/klovercloud-ci-cd/api-service/core/v1"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/api"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/service"
 	"github.com/klovercloud-ci-cd/api-service/enums"
@@ -123,15 +122,6 @@ func reformatObjectName(object string) string {
 		return "stateful-sets"
 	}
 	return ""
-}
-
-// this function is for set all query param
-func getK8sObjectQueryOption(context echo.Context) v1.ResourceQueryOption {
-	option := v1.ResourceQueryOption{}
-	option.Pagination.Page = context.QueryParam("page")
-	option.Pagination.Limit = context.QueryParam("limit")
-	option.AscendingSort = context.QueryParam("sort")
-	return option
 }
 
 // NewKubeObjectApi returns KubeObject type api

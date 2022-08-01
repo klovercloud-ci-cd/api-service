@@ -1,5 +1,7 @@
 package v1
 
+import "time"
+
 // CompanyQueryOption company query param.
 type CompanyQueryOption struct {
 	Pagination       Pagination
@@ -29,4 +31,16 @@ type RepositoryQueryOption struct {
 type ProcessQueryOption struct {
 	Pagination Pagination
 	Step       string
+}
+
+// Process Process struct
+type Process struct {
+	ProcessId    string                 `bson:"process_id" json:"process_id"`
+	CompanyId    string                 `bson:"company_id" json:"company_id"`
+	AppId        string                 `bson:"app_id" json:"app_id"`
+	RepositoryId string                 `bson:"repository_id" json:"repository_id"`
+	CommitId     string                 `bson:"commit_id" json:"commit_id"`
+	Data         map[string]interface{} `bson:"data" json:"data"`
+	CreatedAt    time.Time              `bson:"created_at" json:"created_at"`
+	Branch       string                 `bson:"branch" json:"branch"`
 }
