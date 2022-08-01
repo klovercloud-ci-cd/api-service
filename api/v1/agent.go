@@ -78,6 +78,15 @@ func (a agentApi) GetByName(context echo.Context) error {
 // @Failure 400 {object} common.ResponseDTO
 // @Router /api/v1/agents/{agent}/k8sobjs [GET]
 func (a agentApi) GetK8sObjs(context echo.Context) error {
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, a.jwtService)
+		if err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.PROCESS), "", string(enums.READ)); err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+	}
 	agent := context.Param("agent")
 	if agent == "" {
 		return common.GenerateErrorResponse(context, "[ERROR]: Agent name is not found", "Operation Failed")
@@ -106,6 +115,15 @@ func (a agentApi) GetK8sObjs(context echo.Context) error {
 // @Failure 400 {object} common.ResponseDTO
 // @Router /api/v1/agents/{agent}/daemonSets/{daemonSetId}/pods [GET]
 func (a agentApi) GetPodsByDaemonSet(context echo.Context) error {
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, a.jwtService)
+		if err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.PROCESS), "", string(enums.READ)); err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+	}
 	agent := context.Param("agent")
 	if agent == "" {
 		return common.GenerateErrorResponse(context, "[ERROR]: Agent name is not found", "Operation Failed")
@@ -138,6 +156,15 @@ func (a agentApi) GetPodsByDaemonSet(context echo.Context) error {
 // @Failure 400 {object} common.ResponseDTO
 // @Router /api/v1/agents/{agent}/deployments/{deploymentId}/pods [GET]
 func (a agentApi) GetPodsByDeployment(context echo.Context) error {
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, a.jwtService)
+		if err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.PROCESS), "", string(enums.READ)); err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+	}
 	agent := context.Param("agent")
 	if agent == "" {
 		return common.GenerateErrorResponse(context, "[ERROR]: Agent name is not found", "Operation Failed")
@@ -170,6 +197,15 @@ func (a agentApi) GetPodsByDeployment(context echo.Context) error {
 // @Failure 400 {object} common.ResponseDTO
 // @Router /api/v1/agents/{agent}/replicaSets/{replicaSetId}/pods [GET]
 func (a agentApi) GetPodsByReplicaSet(context echo.Context) error {
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, a.jwtService)
+		if err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.PROCESS), "", string(enums.READ)); err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+	}
 	agent := context.Param("agent")
 	if agent == "" {
 		return common.GenerateErrorResponse(context, "[ERROR]: Agent name is not found", "Operation Failed")
@@ -202,6 +238,15 @@ func (a agentApi) GetPodsByReplicaSet(context echo.Context) error {
 // @Failure 400 {object} common.ResponseDTO
 // @Router /api/v1/agents/{agent}/statefulSets/{statefulSetId}/pods [GET]
 func (a agentApi) GetPodsByStatefulSet(context echo.Context) error {
+	if config.EnableAuthentication {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, a.jwtService)
+		if err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.PROCESS), "", string(enums.READ)); err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+	}
 	agent := context.Param("agent")
 	if agent == "" {
 		return common.GenerateErrorResponse(context, "[ERROR]: Agent name is not found", "Operation Failed")
