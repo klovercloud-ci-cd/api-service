@@ -12,7 +12,7 @@ type processService struct {
 	httpPublisher service.HttpClient
 }
 
-func (p processService) GetProcessLifeCycleEventByProcessIdAndStepName(companyId,processId, step string) (httpCode int, body interface{}) {
+func (p processService) GetProcessLifeCycleEventByProcessIdAndStepName(companyId, processId, step string) (httpCode int, body interface{}) {
 	var response interface{}
 	header := make(map[string]string)
 	header["token"] = config.Token
@@ -57,12 +57,12 @@ func (p processService) GetLogsByProcessIdAndStepAndFootmark(companyId, processI
 	return code, response
 }
 
-func (p processService) GetFootmarksByProcessIdAndStep(processId, step string) (httpCode int, body interface{}) {
+func (p processService) GetFootmarksByProcessIdAndStep(processId, companyId, step string) (httpCode int, body interface{}) {
 	var response interface{}
 
 	header := make(map[string]string)
 	header["token"] = config.Token
-	code, b, err := p.httpPublisher.Get(config.KlovercloudEventStoreUrl+"/processes/"+processId+"/steps/"+step+"/footmarks", header)
+	code, b, err := p.httpPublisher.Get(config.KlovercloudEventStoreUrl+"/processes/"+processId+"/steps/"+step+"/footmarks?companyId="+companyId, header)
 	if err != nil {
 		return code, err
 	}
