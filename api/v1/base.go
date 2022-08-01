@@ -19,7 +19,6 @@ func Router(g *echo.Group) {
 	LogEventRouter(g.Group("/logs"))
 	ProcessEventRouter(g.Group("/processes_events"))
 	KubeEventRouter(g.Group("/kube_events"))
-	KubeObjectRouter(g.Group("/kube_objects"))
 	AgentRouter(g.Group("/agents"))
 	CertificateRouter(g.Group("/certificates"))
 	ClusterRoleRouter(g.Group("/cluster-roles"))
@@ -137,12 +136,6 @@ func ProcessLifeCycleEventRouter(g *echo.Group) {
 func KubeEventRouter(g *echo.Group) {
 	kubeEventApi := NewKubeEventApi(dependency.GetKubeEvent(), dependency.GetV1JwtService())
 	g.POST("", kubeEventApi.Save, AuthenticationHandlerForInternalCall)
-}
-
-// KubeObjectRouter api/v1/kube_objects/* router
-func KubeObjectRouter(g *echo.Group) {
-	kubeObjectApi := NewKubeObjectApi(dependency.GetKubeObjectService(), dependency.GetV1JwtService())
-	g.GET("", kubeObjectApi.Get)
 }
 
 // AgentRouter api/v1/agents/* router
