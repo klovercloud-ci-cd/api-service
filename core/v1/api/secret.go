@@ -2,7 +2,8 @@ package api
 
 import "github.com/labstack/echo/v4"
 
-// KubeObject k8s Object api operations
-type KubeObject interface {
+// Secret api operations
+type Secret interface {
 	Get(context echo.Context) error
+	GetByID(context echo.Context) error
 }
