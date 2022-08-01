@@ -46,9 +46,6 @@ func (p podApi) Get(context echo.Context) error {
 	}
 	action := context.QueryParam("action")
 	processId := context.QueryParam("processId")
-	if processId == "" {
-		return common.GenerateErrorResponse(context, "[ERROR]: Process ID is not given", "Operation Failed")
-	}
 	agent := context.QueryParam("agent")
 	if agent == "" {
 		return common.GenerateErrorResponse(context, "[ERROR]: Agent name is not given", "Operation Failed")
