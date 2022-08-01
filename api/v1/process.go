@@ -44,9 +44,9 @@ func (p processApi) GetProcessLifeCycleEventByProcessIdAndStepName(context echo.
 			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
 
-		companyId=userResourcePermission.Metadata.CompanyId
+		companyId = userResourcePermission.Metadata.CompanyId
 	}
-	code, data := p.processService.GetProcessLifeCycleEventByProcessIdAndStepName(companyId,processId, step)
+	code, data := p.processService.GetProcessLifeCycleEventByProcessIdAndStepName(companyId, processId, step)
 	if code != 200 {
 		return common.GenerateErrorResponse(context, "[ERROR]: Step query failed", "Operation failed")
 	}
@@ -112,9 +112,9 @@ func (p processApi) GetLogsByProcessIdAndStepAndFootmark(context echo.Context) e
 		if err := checkAuthority(userResourcePermission, string(enums.PROCESS), "", string(enums.READ)); err != nil {
 			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
-		companyId=userResourcePermission.Metadata.CompanyId
+		companyId = userResourcePermission.Metadata.CompanyId
 	}
-	code, res := p.processService.GetLogsByProcessIdAndStepAndFootmark(companyId,processId, step, footmark, claims, option)
+	code, res := p.processService.GetLogsByProcessIdAndStepAndFootmark(companyId, processId, step, footmark, claims, option)
 	return context.JSON(code, res)
 }
 
@@ -129,8 +129,9 @@ func (p processApi) GetLogsByProcessIdAndStepAndFootmark(context echo.Context) e
 // @Failure 400 {object} common.ResponseDTO
 // @Router /api/v1/processes/{processId}/steps/{step}/footmarks [GET]
 func (p processApi) GetFootmarksByProcessIdAndStep(context echo.Context) error {
-	process := context.Param("processId")
+	processId := context.Param("processId")
 	step := context.Param("step")
+	var companyId string
 	if config.EnableAuthentication {
 		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, p.jwtService)
 		if err != nil {
@@ -139,8 +140,9 @@ func (p processApi) GetFootmarksByProcessIdAndStep(context echo.Context) error {
 		if err := checkAuthority(userResourcePermission, string(enums.PROCESS), "", string(enums.READ)); err != nil {
 			return common.GenerateUnauthorizedResponse(context, err, err.Error())
 		}
+		companyId = userResourcePermission.Metadata.CompanyId
 	}
-	code, res := p.processService.GetFootmarksByProcessIdAndStep(process, step)
+	code, res := p.processService.GetFootmarksByProcessIdAndStep(processId, companyId, step)
 	if code != 200 {
 		return common.GenerateErrorResponse(context, "", "Footmarks not found")
 	}
