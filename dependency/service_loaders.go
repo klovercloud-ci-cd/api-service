@@ -45,11 +45,6 @@ func GetLogEventService() service.LogEvent {
 	return logic.NewLogEventService(logic.NewHttpClientService())
 }
 
-// GetKubeObjectService returns KubeObject service
-func GetKubeObjectService() service.KubeObject {
-	return logic.NewKubeObjectService(logic.NewHttpClientService())
-}
-
 // GetProcessEvent returns ProcessEvent service
 func GetProcessEvent() service.ProcessEvent {
 	return logic.NewProcessEvent(logic.NewHttpClientService())
