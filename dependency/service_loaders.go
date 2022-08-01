@@ -60,6 +60,11 @@ func GetV1Agent() service.Agent {
 	return logic.NewAgentService(logic.NewHttpClientService())
 }
 
+// GetV1ConfigMap ConfigMap Agent service
+func GetV1ConfigMap() service.ConfigMap {
+	return logic.NewConfigMapService(logic.NewHttpClientService())
+}
+
 // GetV1CertificateService returns service.Certificate
 func GetV1CertificateService() service.Certificate {
 	return logic.NewCertificateService(logic.NewHttpClientService())
