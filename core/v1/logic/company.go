@@ -211,11 +211,11 @@ func (c companyService) GetById(headers map[string]string, id, action string, op
 	return code, response
 }
 
-func (c companyService) UpdateWebhook(id, repoId, url, webhookId, action, repoType string) (httpCode int, error error) {
+func (c companyService) UpdateWebhook(id, repoId, appId, url, webhookId, action, repoType string) (httpCode int, error error) {
 	header := make(map[string]string)
 	header["token"] = config.Token
 	header["Content-Type"] = "application/json"
-	httpCode, err := c.httpPublisher.Patch(config.KlovercloudIntegrationMangerUrl+"/companies/"+id+"/repositories/"+repoId+"/webhooks"+"?url="+url+"&webhookId="+webhookId+"&action="+action+"&repoType="+repoType, header, nil)
+	httpCode, err := c.httpPublisher.Patch(config.KlovercloudIntegrationMangerUrl+"/companies/"+id+"/repositories/"+repoId+"/webhooks"+"?url="+url+"&webhookId="+webhookId+"&action="+action+"&repoType="+repoType+"&appId="+appId, header, nil)
 	return httpCode, err
 }
 

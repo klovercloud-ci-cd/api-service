@@ -321,7 +321,8 @@ func (c companyApi) UpdateWebhook(context echo.Context) error {
 	webhookId := context.QueryParam("webhookId")
 	action := context.QueryParam("action")
 	repoType := context.QueryParam("repoType")
-	_, err := c.companyService.UpdateWebhook(id, repoId, url, webhookId, action, repoType)
+	appId := context.QueryParam("appId")
+	_, err := c.companyService.UpdateWebhook(id, repoId, appId, url, webhookId, action, repoType)
 	if err != nil {
 		return common.GenerateErrorResponse(context, "[ERROR] webhook update failed", err.Error())
 	}
