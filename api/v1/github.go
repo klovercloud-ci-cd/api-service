@@ -94,10 +94,11 @@ func (v v1GithubApi) ListenEvent(context echo.Context) error {
 		return err
 	}
 	companyId := context.QueryParam("companyId")
+	appId := context.QueryParam("appId")
 	if companyId == "" {
 		return common.GenerateErrorResponse(context, "[ERROR] no companyId is provided", "Please provide companyId")
 	}
-	err := v.github.ListenEvent(formData, companyId)
+	err := v.github.ListenEvent(formData, companyId, appId)
 	if err != nil {
 		return err
 	}
