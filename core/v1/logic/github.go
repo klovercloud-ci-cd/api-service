@@ -73,7 +73,7 @@ func (g githubService) ListenEvent(payload interface{}, companyId, appId string)
 	header["token"] = config.Token
 	header["Content-Type"] = "application/json"
 
-	_, err := g.httpPublisher.Post(config.KlovercloudIntegrationMangerUrl+"/githubs?companyId="+companyId+"&appId"+appId, header, marshal)
+	_, err := g.httpPublisher.Post(config.KlovercloudIntegrationMangerUrl+"/githubs?companyId="+companyId+"&appId="+appId, header, marshal)
 	if err != nil {
 		return err
 	}
