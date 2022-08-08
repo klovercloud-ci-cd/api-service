@@ -87,7 +87,11 @@ func (v v1BitbucketApi) ListenEvent(context echo.Context) error {
 	if companyId == "" {
 		return common.GenerateErrorResponse(context, "[ERROR] no companyId is provided", "Please provide companyId")
 	}
-	err := v.bitbucket.ListenEvent(formData, companyId)
+	appId := context.QueryParam("appId")
+	if appId == "" {
+		return common.GenerateErrorResponse(context, "[ERROR] no app id is provided", "Please provide app id")
+	}
+	err := v.bitbucket.ListenEvent(formData, companyId, appId)
 	if err != nil {
 		return err
 	}
