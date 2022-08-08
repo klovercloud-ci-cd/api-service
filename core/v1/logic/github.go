@@ -64,7 +64,7 @@ func (g githubService) GetBranches(url, repositoryId, companyId string) (httpCod
 }
 
 //this function is responsible for forwarding the request to integration-manager
-func (g githubService) ListenEvent(payload interface{}, companyId, appId string) error {
+func (g githubService) ListenEvent(payload interface{}, companyId, appId, appSecret string) error {
 	marshal, marshalErr := json.Marshal(payload)
 	if marshalErr != nil {
 		return marshalErr
@@ -73,11 +73,10 @@ func (g githubService) ListenEvent(payload interface{}, companyId, appId string)
 	header["token"] = config.Token
 	header["Content-Type"] = "application/json"
 
-	_, err := g.httpPublisher.Post(config.KlovercloudIntegrationMangerUrl+"/githubs?companyId="+companyId+"&appId="+appId, header, marshal)
+	_, err := g.httpPublisher.Post(config.KlovercloudIntegrationMangerUrl+"/githubs?companyId="+companyId+"&appId="+appId+"&appSecret="+appSecret+"&userType=client", header, marshal)
 	if err != nil {
 		return err
 	}
-
 	return nil
 }
 
