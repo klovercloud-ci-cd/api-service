@@ -107,6 +107,7 @@ func (c companyApi) UpdateRepositories(context echo.Context) error {
 // @Param id path string true "Company id"
 // @Param repoId path string true "Repository id"
 // @Param companyUpdateOption query string true "Company Update Option"
+// @Param validTill query string false "secret validity date in UTC"
 // @Success 200 {object} common.ResponseDTO
 // @Router /api/v1/companies/{id}/repositories/{repoId}/applications [PUT]
 func (c companyApi) UpdateApplications(context echo.Context) error {
@@ -135,7 +136,8 @@ func (c companyApi) UpdateApplications(context echo.Context) error {
 		}
 	}
 	companyUpdateOption := context.QueryParam("companyUpdateOption")
-	code, err := c.companyService.UpdateApplications(id, repoId, formData, companyUpdateOption)
+	validity := context.QueryParam("validTill")
+	code, err := c.companyService.UpdateApplications(id, repoId, formData, companyUpdateOption, validity)
 	if err != nil {
 		return common.GenerateErrorResponse(context, nil, err.Error())
 	}
