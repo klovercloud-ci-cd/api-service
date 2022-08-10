@@ -142,7 +142,11 @@ func (p processApi) GetFootmarksByProcessIdAndStep(context echo.Context) error {
 		}
 		companyId = userResourcePermission.Metadata.CompanyId
 	}
-	code, res := p.processService.GetFootmarksByProcessIdAndStep(processId, companyId, step)
+	claim := context.QueryParam("claim")
+	if claim == "" {
+		return common.GenerateErrorResponse(context, "[ERROR]: Claim is not given", "Operation failed")
+	}
+	code, res := p.processService.GetFootmarksByProcessIdAndStepAndClaim(processId, companyId, step, claim)
 	if code != 200 {
 		return common.GenerateErrorResponse(context, "", "Footmarks not found")
 	}
