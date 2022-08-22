@@ -122,7 +122,7 @@ func (h httpClientService) Post(url string, header map[string]string, body []byt
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Println("[ERROR] Failed communicate :", err.Error())
-		return http.StatusBadRequest, err
+		return resp.StatusCode, err
 	}
 	defer resp.Body.Close()
 	if resp.StatusCode != 200 {
