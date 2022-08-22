@@ -94,6 +94,20 @@ func (v v1GithubApi) ListenEvent(context echo.Context) error {
 		return err
 	}
 	companyId := context.QueryParam("companyId")
+	bearerToken := context.Request().Header.Get("Authorization")
+	userType := enums.CLIENT
+	if bearerToken != "" {
+		userResourcePermission, err := GetUserResourcePermissionFromBearerToken(context, v.jwtService)
+		if err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		if err := checkAuthority(userResourcePermission, string(enums.REPOSITORY), "", string(enums.READ)); err != nil {
+			return common.GenerateUnauthorizedResponse(context, err, err.Error())
+		}
+		companyId = userResourcePermission.Metadata.CompanyId
+		userType = enums.REGULAR
+	}
+
 	if companyId == "" {
 		return common.GenerateErrorResponse(context, "[ERROR] no company id is provided", "Please provide company id")
 	}
@@ -102,10 +116,10 @@ func (v v1GithubApi) ListenEvent(context echo.Context) error {
 		return common.GenerateErrorResponse(context, "[ERROR] no app id is provided", "Please provide app id")
 	}
 	appSecret := context.QueryParam("appSecret")
-	if appSecret == "" {
+	if appSecret == "" && userType == enums.CLIENT {
 		return common.GenerateErrorResponse(context, "[ERROR] no application secret is provided", "Please provide app id")
 	}
-	err := v.github.ListenEvent(formData, companyId, appId, appSecret)
+	err := v.github.ListenEvent(formData, companyId, appId, appSecret, string(userType))
 	if err != nil {
 		return err
 	}

@@ -61,3 +61,13 @@ const (
 	// TEST test environment
 	TEST = ENVIRONMENT("TEST")
 )
+
+//USER_TYPE user type[api call from user or others]
+type USER_TYPE string
+
+const (
+	// CLIENT client as user
+	CLIENT = USER_TYPE("client")
+	// REGULAR regular user as user
+	REGULAR = USER_TYPE("regular")
+)
