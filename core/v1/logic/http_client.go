@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"github.com/klovercloud-ci-cd/api-service/api/common"
 	"github.com/klovercloud-ci-cd/api-service/config"
 	"github.com/klovercloud-ci-cd/api-service/core/v1/service"
@@ -134,7 +135,7 @@ func (h httpClientService) Post(url string, header map[string]string, body []byt
 			return resp.StatusCode, err
 		} else {
 			log.Println("[ERROR] Failed to communicate :", string(body))
-			return resp.StatusCode, errors.New(resBody.Message)
+			return resp.StatusCode, errors.New(fmt.Sprint(resBody.Data))
 		}
 	}
 	return resp.StatusCode, nil

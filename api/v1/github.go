@@ -119,11 +119,11 @@ func (v v1GithubApi) ListenEvent(context echo.Context) error {
 	if appSecret == "" && userType == enums.CLIENT {
 		return common.GenerateErrorResponse(context, "[ERROR] no application secret is provided", "Please provide app id")
 	}
-	err := v.github.ListenEvent(formData, companyId, appId, appSecret, string(userType))
+	code, err := v.github.ListenEvent(formData, companyId, appId, appSecret, string(userType))
 	if err != nil {
-		return err
+		return common.GenerateGenericResponse(context, code, err.Error(), "Operation Failed")
 	}
-	return nil
+	return common.GenerateGenericResponse(context, code, nil, "Operation Failed")
 }
 
 // NewGithubApi returns bitbucket type api

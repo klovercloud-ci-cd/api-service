@@ -64,19 +64,15 @@ func (b bitbucketService) GetBranches(url, repositoryId, companyId string) (http
 }
 
 //this function is responsible for forwarding the request to integration-manager
-func (b bitbucketService) ListenEvent(payload interface{}, companyId, appId, appSecret, userType string) error {
+func (b bitbucketService) ListenEvent(payload interface{}, companyId, appId, appSecret, userType string) (httpCode int, err error) {
 	marshal, marshalErr := json.Marshal(payload)
 	if marshalErr != nil {
-		return marshalErr
+		return http.StatusBadRequest, marshalErr
 	}
 	header := make(map[string]string)
 	header["token"] = config.Token
 	header["Content-Type"] = "application/json"
-	_, err := b.httpPublisher.Post(config.KlovercloudIntegrationMangerUrl+"/bitbuckets?companyId="+companyId+"&appId="+appId+"&appSecret="+appSecret+"&userType="+userType, header, marshal)
-	if err != nil {
-		return err
-	}
-	return nil
+	return b.httpPublisher.Post(config.KlovercloudIntegrationMangerUrl+"/bitbuckets?companyId="+companyId+"&appId="+appId+"&appSecret="+appSecret+"&userType="+userType, header, marshal)
 }
 
 // NewBitbucketService returns bitbucket type service

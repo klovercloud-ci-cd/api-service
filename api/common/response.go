@@ -40,6 +40,14 @@ func GenerateUnauthorizedResponse(c echo.Context, data interface{}, message stri
 	})
 }
 
+// GenerateUnauthorizedResponse Http unauthorized response
+func GenerateGenericResponse(c echo.Context, code int, data interface{}, message string) error {
+	return c.JSON(code, ResponseDTO{
+		Message: message,
+		Data:    data,
+	})
+}
+
 // GenerateSuccessResponse Http success response
 func GenerateSuccessResponse(c echo.Context, data interface{}, metadata *MetaData, message string) error {
 	if metadata != nil {
